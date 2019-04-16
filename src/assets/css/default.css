@@ -1,0 +1,26 @@
+.chart {
+  width: 80%;
+}
+g {
+  transition-property: all;
+  transition-duration: 0.4s;
+}
+/* path {
+  transition-property: all;
+  transition-delay: 1s;
+  transition-duration: 2s;
+} */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .4s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.em {
+  font-weight: 900;
+}
+.tooltip {
+  background: rgba(255, 255, 255, 0.9);
+  color: rgba(0,0,0, 0.8);
+  padding: 20px;
+}

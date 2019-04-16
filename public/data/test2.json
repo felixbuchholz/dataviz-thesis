@@ -1,0 +1,44 @@
+[{
+  "id": 0,
+  "bin": "< 10.000",
+  "populationPC": 5,
+  "positions": [{
+    "name": "minc",
+    "val": 4000,
+    "valLowLim": 3700,
+    "valUpLim": 4300,
+    "moe": 300
+  }, {
+    "name": "snap",
+    "val": 2300,
+    "valLowLim": 2080,
+    "valUpLim": 2520,
+    "moe": 220
+  }]
+},
+{
+  "id": 1,
+  "bin": "10.000 – 14.999",
+  "populationPC": 3.5,
+  "positions": [{
+    "name": "minc",
+    "val": 12000,
+    "valLowLim": 11100,
+    "valUpLim": 12900,
+    "moe": 900
+  }, {
+    "name": "snap",
+    "val": 400,
+    "valLowLim": 300,
+    "valUpLim": 500,
+    "moe": 100
+  }
+  , {
+    "name": "ssi",
+    "val": 800,
+    "valLowLim": 650,
+    "valUpLim": 950,
+    "moe": 150
+  }]
+}
+]
