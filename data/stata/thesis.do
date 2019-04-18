@@ -3,7 +3,19 @@
 
 
 * Set filepath for the output csv file / generic
-putexcel set "/Users/felixbuchholz/repos/thesis/data/stata/output.csv", replace
+* putexcel set "/Users/felixbuchholz/repos/thesis/data/stata/output.csv", replace
+* Changed method to esttab
+
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+* ### Prepare output template
+	* return list
+	* matrix a = r(table)
+	* matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+	* mat at = a'	
+	* esttab matrix(at) using hh_persons.csv, plain replace eqlabels(none) mlabels(none)
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
 
 * Change directory
 cd 
@@ -392,10 +404,74 @@ svy: mean hh_clean_mkt_inc_total if pernum == 1, over(hh_clean_mkt_inc_total_cat
 * Return the result to be able to access the table
 	return list
 
-* Write the result to the incom.csv file 
-	putexcel set "/Users/felixbuchholz/repos/thesis/data/stata/meanhh_mktinc_by_inccat.csv", replace
-	putexcel A1=matrix(r(table)), names
+* Write the result to the income.csv file 
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at) using hh_m_inc.csv, plain replace eqlabels(none) mlabels(none)
 
+
+* -----------------------------------------------------------------------------
+* ### Count persons per houshold:
+bys serial: egen hh_persons=max(pernum)
+replace hh_persons = 0 if pernum != 1
+
+* -----------------------------------------------------------------------------
+* ### Count adults and children per houshold:
+gen is_adult = 1 if age >= 18
+replace is_adult = 0 if age < 18
+bys serial: egen hh_adults=sum(is_adult)
+gen hh_children = hh_persons - hh_adults
+replace hh_adults = 0 if pernum != 1
+replace hh_children = 0 if pernum != 1
+
+* -----------------------------------------------------------------------------
+* ### Mean count adults and children per houshold:
+
+* Mean persons:
+svy: mean hh_persons if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+* Output to csv file 
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at) using hh_m_persons.csv, plain replace eqlabels(none) mlabels(none)
+
+* Mean adults:
+svy: mean hh_adults if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+* Return the result to be able to access the table
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at) using hh_m_adults.csv, plain replace eqlabels(none) mlabels(none)
+	
+* -----------------------------------------------------------------------------
+* ### Total count adults and children per houshold:
+
+* Total persons:
+svy: total hh_persons if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+* Output to csv file 
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at) using hh_t_persons.csv, plain replace eqlabels(none) mlabels(none)
+
+* Total adults:
+svy: total hh_adults if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+* Output to csv file 
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at) using hh_t_adults.csv, plain replace eqlabels(none) mlabels(none)
+	
 * -----------------------------------------------------------------------------
 * ### Welfare 
 
@@ -450,12 +526,18 @@ svy: mean hh_clean_mkt_inc_total if pernum == 1, over(hh_clean_mkt_inc_total_cat
 	replace clean_eitcred = 0 if clean_eitcred == 9999
 
 * EITC sum by household
-	* bys serial: egen hh_eitcred=total(eitcred)
+	bys serial: egen hh_eitcred=total(eitcred)
 * - Clean up, retain values just for head of household
-	* replace hh_eitcred = 0 if pernum != 1
+	replace hh_eitcred = 0 if pernum != 1
 
 * Get the energy subsidy value by bins
-	* svy: mean hh_eitcred if pernum == 1, over(hh_incomecat)
+	svy: mean hh_eitcred if pernum == 1, over(hh_incomecat)
+
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at) using hh_eitcred.csv, plain replace eqlabels(none) mlabels(none)
 
 * -----------------------------------------------------------------------------
 * #### Child support
@@ -506,23 +588,17 @@ replace hh_spmsnap = 0 if pernum != 1
 svy: mean hh_spmsnap if pernum == 1, over(hh_clean_mkt_inc_total_cat)
 
 * - - - - -
-* ##### Store the output
 
-* Return the result to be able to access the table
-	return list
 
-* Write the result to the incom.csv file 
-	putexcel set "/Users/felixbuchholz/repos/thesis/data/stata/meanhh_snap_by_inccat.csv", replace
-	putexcel A1=matrix(r(table)), names
 	
 
 * -----------------------------------------------------------------------------
 * #### Energy subsidy
 
 * Energy subsidy value sum by household
-	* bys serial: egen hh_heatval=total(heatval)
+	bys serial: egen hh_heatval=total(heatval)
 * - Clean up, retain values just for head of household
-	* replace hh_heatval = 0 if pernum != 1
+	replace hh_heatval = 0 if pernum != 1
 
 * Get the energy subsidy value by bins
 	* svy: mean hh_heatval if pernum == 1, over(hh_incomecat)

@@ -1,6 +1,6 @@
 <template>
   <div class="chart">
-    <h5 class="sans">Current distribution of incomes</h5>
+    <h5 class="sans">Current distribution of incomes (UIG scheme 2)</h5>
     <div v-if="tooltip.id != -1">
       <div
         v-for="(element, index) in data"
@@ -12,18 +12,20 @@
         "
       >
         <div
-          class="tooltip sans"
+          class="tooltip"
           v-if="index == tooltip.id"
           v-html="formatTooltip(element)"
         ></div>
       </div>
     </div>
+    <!-- <div id="test">Hi</div> -->
     <transition name="fade">
       <svg v-if="isLoaded" :width="svgWidth" :height="svgHeight">
-        <g :transform="`translate(${margin.left}, ${margin.top})`">
+        <g :transform="`translate(${margin.left}, ${margin.bottom})`">
           <g v-for="(e, i) in data" :key="i" :id="i">
             <transition name="fade">
               <g v-if="show">
+                <!-- <transition-group> -->
                 <!-- Needs to remove elements from list -->
                 <g v-for="(f, j) in e.positions" :key="`${i}${f.name}`">
                   <transition name="fade">
@@ -53,38 +55,24 @@
                       />
                     </g>
                     <g v-else key="predict">
-                      <g
-                        :transform="
-                          `translate(${scale.x(e.bin)},${scale.y(
-                            findVerticalPosition(e.positions, j)
-                          )})`
-                        "
-                      >
-                        <!-- <rect
-                          v-show="show"
-                          :fill="myFill(j)"
-                          :width="scale.x.bandwidth()"
-                          :height="height - scale.y(f.val)"
-                        /> -->
-
-                        <path
-                          v-show="show"
-                          fill="none"
-                          :stroke="categoryColors(j)"
-                          stroke-width="0.5"
-                          :d="f.path.stroke"
-                        />
-                        <path
-                          v-show="show"
-                          fill="none"
-                          :stroke="categoryColors(j)"
-                          stroke-width="1"
-                          :d="f.path.fill"
-                        />
-                      </g>
+                      <path
+                        v-show="show"
+                        fill="none"
+                        :stroke="categoryColors(f.name)"
+                        stroke-width="1"
+                        :d="f.pathFillvalfalse"
+                      />
+                      <path
+                        v-show="show"
+                        fill="none"
+                        :stroke="categoryColors(f.name)"
+                        stroke-width="0.5"
+                        :d="f.pathStrokevalfalse"
+                      />
                     </g>
                   </transition>
                 </g>
+                <!-- </transition-group> -->
               </g>
             </transition>
             <rect
@@ -101,39 +89,24 @@
               @mouseleave="mouseleave"
             />
           </g>
-          <text
-            class="graph-label"
-            :transform="`translate(${width / 2}, ${height + 110})`"
-            text-anchor="middle"
-            fill="currentColor"
-          >
-            Market income per household, ranges in 2017 $
-          </text>
           <g
             v-axis:x="scale"
             :transform="`translate(${0}, ${height})`"
             class="x-axis"
           ></g>
-          <text
-            class="graph-label"
-            :transform="`rotate(-90) translate(${-height / 2},-90)`"
-            text-anchor="middle"
-            fill="currentColor"
-          >
-            Household income and benefits, in 2017 $
-          </text>
           <g v-axis:y="scale" class="y-axis"></g>
         </g>
       </svg>
     </transition>
+    <div class="x-axis-legend">
+      <h6 class="sans">Market income bins, in 2017 $</h6>
+    </div>
     <div>
       <h4>Temporary Interaction</h4>
-      <button @click="click4">scale y-axis</button>
-      <button @click="click3">remove/retain snap</button>
-      <!-- <button @click="click">fixed width</button>
+      <button @click="click">fixed width</button>
       <button @click="click2">show/hide margin of error</button>
-      <button @click="click5">select class</button>
-      <button @click="click6">change labels on x axis</button> -->
+      <button @click="click3">remove/retain snap</button>
+      <button @click="click4">scale y-axis</button>
       <input
         v-if="isLoaded"
         type="number"
@@ -144,8 +117,9 @@
   </div>
 </template>
 <script>
-import * as d3 from "d3";
-import { rough } from "../assets/lib/rough.js";
+import * as d3 from "d3"; // eslint-disable-line
+import { rough } from "../assets/lib/rough.js"; // eslint-disable-line
+import { inflateSync } from "zlib";
 
 export default {
   name: "graphModelOne",
@@ -157,7 +131,7 @@ export default {
       data: [],
       svgWidth: 400,
       svgHeight: 750,
-      margin: { top: 20, left: 105, bottom: 120, right: 40 },
+      margin: { top: 20, left: 100, bottom: 40, right: 40 },
       tooltip: { id: null, x: 0, y: 0, opacity: 0 },
       show: false,
       mouseDown: false,
@@ -191,7 +165,7 @@ export default {
         .scaleBand()
         .domain(this.data.map(x => x.bin))
         .rangeRound([0, this.width])
-        .padding(0.3);
+        .padding(0.1);
       const y = d3
         .scaleLinear()
         .domain([0, this.maxValue])
@@ -207,6 +181,8 @@ export default {
       deep: true,
       handler(update) {
         console.log("data has changed", update);
+        this.computeMOE();
+        this.computePaths();
       }
     },
     tooltip() {
@@ -228,48 +204,43 @@ export default {
   },
   methods: {
     loadData() {
-      d3.json("data/test-stata.json").then(d => {
+      d3.json("data/test-stata2.json").then(d => {
         console.log(d); // eslint-disable-line
         this.data = d;
         this.isLoaded = true;
-        this.computeData();
-        this.computeAllPaths();
+        this.computeMOE();
+        this.computePaths();
       });
     },
-    computePath(val, j) {
-      console.log(j);
-      const x = 0;
-      const y = 0;
-      const w = this.scale.x.bandwidth();
-      const h = this.height - this.scale.y(val);
-      let hachureAngle = -(90 - 25);
-      let hachureGap = 5;
-      let fillWeight = 2;
-      let fillStyle = "cross-hatch";
-      if (j > 0) {
-        hachureAngle = -(90 - 25);
-        hachureGap = 3;
-        fillWeight = 1.5;
-        fillStyle = "hachure";
-      }
+    computePaths() {
       let generator = rough.generator();
-      let rect = generator.rectangle(x, y, w, h, {
-        fill: "rgba(0,0,0,1)",
-        stroke: "rgba(0,0,0,1)",
-        roughness: 0.2,
-        fillWeight: fillWeight,
-        hachureGap: hachureGap,
-        hachureAngle: hachureAngle,
-        fillStyle: fillStyle
-      });
-      let path = generator.toPaths(rect);
-      return { stroke: path[1].d, fill: path[0].d };
-    },
-    computeAllPaths() {
+      const propertiesArray = ["val", "valLowLim", "valUpLim"];
+      const moeArray = [true, false];
       for (const [i, e] of this.data.entries()) {
         for (const [j, f] of e.positions.entries()) {
-          // console.log(f);
-          f["path"] = this.computePath(f.val, j);
+          for (const property of propertiesArray) {
+            for (const moe of moeArray) {
+              const x = this.scale.x(e.bin);
+              const y = this.scale.y(
+                this.findVerticalEnding(e.positions, j, property, moe)
+              );
+              const w = this.scale.x.bandwidth();
+              const h = this.height - this.scale.y(f[property]);
+              let rect = generator.rectangle(x, y, w, h, {
+                fill: "rgba(0,0,0,1)",
+                stroke: "rgba(0,0,0,1)",
+                roughness: 0.2,
+                fillWeight: 2,
+                hachureGap: 5,
+                hachureAngle: 45,
+                fillStyle: "hachure"
+              });
+              let path = generator.toPaths(rect);
+              // console.log(path);
+              f[`pathFill${property}${moe}`] = path[0].d;
+              f[`pathStroke${property}${moe}`] = path[1].d;
+            }
+          }
         }
       }
     },
@@ -282,34 +253,18 @@ export default {
         }
       }
     },
-    computeData() {
-      for (const e of this.data) {
-        for (const f of e.positions) {
-          // console.log(f.val);
-          f.valLowLim = f.val - f.moe;
-          f.valUpLim = f.val + f.moe;
-          if (this.moe) {
-            f.total = f.val + f.moe;
-          } else {
-            f.total = f.val;
-          }
-        }
-      }
-    },
-    categoryColors(j) {
+    categoryColors(name) {
+      // console.log(name);
       let color = "";
-      if (j == 0) {
-        color = "rgba(72, 72, 72, 1)";
-      } else if (j >= 1) {
-        color = "rgba(122, 122, 122, 1)";
+      if (name == "minc") {
+        color = "rgba(102, 102, 102, 1)";
+      } else if (name == "snap") {
+        color = "rgba(255, 138, 24, 1)";
+      } else if (name == "ssi") {
+        color = "rgba(77, 175, 74, 1)";
+      } else {
+        color = "rgba(255, 0, 0, 1)";
       }
-      // else if (j == 1) {
-      //   color = "rgba(255, 138, 24, 1)";
-      // } else if (j == 2) {
-      //   color = "rgba(77, 175, 74, 1)";
-      // } else {
-      //   color = "rgba(255, 0, 0, 1)";
-      // }
       return color;
     },
     mousemove(e) {
@@ -328,15 +283,13 @@ export default {
       // console.log(e);
       let positionshtml = "";
       for (const position of e.positions) {
-        positionshtml += `<p class="tooltip-p">${
-          position.longName
-        }: <br /> <span class="boldest">$ ${
+        positionshtml += `<p>${position.name}: <span class="em">${
           position.val
-        }</span>  <span class="italic"> +/- $ ${position.moe}</span></p>`;
+        }</span> +/- ${position.moe}</p>`;
       }
-      let tooltiphtml = `<p class="graph-label">Income range:<br /> <span class="">${
+      let tooltiphtml = `<p>Income range: <span class="em">${
         e.bin
-      } $</span></p>${positionshtml}`;
+      }</span></p>${positionshtml}`;
       return tooltiphtml;
     },
     click() {
@@ -371,82 +324,18 @@ export default {
           e.positions[1]["moe"] = e.positions[1]["moeBefore"];
         }
       }
-      this.computeAllPaths();
-      this.computeData();
-      this.show = false;
-      setTimeout(() => {
-        if (this.mouseDown == false) {
-          this.show = true;
-        }
-      }, 100);
     },
     click4() {
       setTimeout(() => {
         window.scrollBy({
-          top: 2700,
+          top: 2500,
           left: 0,
           behavior: "smooth"
         });
       }, 800);
       console.log("outside");
-      this.svgHeight = 3000;
-      this.computeAllPaths();
-    },
-    click5() {
-      [].map.call(this.$el.querySelectorAll(".benefits"), function(e) {
-        e.classList.toggle("benefits--active");
-      });
-      // console.log(this.$el.querySelectorAll(".benefits"));
-      // this.$el.querySelectorAll(".benefits").toggle
-    },
-    click6() {
-      [].map.call(this.$el.querySelectorAll(".x-axis .tick"), (e, i) => {
-        e.querySelector("line").setAttribute("y2", i % 2 == 0 ? 6 : 10);
-        console.log(e.innerHTML);
-        e.querySelector("text").setAttribute("y", i % 2 == 0 ? 9 : 20);
-        // if (i % 2 != 0) {
-        //   e.setAttribute("y2", 10);
-        // }
-        // e.classList.toggle("benefits--active");
-      });
-      // console.log(this.$el.querySelectorAll(".benefits"));
-      // this.$el.querySelectorAll(".benefits").toggle
-    },
-    wrap(text, width) {
-      text.each(function() {
-        var text = d3.select(this),
-          words = text
-            .text()
-            .split(/\s+/)
-            .reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 1.1, // ems
-          y = text.attr("y"),
-          dy = parseFloat(text.attr("dy")),
-          tspan = text
-            .text(null)
-            .append("tspan")
-            .attr("x", 0)
-            .attr("y", y)
-            .attr("dy", dy + "em");
-        while ((word = words.pop())) {
-          line.push(word);
-          tspan.text(line.join(" "));
-          if (tspan.node().getComputedTextLength() > width) {
-            line.pop();
-            tspan.text(line.join(" "));
-            line = [word];
-            tspan = text
-              .append("tspan")
-              .attr("x", 0)
-              .attr("y", y)
-              .attr("dy", ++lineNumber * lineHeight + dy + "em")
-              .text(word);
-          }
-        }
-      });
+      this.svgHeight = 2700;
+      this.computePaths();
     },
     onResize(event) {
       console.log("window has been resized", event, this);
@@ -454,7 +343,7 @@ export default {
       this.show = false;
       setTimeout(() => {
         if (this.mouseDown == false) {
-          this.computeAllPaths();
+          this.computePaths();
           this.show = true;
         }
       }, 800);
@@ -462,32 +351,7 @@ export default {
     },
     onChange(event) {
       // console.log("changed", event);
-      this.computeData();
-      this.computeAllPaths();
-    },
-    findVerticalPosition(array, index) {
-      // console.log("fvp");
-      let sum = 0;
-      let arrayUpToPosition = array.slice(0, index + 1);
-      for (var i = 0; i < arrayUpToPosition.length; i++) {
-        // console.log(
-        //   i,
-        //   arrayUpToPosition[i]["total"],
-        //   arrayUpToPosition[i]["val"]
-        // );
-        sum += arrayUpToPosition[i]["total"];
-        // if (i == arrayUpToPosition.length - 1) {
-        //   sum += 0;
-        // }
-      }
-      return sum;
-    },
-    myFill(j) {
-      if (j == 0) {
-        return "rgba(0,0,0,0.5)";
-      } else {
-        return "rgba(0,0,0,0.3)";
-      }
+      // this.computePaths();
     },
     findVerticalEnding(array, index, property, moe) {
       var arrayUpToPosition = array.slice(0, index + 1);
@@ -530,26 +394,11 @@ export default {
       const axisMethod = { x: "axisBottom", y: "axisLeft" }[axis];
       const methodArg = binding.value[axis];
       // d3.axisBottom(scale.x)
-      if (binding.arg == "y") {
-        d3.select(el)
-          .call(
-            d3[axisMethod](methodArg)
-              .tickFormat(d3.format(",d"))
-              .ticks(15)
-          )
-          .selectAll(".tick text")
-          .attr("transform", "rotate(-25)")
-          .attr("text-anchor", "end");
-      } else {
-        let self = this;
-        // console.log(el);
-        d3.select(el)
-          .call(d3[axisMethod](methodArg).tickFormat(d3.format("c")))
-          .selectAll(".tick text")
-          .attr("transform", "rotate(-25) translate(-2,4)")
-          .attr("text-anchor", "end")
-          .attr("alignment-baseline", "after-edge");
-      }
+      d3.select(el).call(
+        d3[axisMethod](methodArg)
+          .tickFormat(d3.format(binding.arg === "y" ? ",d" : "c"))
+          .ticks(binding.arg === "x" ? 10 : 30)
+      );
     }
   },
   beforeDestroy() {

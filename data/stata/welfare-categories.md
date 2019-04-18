@@ -9,6 +9,6 @@ welfare categories:
  6. EITC
  7. Worker compensation
  8. Unemployment benefits / other
-
+9. Veterans
 
 

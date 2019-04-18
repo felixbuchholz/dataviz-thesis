@@ -1,26 +1,58 @@
-.chart {
-  width: 80%;
+.center-block {
+  margin: 0 auto;
+  max-width: 740px;
+  padding: 32px;
+  background: rgba(252,252,252,1);
 }
-g {
-  transition-property: all;
-  transition-duration: 0.4s;
+
+.inline {
+  display: inline;
 }
-/* path {
-  transition-property: all;
-  transition-delay: 1s;
-  transition-duration: 2s;
-} */
+
+.tooltip {
+  background: rgba(255, 255, 255, 0.9);
+  color: rgba(0,0,0, 0.8);
+  padding: 26px;
+}
+
+
+/* Transition */
 .fade-enter-active, .fade-leave-active {
   transition: opacity .4s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
-.em {
-  font-weight: 900;
+g {
+  transition-property: all;
+  transition-duration: 0.4s;
 }
-.tooltip {
-  background: rgba(255, 255, 255, 0.9);
-  color: rgba(0,0,0, 0.8);
-  padding: 20px;
+
+.benefits--active {
+  stroke: rgba(0,0,0,1);
+}
+
+
+.rotate {
+
+  transform: rotate(-90deg);
+
+
+  /* Legacy vendor prefixes that you probably don't need... */
+
+  /* Safari */
+  -webkit-transform: rotate(-90deg);
+
+  /* Firefox */
+  -moz-transform: rotate(-90deg);
+
+  /* IE */
+  -ms-transform: rotate(-90deg);
+
+  /* Opera */
+  -o-transform: rotate(-90deg);
+
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
 }

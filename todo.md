@@ -10,7 +10,7 @@
   - element gets transform="translate(x,y)"
   - calculatePaths only calculates in terms of width and height
   - findVerticalEndings only is relevant to the transform=translate()
-  - 
+  - Rebuild the path and positioning function
 
 
 

@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans:300,300i,400,400i,700,700i|Merriweather:300,300i,400,400i,700,700i');
+/* Base Typography Styles
+Credit to Skeleton.css
+Credit to Andrew Levinson
+
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.bold {
+  font-style: inherit;
+  font-weight: bolder;
+}
+.boldest {
+  font-style: inherit;
+  font-weight: 700;
+}
+.italic {
+  font-weight: inherit;
+  font-style: italic;
+}
+.left {
+  padding-right: 36%;
+}
+.right {
+  padding-left: 36%;
+}
+.hug {
+  margin-bottom: 1rem;
+}
+.unhug {
+  margin-top: 3.75rem;
+  margin-bottom: 3.75rem;
+}
+
+html {
+  font-size: 62.5%;
+  /* font-size: 40.5%; */
+}
+
+body {
+  font-size: 1.6em;
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: "Merriweather", serif;
+  color: rgba(0,0,0,0.85);
+  background: rgba(235,235,235,1);
+  -webkit-font-smoothing: antialiased;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+  -moz-osx-font-smoothing: grayscale;
+}
+.sans {
+  font-family: "Merriweather Sans", sans-serif;
+}
+
+
+/* Typography
+  –––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 700;
+  }
+  
+  h1 {
+    font-size: 4rem;
+    line-height: 1.25;
+    letter-spacing: -0.1rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    line-height: 1.42;
+    letter-spacing: -0.125rem;
+  }
+  
+  h3 {
+    font-size: 2.4rem;
+    line-height: 1.3;
+    letter-spacing: -0.1rem;
+  }
+  
+  h4 {
+    font-size: 2rem;
+    /* line-height: 1.35; */
+    line-height: 1.3;
+    /* letter-spacing: -0.08rem; */
+    letter-spacing: -0.1rem;
+  }
+  
+  h5 {
+    font-size: 1.8rem;
+    line-height: 1.3;
+    letter-spacing: -0.08rem;
+  }
+  
+  h6 {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    letter-spacing: 0.05rem;
+  }
+
+  svg {
+    color: rgba(0,0,0, 0.65);
+  }
+  
+  @media (min-width: 550px) {
+    h1 {
+      font-size: 3.2rem;
+    }
+    h2 {
+      font-size: 2.5rem;
+    }
+    h3 {
+      font-size: 2.4rem;
+    }
+    h4 {
+      font-size: 3rem;
+    }
+    h5 {
+      font-size: 1.6rem;
+    }
+    h6 {
+      font-size: 1.35rem;
+    }
+    .subheadline {
+      font-size: 1.35rem;
+    }
+    p {
+      margin-top: 0;
+    }
+    body {
+      font-size: 1.6rem;
+      line-height: 1.35;
+    }
+    g,
+    text {
+      font-size: 1.35rem;
+      font-family: "Merriweather Sans", sans-serif;
+      font-weight: 300;
+    }
+    .graph-label {
+      font-size: 1.6rem;
+      line-height: 1.3;
+      font-weight: 400;
+    }
+    p {
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+    .intro {
+      font-size: 2rem;
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.4;
+    }
+    .tooltip-p {
+      font-weight: 300;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+  }
