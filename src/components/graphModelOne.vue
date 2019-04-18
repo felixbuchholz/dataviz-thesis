@@ -127,19 +127,26 @@
       </svg>
     </transition>
     <div>
-      <h4>Temporary Interaction</h4>
-      <button @click="click4">scale y-axis</button>
-      <button @click="click3">remove/retain snap</button>
+      <h5>Temporary Interaction</h5>
+      <button class="sans bold" @click="click4">scale y-axis</button>
+      <!-- <button @click="click3">remove/retain snap</button> -->
       <!-- <button @click="click">fixed width</button>
       <button @click="click2">show/hide margin of error</button>
       <button @click="click5">select class</button>
       <button @click="click6">change labels on x axis</button> -->
-      <input
+      <!-- <input
         v-if="isLoaded"
         type="number"
         v-model.number="data[0].positions[0].val"
         v-on:input="onChange"
-      />
+      /> -->
+      <p class="unhug">
+        <a
+          class="sans"
+          href="https://github.com/felixbuchholz/thesis2019/blob/master/data/thesis.pdf"
+          >Layout</a
+        >
+      </p>
     </div>
   </div>
 </template>
