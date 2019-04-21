@@ -1,3 +1,12 @@
+const colors = [
+  "rgba(87,176,234,1)",
+  "rgba(255, 138, 24,1)",
+  "rgba(240, 234, 0, 1)",
+  "rgba(228, 36, 28, 1)",
+  "rgba(77, 175, 74, 1)",
+  "rgba(152, 78, 168, 1)",
+  "rgba(247, 129, 191)"
+];
 const names = [
   {
     fileName: "hh_t_persons.csv",
@@ -125,16 +134,16 @@ const processCSV = (data, names, population) => {
   data.map((e, i) => {
     if (population) {
       e.population = {
-        val: parseFloat(e.b),
-        moe: parseFloat(e.se),
+        val: parseInt(e.b),
+        moe: parseInt(e.se),
         name: names.shortName,
         longName: names.longName,
         desc: names.desc
       };
     } else {
       e.position = {
-        val: parseFloat(e.b),
-        moe: parseFloat(e.se),
+        val: parseInt(e.b),
+        moe: parseInt(e.se),
         name: names.shortName,
         longName: names.longName,
         desc: names.desc

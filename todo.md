@@ -11,6 +11,24 @@
   - calculatePaths only calculates in terms of width and height
   - findVerticalEndings only is relevant to the transform=translate()
   - Rebuild the path and positioning function
+  - move tooltip around according to the position: bind the top and bottom position as well
+  - use java-script hooks to animate the tooltips
+  - re-arrange the data buckets
+  - socialsec and vet reason
+  - sccs media queries
+  - remove single programs
+  - how to add stuff from the x-axis (animation)
+  - compute the max, max value
+  - compute the total income after benefits for each bin, and show it in the tool tip!
+  - Data: **Create valueBefore in data-wrangling-script**
+  - Data: **You need the household information: number of households per bin, avg. household size, avg.number of adults per household**
+
+- Responsiveness:
+  - If min-width then the tooltip has a fixed position,
+  - **If window.innerHeight < 550px!!!**
+  - Reformat mix-ins to scss
+  - Scss function to make all the classes that I do manually?
+
 
 
 

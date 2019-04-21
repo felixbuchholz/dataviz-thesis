@@ -1,0 +1,53 @@
+.grid-container {display: grid;
+  grid-template-columns: 1fr 55% 1fr;
+  // grid-column-gap: 32px;
+  grid-template-rows: auto;
+  grid-template-areas: 
+    "margin-left center-block margin-right";
+}
+.margin-left {
+  grid-area: "margin-left";
+  justify-self: end;
+}
+.margin-right {
+  grid-area: margin-right;
+  justify-self: start;
+}
+.center-block {
+  // margin: 0 auto;
+  // max-width: 740px;
+  padding: 32px;
+  background: rgba(252,252,252,1);
+  grid-area: "center-block";
+}
+.interface, .budget {
+  padding: 32px;
+  width: 70%;
+}
+
+.interface {
+  margin-left: auto;
+}
+
+.budget {
+  margin-right: auto;
+}
+
+@media (max-width: 1050px) {
+  
+  .grid-container {
+    // background: red; // good to check the break point
+    grid-template-columns: 100%;
+    grid-template-areas: 
+    "margin-left"
+    "center-block"
+    "margin-right";
+  }
+  .margin-left {
+    grid-area: "margin-left";
+    justify-self: center;
+  }
+  .chart {
+    width: 100%;
+  }
+}

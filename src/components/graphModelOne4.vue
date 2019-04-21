@@ -229,7 +229,7 @@ export default {
               let rect = generator.rectangle(x, y, w, h, {
                 fill: "rgba(0,0,0,1)",
                 stroke: "rgba(0,0,0,1)",
-                roughness: 0.2,
+                roughness: 0,
                 fillWeight: 2,
                 hachureGap: 5,
                 hachureAngle: 45,

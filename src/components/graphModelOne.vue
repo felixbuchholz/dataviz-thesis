@@ -1,152 +1,215 @@
 <template>
-  <div class="chart">
-    <h5 class="sans">Current distribution of incomes</h5>
-    <div v-if="tooltip.id != -1">
-      <div
-        v-for="(element, index) in data"
-        :key="index * 10 + element.id"
-        :style="
-          `opacity:${tooltip.opacity};position:fixed;left:${
-            tooltip.x
-          }px;top:${tooltip.y + 10}px;`
-        "
-      >
-        <div
-          class="tooltip sans"
-          v-if="index == tooltip.id"
-          v-html="formatTooltip(element)"
-        ></div>
+  <div class="grid-container">
+    <div class="margin-left">
+      <div class="interface">
+        <h5 class="sans">Change the parameters of this scheme:</h5>
+        <div class="parameters">
+          <span class="sans">The UIG should go to the</span>
+          <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
+          <div class="group bignumberinput">
+            <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+            <input
+              type="number"
+              id="incomebrackets"
+              required="required"
+              class="bignumberinput sans"
+              max="9"
+            />
+            <div for="incomebrackets" class="controls bold sans control-minus">
+              -
+            </div>
+            <label for="incomebrackets" class="bignumberinput sans"
+              >lowest income brackets</label
+            >
+            <div class="controls bold sans control-plus">+</div>
+            <div class="bar bignumberinput"></div>
+          </div>
+        </div>
+        <div class="uig">
+          <!-- <p class="sans">A UIG is active:</p> -->
+          <label class="checkbox-container sans color-primary checkbox-primary">
+            Universal Income Guarantee
+            <input type="checkbox" />
+            <span class="checkmark checkmark-primary"></span>
+          </label>
+        </div>
+        <hr />
+        <div class="positions">
+          <p class="sans">These programs should be in place:</p>
+          <div class="transfer-checkboxes">
+            <label
+              v-for="(e, i) in positionsWithoutIncome"
+              :key="i + 1"
+              :class="
+                `checkbox-container sans color-${e.name} checkbox-${e.name}`
+              "
+            >
+              {{ e.name }}
+              <input
+                type="checkbox"
+                v-model="e.checked"
+                @click="togglePosition(i + 1)"
+              />
+              <span :class="`checkmark checkmark-${e.name}`"></span>
+            </label>
+          </div>
+        </div>
+        <hr />
+        <div class="uig">
+          <p class="sans small unhug-top">Show and hide market income:</p>
+          <label class="checkbox-container sans">
+            Income
+            <input type="checkbox" />
+            <span class="checkmark"></span>
+          </label>
+        </div>
       </div>
     </div>
-    <transition name="fade">
-      <svg v-if="isLoaded" :width="svgWidth" :height="svgHeight">
-        <g :transform="`translate(${margin.left}, ${margin.top})`">
-          <g v-for="(e, i) in data" :key="i" :id="i">
-            <transition name="fade">
-              <g v-if="show">
-                <!-- Needs to remove elements from list -->
-                <g v-for="(f, j) in e.positions" :key="`${i}${f.name}`">
-                  <transition name="fade">
-                    <!-- mode="in-out" -->
-                    <g v-if="moe" key="moe">
-                      <path
-                        v-show="show"
-                        fill="none"
-                        :stroke="categoryColors(f.name)"
-                        stroke-width="1"
-                        :d="f.pathFillvalLowLimtrue"
-                      />
-                      <path
-                        v-show="show"
-                        fill="none"
-                        :stroke="categoryColors(f.name)"
-                        stroke-width="1"
-                        opacity="0.3"
-                        :d="f.pathFillvalUpLimtrue"
-                      />
-                      <path
-                        v-show="show"
-                        fill="none"
-                        :stroke="categoryColors(f.name)"
-                        stroke-width="0.5"
-                        :d="f.pathStrokevaltrue"
-                      />
-                    </g>
-                    <g v-else key="predict">
-                      <g
-                        :transform="
-                          `translate(${scale.x(e.bin)},${scale.y(
-                            findVerticalPosition(e.positions, j)
-                          )})`
-                        "
-                      >
-                        <!-- <rect
+    <div class="center-block">
+      <div class="chart">
+        <h5 class="sans">Current distribution of incomes</h5>
+        <div v-if="tooltip.id != null">
+          <transition-group name="tipmove" tag="div">
+            <div
+              class="tooltip-container"
+              v-for="(element, index) in data"
+              :key="index * 10 + element.id"
+              :style="
+                `position:fixed;left:${tooltip.left}px;top:${
+                  tooltip.top
+                }px;right:${tooltip.right}px;bottom:${tooltip.bottom}px`
+              "
+            >
+              <div
+                class="tooltip sans"
+                :id="`tooltip${element.id}`"
+                v-show="index == tooltip.id"
+                v-html="formatTooltip(element)"
+                @mouseenter="touchedToolTip"
+              ></div>
+            </div>
+          </transition-group>
+        </div>
+
+        <transition name="fade">
+          <svg
+            v-if="isLoaded"
+            :width="svgWidth"
+            :height="svgHeight"
+            id="incomedistribution"
+          >
+            <g :transform="`translate(${margin.left}, ${margin.top})`">
+              <g v-for="(e, i) in data" :key="i" :id="`bin${i}`">
+                <transition name="fade">
+                  <g v-if="show" :id="`${e.id}`">
+                    <g v-for="(f, j) in e.positions" :key="`${i}${f.name}`">
+                      <transition name="fade">
+                        <g
+                          :transform="
+                            `translate(${scale.x(e.bin)},${findVerticalPosition(
+                              e.positions,
+                              j
+                            )})`
+                          "
+                        >
+                          <path
+                            v-show="show"
+                            :class="
+                              `path stroke-${f.name} stroke-deactive-benefits`
+                            "
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="0.5"
+                            :d="f.path.stroke"
+                          />
+                          <path
+                            v-show="show"
+                            :class="
+                              ` path stroke-${f.name} stroke-deactive-benefits`
+                            "
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1"
+                            :d="f.path.fill"
+                          />
+                          <!-- <rect
                           v-show="show"
-                          :fill="myFill(j)"
+                          fill: "rgba(0,0,0,0.3)"
                           :width="scale.x.bandwidth()"
                           :height="height - scale.y(f.val)"
                         /> -->
-
-                        <path
-                          v-show="show"
-                          fill="none"
-                          :stroke="categoryColors(j)"
-                          stroke-width="0.5"
-                          :d="f.path.stroke"
-                        />
-                        <path
-                          v-show="show"
-                          fill="none"
-                          :stroke="categoryColors(j)"
-                          stroke-width="1"
-                          :d="f.path.fill"
-                        />
-                      </g>
+                        </g>
+                      </transition>
                     </g>
-                  </transition>
-                </g>
+                  </g>
+                </transition>
+                <rect
+                  v-show="show"
+                  :key="`${i}${e.name}`"
+                  :x="scale.x(e.bin)"
+                  :y="0"
+                  :width="scale.x.bandwidth()"
+                  :height="height"
+                  opacity="0"
+                  fill="red"
+                  :id="e.id"
+                  @mouseenter="mouseenter"
+                  @mousemove="mousemove"
+                  @mouseout="mouseleave"
+                />
               </g>
-            </transition>
-            <rect
-              v-show="show"
-              :key="`${i}${e.name}`"
-              :x="scale.x(e.bin)"
-              :y="0"
-              :width="scale.x.bandwidth()"
-              :height="height"
-              opacity="0"
-              fill="red"
-              :id="e.id"
-              @mousemove="mousemove"
-              @mouseleave="mouseleave"
-            />
-          </g>
-          <text
-            class="graph-label"
-            :transform="`translate(${width / 2}, ${height + 110})`"
-            text-anchor="middle"
-            fill="currentColor"
-          >
-            Market income per household, ranges in 2017 $
-          </text>
-          <g
-            v-axis:x="scale"
-            :transform="`translate(${0}, ${height})`"
-            class="x-axis"
-          ></g>
-          <text
-            class="graph-label"
-            :transform="`rotate(-90) translate(${-height / 2},-90)`"
-            text-anchor="middle"
-            fill="currentColor"
-          >
-            Household income and benefits, in 2017 $
-          </text>
-          <g v-axis:y="scale" class="y-axis"></g>
-        </g>
-      </svg>
-    </transition>
-    <div>
-      <h5>Temporary Interaction</h5>
-      <button class="sans bold" @click="click4">scale y-axis</button>
-      <!-- <button @click="click3">remove/retain snap</button> -->
-      <!-- <button @click="click">fixed width</button>
-      <button @click="click2">show/hide margin of error</button>
-      <button @click="click5">select class</button>
-      <button @click="click6">change labels on x axis</button> -->
-      <!-- <input
+              <text
+                class="graph-label"
+                :transform="`translate(${width / 2}, ${height + 110})`"
+                text-anchor="middle"
+                fill="currentColor"
+              >
+                Market income per household, ranges in 2017 $
+              </text>
+              <g
+                v-axis:x="scale"
+                :transform="`translate(${0}, ${height})`"
+                class="x-axis"
+              ></g>
+              <text
+                class="graph-label"
+                :transform="`rotate(-90) translate(${-height / 2},-90)`"
+                text-anchor="middle"
+                fill="currentColor"
+              >
+                Household income and benefits, in 2017 $
+              </text>
+              <g v-axis:y="scale" class="y-axis"></g>
+            </g>
+          </svg>
+        </transition>
+        <div>
+          <h5>Temporary Interaction</h5>
+          <button class="sans bold" @click="scaleYAxis">scale y-axis</button>
+
+          <!-- Leave in here to test the animation -->
+          <!-- <input
         v-if="isLoaded"
         type="number"
         v-model.number="data[0].positions[0].val"
         v-on:input="onChange"
       /> -->
-      <p class="unhug">
-        <a
-          class="sans"
-          href="https://github.com/felixbuchholz/thesis2019/blob/master/data/thesis.pdf"
-          >Layout</a
-        >
-      </p>
+          <p class="unhug">
+            <a
+              class="sans"
+              href="https://github.com/felixbuchholz/thesis2019/blob/master/data/thesis.pdf"
+              >Layout</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="margin-right">
+      <div class="budget">
+        <h5 class="sans">
+          Budget effects of UIG scheme <span class="primary-color">1</span>
+        </h5>
+      </div>
     </div>
   </div>
 </template>
@@ -162,11 +225,12 @@ export default {
   data() {
     return {
       data: [],
+      positionsArray: [],
       svgWidth: 400,
       svgHeight: 750,
-      margin: { top: 20, left: 105, bottom: 120, right: 40 },
-      tooltip: { id: null, x: 0, y: 0, opacity: 0 },
-      show: false,
+      margin: { top: 20, left: 105, bottom: 120, right: 2 },
+      tooltip: { id: -1, left: null, top: null, bottom: null, right: null },
+      show: true,
       mouseDown: false,
       isLoaded: false,
       moe: false,
@@ -181,16 +245,11 @@ export default {
       return this.svgHeight - this.margin.top - this.margin.bottom;
     },
     maxValue() {
-      // console.log(this.data);
       const lastIndex = this.data.length - 1;
-      // console.log(lastIndex);
       const lastArrayOfPositions = this.data[lastIndex].positions;
-      // console.log(lastArrayOfPositions);
-      // https://stackoverflow.com/questions/5732043/javascript-reduce-on-array-of-objects
       const sumOfPositionsInLastArray = lastArrayOfPositions.reduce((a, b) => {
-        return { valUpLim: a.valUpLim + b.valUpLim };
-      }).valUpLim;
-      // console.log(sumOfPositionsInLastArray);
+        return { total: a.total + b.total };
+      }).total;
       return sumOfPositionsInLastArray;
     },
     scale() {
@@ -204,6 +263,12 @@ export default {
         .domain([0, this.maxValue])
         .rangeRound([this.height, 0]);
       return { x, y };
+    },
+    positionsWithoutIncome() {
+      return this.positionsArray.slice(1);
+    },
+    onlyIncome() {
+      return this.positionsArray.slice(0, 1);
     }
   },
   watch: {
@@ -225,6 +290,10 @@ export default {
   },
   mounted() {
     this.onResize();
+    let w = window.innerWidth;
+    let h = window.innerHeight;
+    this.tooltip.left = w / 2;
+    this.tooltip.top = h / 2;
     window.addEventListener("resize", this.onResize);
     window.onmousedown = () => {
       this.mouseDown = true;
@@ -236,15 +305,68 @@ export default {
   methods: {
     loadData() {
       d3.json("data/test-stata.json").then(d => {
-        console.log(d); // eslint-disable-line
+        console.log(d);
         this.data = d;
-        this.isLoaded = true;
-        this.computeData();
-        this.computeAllPaths();
+        this.doAfterDataIsLoaded();
       });
     },
+    doAfterDataIsLoaded() {
+      this.isLoaded = true;
+      this.computeData();
+      this.computeAllPaths();
+      this.positionsArrayCreate();
+      this.calculateSavingsOfAllPositions();
+      // This doesn’t work currently
+      // Idea: you can change the initial state here later by using another function
+      // this.positionArrayToggleForAll(false);
+    },
+    computeData() {
+      this.calculateUpperAndLowerLimit();
+    },
+    calculateSavingsOfAllPositions() {
+      for (const [i, e] of this.positionsWithoutIncome.entries()) {
+        this.calculateSavingsOfOnePosition(i);
+      }
+    },
+    calculateSavingsOfOnePosition(index) {
+      let sum = 0;
+      for (const e of this.data) {
+        // Correct this to valueBefore
+        // Correct this to households
+        sum += e.positions[index].val * e.population.val;
+      }
+      this.positionsArray[index]["savings"] = sum;
+    },
+    calculateUpperAndLowerLimit() {
+      for (const e of this.data) {
+        for (const f of e.positions) {
+          f.valLowLim = f.val - f.moe;
+          f.valUpLim = f.val + f.moe;
+          if (this.moe) {
+            f.total = f.val + f.moe;
+          } else {
+            f.total = f.val;
+          }
+        }
+      }
+    },
+    positionsArrayCreate() {
+      // console.log(this.data[0].positions);
+      this.positionsArray = this.data[0].positions.map(x => {
+        return {
+          name: x.name,
+          longName: x.longName,
+          desc: x.desc,
+          checked: true
+        };
+      });
+    },
+    positionArrayToggleForAll(bool) {
+      for (const position of this.positionsArray) {
+        position.checked = bool;
+      }
+    },
     computePath(val, j) {
-      console.log(j);
       const x = 0;
       const y = 0;
       const w = this.scale.x.bandwidth();
@@ -263,7 +385,7 @@ export default {
       let rect = generator.rectangle(x, y, w, h, {
         fill: "rgba(0,0,0,1)",
         stroke: "rgba(0,0,0,1)",
-        roughness: 0.2,
+        roughness: 0,
         fillWeight: fillWeight,
         hachureGap: hachureGap,
         hachureAngle: hachureAngle,
@@ -272,70 +394,78 @@ export default {
       let path = generator.toPaths(rect);
       return { stroke: path[1].d, fill: path[0].d };
     },
+    computePathsOfOnePosition(i) {
+      const index = i;
+      // eslint-disable-next-line no-unused-vars
+      for (const [i, e] of this.data.entries()) {
+        const position = e.positions[index];
+        position.path = this.computePath(position.val, index);
+      }
+    },
     computeAllPaths() {
+      // eslint-disable-next-line no-unused-vars
       for (const [i, e] of this.data.entries()) {
         for (const [j, f] of e.positions.entries()) {
-          // console.log(f);
           f["path"] = this.computePath(f.val, j);
         }
       }
     },
-    computeMOE() {
-      for (const e of this.data) {
-        for (const f of e.positions) {
-          // console.log(f.val);
-          f.valLowLim = f.val - f.moe;
-          f.valUpLim = f.val + f.moe;
-        }
-      }
+    mouseenter(e) {
+      this.findBinAndToggleDeactive(e);
+      // console.log(e.target.id);
+      const i = e.target.id;
+      this.tooltip.id = i;
+      d3.select(`#tooltip${i}`)
+        .transition()
+        .duration(400)
+        .style("opacity", 1);
     },
-    computeData() {
-      for (const e of this.data) {
-        for (const f of e.positions) {
-          // console.log(f.val);
-          f.valLowLim = f.val - f.moe;
-          f.valUpLim = f.val + f.moe;
-          if (this.moe) {
-            f.total = f.val + f.moe;
-          } else {
-            f.total = f.val;
-          }
-        }
-      }
-    },
-    categoryColors(j) {
-      let color = "";
-      if (j == 0) {
-        color = "rgba(72, 72, 72, 1)";
-      } else if (j >= 1) {
-        color = "rgba(122, 122, 122, 1)";
-      }
-      // else if (j == 1) {
-      //   color = "rgba(255, 138, 24, 1)";
-      // } else if (j == 2) {
-      //   color = "rgba(77, 175, 74, 1)";
-      // } else {
-      //   color = "rgba(255, 0, 0, 1)";
-      // }
-      return color;
+    findBinAndToggleDeactive(e) {
+      const binNum = e.target.id;
+      [].map.call(this.$el.querySelectorAll(`#bin${binNum} .path`), e => {
+        e.classList.toggle("stroke-deactive-benefits");
+      });
     },
     mousemove(e) {
-      // console.log(e);
-      const i = e.target.id;
-      // console.log(e) // eslint-disable-line
-      // console.log(e.target.id) // eslint-disable-line
-      // this.selectIndex = e.target.id;
-      this.tooltip = { id: i, x: e.clientX, y: e.clientY, opacity: 1 };
-      // console.log(this) // eslint-disable-line
+      let mouse = { x: e.clientX, y: e.clientY };
+      let w = window.innerWidth;
+      let h = window.innerHeight;
+      let barWidth = this.scale.x.bandwidth();
+      // this.tooltip.left = mouse.x + barWidth;
+      if (mouse.x < w / 2) {
+        this.tooltip.left = mouse.x + barWidth;
+        this.tooltip.right = null;
+      } else {
+        this.tooltip.left = null;
+        this.tooltip.left = mouse.x - 450;
+      }
+      if (mouse.y > h / 2) {
+        this.tooltip.bottom = h - mouse.y + 10;
+        this.tooltip.top = null;
+      } else {
+        this.tooltip.top = mouse.y + 50;
+        this.tooltip.bottom = null;
+      }
     },
-    mouseleave() {
+    mouseleave(e) {
+      this.findBinAndToggleDeactive(e);
+      const i = e.target.id;
+
+      d3.select(`#tooltip${i}`)
+        .transition()
+        .duration(200)
+        .style("opacity", 0);
+      this.tooltip.id = null;
+    },
+    // eslint-disable-next-line no-unused-vars
+    touchedToolTip(e) {
       this.tooltip.id = -1;
     },
     formatTooltip(e) {
-      // console.log(e);
       let positionshtml = "";
       for (const position of e.positions) {
-        positionshtml += `<p class="tooltip-p">${
+        // console.log(position.name);
+        positionshtml += `<p class="tooltip-p color-${position.name}">${
           position.longName
         }: <br /> <span class="boldest">$ ${
           position.val
@@ -346,48 +476,30 @@ export default {
       } $</span></p>${positionshtml}`;
       return tooltiphtml;
     },
-    click() {
-      this.$el.style = "width: 300px";
-      this.onResize();
-    },
-    click2() {
-      // this.show = false;
-      // setTimeout(() => {
-      //   this.show = true;
-      // }, 100);
-      if (this.moe) {
-        this.moe = false;
-      } else {
-        this.moe = true;
-      }
-    },
-    click3() {
-      if (!this.testSnapElim) {
-        this.testSnapElim = true;
+    togglePosition(i) {
+      const index = i;
+      let checkedAtIndex = this.positionsArray[index].checked;
+      if (checkedAtIndex == true) {
+        checkedAtIndex = false;
         for (const e of this.data) {
-          // console.log(e.positions[1]);
-          e.positions[1]["valueBefore"] = e.positions[1]["val"];
-          e.positions[1]["moeBefore"] = e.positions[1]["moe"];
-          e.positions[1]["val"] = 0;
-          e.positions[1]["moe"] = 0;
+          const positionObject = e.positions[index];
+          positionObject["valueBefore"] = positionObject["val"];
+          positionObject["moeBefore"] = positionObject["moe"];
+          positionObject["val"] = 0;
+          positionObject["moe"] = 0;
         }
-      } else {
-        this.testSnapElim = false;
+      } else if (checkedAtIndex == false) {
+        checkedAtIndex = true;
         for (const e of this.data) {
-          e.positions[1]["val"] = e.positions[1]["valueBefore"];
-          e.positions[1]["moe"] = e.positions[1]["moeBefore"];
+          const positionObject = e.positions[index];
+          positionObject["val"] = positionObject["valueBefore"];
+          positionObject["moe"] = positionObject["moeBefore"];
         }
       }
-      this.computeAllPaths();
       this.computeData();
-      this.show = false;
-      setTimeout(() => {
-        if (this.mouseDown == false) {
-          this.show = true;
-        }
-      }, 100);
+      this.computePathsOfOnePosition(index);
     },
-    click4() {
+    scaleYAxis() {
       setTimeout(() => {
         window.scrollBy({
           top: 2700,
@@ -395,140 +507,65 @@ export default {
           behavior: "smooth"
         });
       }, 800);
-      console.log("outside");
       this.svgHeight = 3000;
       this.computeAllPaths();
     },
-    click5() {
-      [].map.call(this.$el.querySelectorAll(".benefits"), function(e) {
-        e.classList.toggle("benefits--active");
-      });
-      // console.log(this.$el.querySelectorAll(".benefits"));
-      // this.$el.querySelectorAll(".benefits").toggle
-    },
-    click6() {
-      [].map.call(this.$el.querySelectorAll(".x-axis .tick"), (e, i) => {
-        e.querySelector("line").setAttribute("y2", i % 2 == 0 ? 6 : 10);
-        console.log(e.innerHTML);
-        e.querySelector("text").setAttribute("y", i % 2 == 0 ? 9 : 20);
-        // if (i % 2 != 0) {
-        //   e.setAttribute("y2", 10);
-        // }
-        // e.classList.toggle("benefits--active");
-      });
-      // console.log(this.$el.querySelectorAll(".benefits"));
-      // this.$el.querySelectorAll(".benefits").toggle
-    },
-    wrap(text, width) {
-      text.each(function() {
-        var text = d3.select(this),
-          words = text
-            .text()
-            .split(/\s+/)
-            .reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 1.1, // ems
-          y = text.attr("y"),
-          dy = parseFloat(text.attr("dy")),
-          tspan = text
-            .text(null)
-            .append("tspan")
-            .attr("x", 0)
-            .attr("y", y)
-            .attr("dy", dy + "em");
-        while ((word = words.pop())) {
-          line.push(word);
-          tspan.text(line.join(" "));
-          if (tspan.node().getComputedTextLength() > width) {
-            line.pop();
-            tspan.text(line.join(" "));
-            line = [word];
-            tspan = text
-              .append("tspan")
-              .attr("x", 0)
-              .attr("y", y)
-              .attr("dy", ++lineNumber * lineHeight + dy + "em")
-              .text(word);
-          }
-        }
-      });
-    },
+    // eslint-disable-next-line no-unused-vars
     onResize(event) {
-      console.log("window has been resized", event, this);
-      this.svgWidth = this.$el.getBoundingClientRect().width;
+      console.log("window has been resized");
+      // console.log( event, this);
+      // complicated d3 way to get to the width
+      // console.log(
+      //   d3.select(".chart")["_groups"][0][0].getBoundingClientRect().width - 64
+      // );
+      // console.log(this.$el.querySelectorAll(".chart")[0]);
+      const chartElement = this.$el.querySelectorAll(".chart")[0];
+      const padding = parseInt(
+        getComputedStyle(chartElement).padding.substring(0, 2)
+      );
+      // console.log(padding);
+      const parentWidth = chartElement.getBoundingClientRect().width;
+      this.svgWidth = parentWidth - 2 * padding;
+      // Fade
       this.show = false;
       setTimeout(() => {
         if (this.mouseDown == false) {
-          this.computeAllPaths();
           this.show = true;
+          this.computeAllPaths();
         }
       }, 800);
-      // this.$el.querySelector(".rough").style("opacity", 0);
     },
+    // This is just to test the modal event, might not be that important
+    // eslint-disable-next-line no-unused-vars
     onChange(event) {
-      // console.log("changed", event);
       this.computeData();
       this.computeAllPaths();
     },
     findVerticalPosition(array, index) {
-      // console.log("fvp");
-      let sum = 0;
+      // Note:
+      // This was extremely painful,
+      // only individualSum is needed to calculate
+      // the correct position
+      // sum of scale(individual) != scale(sum)
+      // … leave the comment in here to remember
+      // let sum = 0;
+      let individualSum = this.height;
       let arrayUpToPosition = array.slice(0, index + 1);
       for (var i = 0; i < arrayUpToPosition.length; i++) {
-        // console.log(
-        //   i,
-        //   arrayUpToPosition[i]["total"],
-        //   arrayUpToPosition[i]["val"]
-        // );
-        sum += arrayUpToPosition[i]["total"];
-        // if (i == arrayUpToPosition.length - 1) {
-        //   sum += 0;
-        // }
+        // sum += arrayUpToPosition[i]["val"];
+        individualSum -=
+          this.height - this.scale.y(arrayUpToPosition[i]["total"]);
       }
-      return sum;
-    },
-    myFill(j) {
-      if (j == 0) {
-        return "rgba(0,0,0,0.5)";
-      } else {
-        return "rgba(0,0,0,0.3)";
-      }
-    },
-    findVerticalEnding(array, index, property, moe) {
-      var arrayUpToPosition = array.slice(0, index + 1);
-      // console.log(array, array[index].name, array[index].val, property);
-      let sum = 0;
-      if (moe) {
-        if (property == "valLowLim") {
-          for (var i = 0; i < arrayUpToPosition.length; i++) {
-            // console.log(i);
-            sum += arrayUpToPosition[i]["valUpLim"];
-            if (i == arrayUpToPosition.length - 1) {
-              sum -= 2 * arrayUpToPosition[i].moe;
-            }
-          }
-        } else if (property == "valUpLim") {
-          for (var i = 0; i < arrayUpToPosition.length; i++) {
-            sum += arrayUpToPosition[i]["valUpLim"];
-          }
-        } else if (property == "val") {
-          for (var i = 0; i < arrayUpToPosition.length; i++) {
-            // console.log(i);
-            sum += arrayUpToPosition[i]["valUpLim"];
-            if (i == arrayUpToPosition.length - 1) {
-              sum -= 1 * arrayUpToPosition[i].moe;
-            }
-          }
-        }
-      } else {
-        for (var i = 0; i < arrayUpToPosition.length; i++) {
-          // console.log(arrayAtPosition[i].val);
-          sum += arrayUpToPosition[i].val;
-        }
-      }
-      return sum;
+      // console.log(
+      //   "comparison:",
+      //   index,
+      //   "valueTotal",
+      //   this.scale.y(sum),
+      //   "valueindiv",
+      //   individualSum
+      // );
+      // console.log(sum == individualSum);
+      return individualSum;
     }
   },
   directives: {
@@ -536,7 +573,6 @@ export default {
       const axis = binding.arg; // x or y
       const axisMethod = { x: "axisBottom", y: "axisLeft" }[axis];
       const methodArg = binding.value[axis];
-      // d3.axisBottom(scale.x)
       if (binding.arg == "y") {
         d3.select(el)
           .call(
@@ -548,8 +584,7 @@ export default {
           .attr("transform", "rotate(-25)")
           .attr("text-anchor", "end");
       } else {
-        let self = this;
-        // console.log(el);
+        // let self = this;
         d3.select(el)
           .call(d3[axisMethod](methodArg).tickFormat(d3.format("c")))
           .selectAll(".tick text")

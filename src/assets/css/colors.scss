@@ -1,0 +1,182 @@
+$primary: rgba(87,176,234,1);
+$minc: rgba(0,0,0,0.5);
+$oadivs: rgba(255, 138, 24,1);
+$socialsec:rgba(240, 234, 0, 1);
+$child:rgba(228, 36, 28, 1);
+$snapp:rgba(77, 175, 74, 1);
+$eitc:rgba(152, 78, 168, 1);
+$eduwrkunem:rgba(247, 129, 191, 1);
+$deactive-benefits: rgba(0,0,0,0.3);
+
+::selection {
+  background: $primary; /* WebKit/Blink Browsers */
+  color: white;
+}
+::-moz-selection {
+  background: $primary; /* Gecko Browsers */
+  color: white;
+}
+
+$colors: (
+  primary: rgba(87,176,234,1),
+  minc: rgba(128,128,128,1),
+  oadivs: rgba(255, 138, 24,1),
+  socialsec:rgba(240, 234, 0, 1),
+  child:rgba(228, 36, 28, 1),
+  snapp:rgba(77, 175, 74, 1),
+  eitc:rgba(152, 78, 168, 1),
+  eduwrkunem:rgba(247, 129, 191, 1),
+  deactive-benefits: rgba(0,0,0,0.3),
+);
+
+// Credit: https://frontstuff.io/generate-all-your-utility-classes-with-sass-maps
+@mixin color-modifiers {
+  @each $name, $rgba in $colors {
+    &-#{$name} {
+      color: $rgba;
+    }
+  }
+}
+.color {
+  @include color-modifiers;
+}
+
+@mixin stroke-modifiers {
+  @each $name, $rgba in $colors {
+    &-#{$name} {
+      stroke: $rgba;
+    }
+  }
+}
+.stroke {
+  @include color-modifiers;
+}
+
+@mixin checkmark-modifiers {
+  @each $name, $rgba in $colors {
+    &-#{$name} {
+      color: $rgba;
+      border-color: $rgba;
+    }
+  }
+}
+.checkmark {
+  @include checkmark-modifiers;
+}
+
+@mixin checkbox-hover-modifiers {
+  @each $name, $rgba in $colors {
+    &-#{$name} {
+      background-color: lighten( $rgba, 15% );
+    }
+  }
+}
+.checkbox-container:hover input ~ .checkmark {
+  @include checkbox-hover-modifiers;
+}
+
+@mixin checkbox-checked-modifiers {
+  @each $name, $rgba in $colors {
+    &-#{$name} {
+      background-color: $rgba;
+    }
+  }
+}
+.checkbox-container input:checked ~ .checkmark {
+  @include checkbox-checked-modifiers;
+}
+
+
+// $primary-color: rgba(87,176,234,1);
+//   $income-color: rgba(0,0,0,0.5);
+//   $deactive-benefits-color: rgba(0,0,0,0.3);
+//   $oadivs-color: rgba(255, 138, 24,1);
+//   $socialsec-color:rgba(240, 234, 0, 1);
+//   $child-color:rgba(228, 36, 28, 1);
+//   $snapp-color:rgba(77, 175, 74, 1);
+//   $eitc-color:rgba(152, 78, 168, 1);
+//   $eduwrkunem:rgba(247, 129, 191, 1);
+
+// .primary-stroke {
+//   stroke: $primary-color;
+// }
+// .primary-fill {
+//   stroke: $primary-color;
+// }
+// .primary-color {
+//   color: $primary-color;
+// }
+// .income-stroke {
+//   stroke: $income-color;
+// }
+// .income-fill {
+//   fill: $income-color;
+// }
+// .income-color {
+//   color: $income-color;
+// }
+// .oadivs-stroke {
+//   stroke: $oadivs-color;
+// }
+// .oadivs-fill {
+//   fill: $oadivs-color;
+// }
+// .oadivs-color {
+//   color: $oadivs-color;
+// }
+// .socialsec-stroke {
+//   stroke: $socialsec-color;
+// }
+// .socialsec-fill {
+//   fill: $socialsec-color;
+// }
+// .socialsec-color {
+//   color: $socialsec-color;
+// }
+// .child-stroke {
+//   stroke: $child-color;
+// }
+// .child-fill {
+//   fill: $child-color;
+// }
+// .child-color {
+//   color: $child-color;
+// }
+// .snapp-stroke {
+//   stroke: $snapp-color;
+// }
+// .snapp-fill {
+//   fill: $snapp-color;
+// }
+// .snapp-color {
+//   color: $snapp-color;
+// }
+// .eitc-stroke {
+//   stroke: $eitc-color;
+// }
+// .eitc-fill {
+//   fill: $eitc-color;
+// }
+// .eitc-color {
+//   color: $eitc-color;
+// }
+// .eduwrkunem-stroke {
+//   stroke: $eduwrkunem;
+// }
+// .eduwrkunem-fill {
+//   fill: $eduwrkunem;
+// }
+// .eduwrkunem-color {
+//   color: $eduwrkunem;
+// }
+
+
+// .deactive-benefits-stroke {
+//   stroke: $deactive-benefits-color;
+// }
+// .deactive-benefits-fill {
+//   fill: $deactive-benefits-color;
+// }
+// .deactive-benefits-color {
+//   color: $deactive-benefits-color;
+// }
