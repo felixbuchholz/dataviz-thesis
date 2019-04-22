@@ -22,6 +22,8 @@
   - compute the total income after benefits for each bin, and show it in the tool tip!
   - Data: **Create valueBefore in data-wrangling-script**
   - Data: **You need the household information: number of households per bin, avg. household size, avg.number of adults per household**
+  - Totals: calculate with if/else on position[i].checked
+  - sumSavings - (((threshold-meanIncome)/2)*households)=0
 
 - Responsiveness:
   - If min-width then the tooltip has a fixed position,

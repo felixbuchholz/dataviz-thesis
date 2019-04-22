@@ -14,6 +14,7 @@
               required="required"
               class="bignumberinput sans"
               max="9"
+              v-model="numOfUIGBins"
             />
             <div for="incomebrackets" class="controls bold sans control-minus">
               -
@@ -29,7 +30,13 @@
           <!-- <p class="sans">A UIG is active:</p> -->
           <label class="checkbox-container sans color-primary checkbox-primary">
             Universal Income Guarantee
-            <input type="checkbox" />
+            <input
+              v-if="isLoaded"
+              v-show="positionsArray[positionsArray.length - 1].checked"
+              type="checkbox"
+              v-model="positionsArray[positionsArray.length - 1].checked"
+              @click="togglePosition(positionsArray.length - 1)"
+            />
             <span class="checkmark checkmark-primary"></span>
           </label>
         </div>
@@ -38,7 +45,7 @@
           <p class="sans">These programs should be in place:</p>
           <div class="transfer-checkboxes">
             <label
-              v-for="(e, i) in positionsWithoutIncome"
+              v-for="(e, i) in positionsOnlyWelfare"
               :key="i + 1"
               :class="
                 `checkbox-container sans color-${e.name} checkbox-${e.name}`
@@ -55,11 +62,18 @@
           </div>
         </div>
         <hr />
-        <div class="uig">
-          <p class="sans small unhug-top">Show and hide market income:</p>
+        <div class="income">
+          <p class="sans small unhug-top">
+            Include market income in comparison:
+          </p>
           <label class="checkbox-container sans">
             Income
-            <input type="checkbox" />
+            <input
+              v-if="isLoaded"
+              type="checkbox"
+              v-model="positionsArray[0].checked"
+              @click="togglePosition(0)"
+            />
             <span class="checkmark"></span>
           </label>
         </div>
@@ -113,9 +127,11 @@
                           "
                         >
                           <path
-                            v-show="show"
+                            v-show="show & positionsArray[j].checked"
                             :class="
-                              `path stroke-${f.name} stroke-deactive-benefits`
+                              `path ${f.category} stroke-${
+                                f.name
+                              } stroke-deactive-${f.category}`
                             "
                             fill="none"
                             stroke="currentColor"
@@ -125,11 +141,13 @@
                           <path
                             v-show="show"
                             :class="
-                              ` path stroke-${f.name} stroke-deactive-benefits`
+                              ` path ${f.category} stroke-${
+                                f.name
+                              } stroke-deactive-${f.category}`
                             "
                             fill="none"
                             stroke="currentColor"
-                            stroke-width="1"
+                            stroke-width="0.5"
                             :d="f.path.fill"
                           />
                           <!-- <rect
@@ -158,6 +176,14 @@
                   @mouseout="mouseleave"
                 />
               </g>
+
+              <rect
+                x="0"
+                :y="height"
+                :height="margin.bottom"
+                :width="width"
+                fill="#fcfcfc"
+              />
               <text
                 class="graph-label"
                 :transform="`translate(${width / 2}, ${height + 110})`"
@@ -209,6 +235,13 @@
         <h5 class="sans">
           Budget effects of UIG scheme <span class="primary-color">1</span>
         </h5>
+        <div>
+          <p>Current total welfare savings:</p>
+          <h2 class="bold sans">{{ currentTotalSavingsF }}</h2>
+          <p>
+            Which is: <span>{{ currentTotalSavings }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -226,6 +259,7 @@ export default {
     return {
       data: [],
       positionsArray: [],
+      totalMax: 0,
       svgWidth: 400,
       svgHeight: 750,
       margin: { top: 20, left: 105, bottom: 120, right: 2 },
@@ -234,7 +268,7 @@ export default {
       mouseDown: false,
       isLoaded: false,
       moe: false,
-      testSnapElim: false
+      numOfUIGBins: 4
     };
   },
   computed: {
@@ -245,44 +279,94 @@ export default {
       return this.svgHeight - this.margin.top - this.margin.bottom;
     },
     maxValue() {
-      const lastIndex = this.data.length - 1;
-      const lastArrayOfPositions = this.data[lastIndex].positions;
-      const sumOfPositionsInLastArray = lastArrayOfPositions.reduce((a, b) => {
-        return { total: a.total + b.total };
-      }).total;
-      return sumOfPositionsInLastArray;
+      let max = 0;
+      for (const e of this.data) {
+        if (max < e.totalIncome) {
+          max = e.totalIncome;
+        }
+      }
+      return this.totalMax;
     },
     scale() {
       const x = d3
         .scaleBand()
         .domain(this.data.map(x => x.bin))
         .rangeRound([0, this.width])
-        .padding(0.3);
+        .padding(0.2);
       const y = d3
         .scaleLinear()
+        // .domain([
+        //   0,
+        //   () => {
+        //     return 1 * this.maxValue;
+        //   }
+        // ])
         .domain([0, this.maxValue])
+        // .domain([0, Math.max(...this.data.map(x => x.totalIncome))])
         .rangeRound([this.height, 0]);
       return { x, y };
     },
-    positionsWithoutIncome() {
-      return this.positionsArray.slice(1);
+    positionsOnlyWelfare() {
+      return this.positionsArray.slice(1, this.positionsArray.length - 1);
     },
     onlyIncome() {
       return this.positionsArray.slice(0, 1);
+    },
+    onlyUIG() {
+      return this.positionsArray.slice(this.positionsArray.length - 1);
+    },
+    totalHousholds() {
+      let sum = 0;
+      for (const e of this.data) {
+        sum += e.populationDetails.hhtotal.val;
+      }
+      return sum;
+    },
+    totalHousholdsF() {
+      const f = d3.format(".2s");
+      return f(this.totalHousholds);
+    },
+    currentTotalSavings() {
+      let sum = 0;
+      for (const e of this.positionsOnlyWelfare) {
+        if (e.checked == false) {
+          sum += e.savings;
+        }
+      }
+      return sum;
+    },
+    currentTotalSavingsF() {
+      const f = d3.format("($.2s");
+      return f(this.currentTotalSavings);
+    },
+    UIGthreshold() {
+      const binIndex = this.numOfUIGBins - 1;
+      return this.data[binIndex].binDetails.ul;
     }
   },
   watch: {
-    width() {
-      // console.log("width has changed");
-    },
     data: {
       deep: true,
       handler(update) {
         console.log("data has changed", update);
       }
     },
+    positionsArray: {
+      deep: true,
+      handler(update) {
+        console.log("positionsArray has changed");
+        setTimeout(() => {
+          this.calculateTotalIncomePerBin();
+          this.calculateMaxMax();
+          this.computeAllPaths();
+        }, 1200);
+      }
+    },
     tooltip() {
       // console.log("tooltip has changed");
+    },
+    width() {
+      // console.log("width has changed");
     }
   },
   created() {
@@ -305,7 +389,7 @@ export default {
   methods: {
     loadData() {
       d3.json("data/test-stata.json").then(d => {
-        console.log(d);
+        // console.log(d);
         this.data = d;
         this.doAfterDataIsLoaded();
       });
@@ -313,9 +397,13 @@ export default {
     doAfterDataIsLoaded() {
       this.isLoaded = true;
       this.computeData();
-      this.computeAllPaths();
       this.positionsArrayCreate();
       this.calculateSavingsOfAllPositions();
+      this.calculateTotalIncomePerBin();
+      this.calculateMaxMax();
+      this.calculateUIGInAllBins();
+      this.initiallyUncheckUIG();
+      this.computeAllPaths();
       // This doesn’t work currently
       // Idea: you can change the initial state here later by using another function
       // this.positionArrayToggleForAll(false);
@@ -324,18 +412,55 @@ export default {
       this.calculateUpperAndLowerLimit();
     },
     calculateSavingsOfAllPositions() {
-      for (const [i, e] of this.positionsWithoutIncome.entries()) {
+      for (const [i, e] of this.positionsOnlyWelfare.entries()) {
         this.calculateSavingsOfOnePosition(i);
       }
     },
     calculateSavingsOfOnePosition(index) {
       let sum = 0;
       for (const e of this.data) {
-        // Correct this to valueBefore
-        // Correct this to households
-        sum += e.positions[index].val * e.population.val;
+        // console.log(e.positions[index]);
+        // !!!! +1
+        sum +=
+          e.positions[index + 1].valueBefore * e.populationDetails.hhtotal.val;
       }
-      this.positionsArray[index]["savings"] = sum;
+      this.positionsOnlyWelfare[index]["savings"] = sum;
+    },
+    initiallyUncheckUIG() {
+      this.positionsArray[this.positionsArray.length - 1].checked = false;
+    },
+    calculateUIGPerBin(i) {
+      let e = this.data[i];
+      let UIGPositionInBin = e.positions[e.positions.length - 1];
+      let incomeInBin = e.positions[0].valueBefore;
+      // Negative marginal tax rate
+      UIGPositionInBin.value = (this.UIGthreshold - incomeInBin) * 0.5;
+      UIGPositionInBin.valueBefore = (this.UIGthreshold - incomeInBin) * 0.5;
+    },
+    calculateUIGInAllBins() {
+      for (let i = 0; i < this.numOfUIGBins; i++) {
+        this.calculateUIGPerBin(i);
+      }
+    },
+    calculateTotalIncomePerBin() {
+      for (const e of this.data) {
+        let sum = 0;
+        for (const f of e.positions) {
+          sum += f.val;
+        }
+        e.totalIncome = sum;
+      }
+    },
+    calculateMaxMax() {
+      let max = 0;
+      for (const e of this.data) {
+        if (max < e.totalIncome) {
+          // console.log(max, e.totalIncome);
+          max = e.totalIncome;
+        }
+      }
+      this.totalMax = max;
+      return max;
     },
     calculateUpperAndLowerLimit() {
       for (const e of this.data) {
@@ -372,12 +497,13 @@ export default {
       const w = this.scale.x.bandwidth();
       const h = this.height - this.scale.y(val);
       let hachureAngle = -(90 - 25);
-      let hachureGap = 5;
-      let fillWeight = 2;
+      let hachureGap = 7;
+      let fillWeight = 3;
       let fillStyle = "cross-hatch";
+      // let fillStyle = "zigzag-line";
       if (j > 0) {
         hachureAngle = -(90 - 25);
-        hachureGap = 3;
+        hachureGap = 4;
         fillWeight = 1.5;
         fillStyle = "hachure";
       }
@@ -385,7 +511,7 @@ export default {
       let rect = generator.rectangle(x, y, w, h, {
         fill: "rgba(0,0,0,1)",
         stroke: "rgba(0,0,0,1)",
-        roughness: 0,
+        roughness: 0.8,
         fillWeight: fillWeight,
         hachureGap: hachureGap,
         hachureAngle: hachureAngle,
@@ -411,22 +537,34 @@ export default {
       }
     },
     mouseenter(e) {
-      this.findBinAndToggleDeactive(e);
-      // console.log(e.target.id);
       const i = e.target.id;
+      this.findBinAndToggleDeactive(e);
+      // console.log(d3.select(`#tooltip${i}`));
       this.tooltip.id = i;
       d3.select(`#tooltip${i}`)
         .transition()
         .duration(400)
         .style("opacity", 1);
     },
-    findBinAndToggleDeactive(e) {
+    findBinAndToggleDeactive(e, i) {
       const binNum = e.target.id;
       [].map.call(this.$el.querySelectorAll(`#bin${binNum} .path`), e => {
-        e.classList.toggle("stroke-deactive-benefits");
+        e.classList.toggle("more-stroke");
+        // Colors
+        if (e.classList.contains("income")) {
+          e.classList.toggle("stroke-deactive-income");
+        } else if (e.classList.contains("welfare")) {
+          e.classList.toggle("stroke-deactive-welfare");
+        } else if (e.classList.contains("uig")) {
+          e.classList.toggle("stroke-deactive-uig");
+        }
       });
     },
     mousemove(e) {
+      const i = e.target.id;
+      let tooltip = this.$el.querySelector(`#tooltip${i}`);
+      const tooltipHeight = tooltip.getBoundingClientRect().height;
+      // console.log(tooltip, tooltipHeight);
       let mouse = { x: e.clientX, y: e.clientY };
       let w = window.innerWidth;
       let h = window.innerHeight;
@@ -440,11 +578,12 @@ export default {
         this.tooltip.left = mouse.x - 450;
       }
       if (mouse.y > h / 2) {
-        this.tooltip.bottom = h - mouse.y + 10;
-        this.tooltip.top = null;
+        // console.log(d3.select(`#tooltip${i}`));
+        // this.tooltip.top = null;
+        this.tooltip.top = mouse.y - tooltipHeight - 35;
       } else {
+        // this.tooltip.bottom = null;
         this.tooltip.top = mouse.y + 50;
-        this.tooltip.bottom = null;
       }
     },
     mouseleave(e) {
@@ -453,9 +592,9 @@ export default {
 
       d3.select(`#tooltip${i}`)
         .transition()
-        .duration(200)
+        .duration(300)
         .style("opacity", 0);
-      this.tooltip.id = null;
+      // this.tooltip.id = null;
     },
     // eslint-disable-next-line no-unused-vars
     touchedToolTip(e) {
@@ -477,6 +616,7 @@ export default {
       return tooltiphtml;
     },
     togglePosition(i) {
+      // console.log(i);
       const index = i;
       let checkedAtIndex = this.positionsArray[index].checked;
       if (checkedAtIndex == true) {
@@ -512,7 +652,7 @@ export default {
     },
     // eslint-disable-next-line no-unused-vars
     onResize(event) {
-      console.log("window has been resized");
+      // console.log("window has been resized");
       // console.log( event, this);
       // complicated d3 way to get to the width
       // console.log(
@@ -533,7 +673,7 @@ export default {
           this.show = true;
           this.computeAllPaths();
         }
-      }, 800);
+      }, 1000);
     },
     // This is just to test the modal event, might not be that important
     // eslint-disable-next-line no-unused-vars
@@ -569,10 +709,11 @@ export default {
     }
   },
   directives: {
-    axis(el, binding) {
+    axis(el, binding, update) {
+      // console.log(update);
       const axis = binding.arg; // x or y
       const axisMethod = { x: "axisBottom", y: "axisLeft" }[axis];
-      const methodArg = binding.value[axis];
+      let methodArg = binding.value[axis];
       if (binding.arg == "y") {
         d3.select(el)
           .call(

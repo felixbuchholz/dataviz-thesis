@@ -9,81 +9,115 @@ const colors = [
 ];
 const names = [
   {
+    fileName: "hh_total.csv",
+    population: true,
+    shortName: "hhtotal",
+    listName: "Total households in range",
+    longName: "Total count of households in income range",
+    desc: "",
+    category: "population"
+  },
+  {
     fileName: "hh_t_persons.csv",
     population: true,
     shortName: "tpersons",
-    longName: "Total count of person per household",
-    desc: ""
+    listName: "Total persons in range",
+    longName: "Total count of persons in income range",
+    desc: "",
+    category: "population"
   },
   {
     fileName: "hh_t_adults.csv",
     population: true,
     shortName: "tadults",
-    longName: "Total count of adults per household",
-    desc: ""
+    listName: "Total adults in range",
+    longName: "Total count of adults  in income range",
+    desc: "",
+    category: "population"
   },
   {
     fileName: "hh_m_persons.csv",
     population: true,
     shortName: "mpersons",
-    longName: "Mean count of person per household",
-    desc: ""
+    listName: "Avg. persons per household",
+    longName: "Mean count of person per household in income range",
+    desc: "",
+    category: "population"
   },
   {
     fileName: "hh_m_adults.csv",
     population: true,
     shortName: "madults",
-    longName: "Mean count of adults per household",
-    desc: ""
+    listName: "Avg. adults per household",
+    longName: "Mean count of adults per household in income range",
+    desc: "",
+    category: "population"
   },
+  // Make proper list names for the different welfare positions
   {
     fileName: "hh_m_inc.csv",
     population: false,
     shortName: "minc",
     longName: "Mean market income",
-    desc: ""
+    desc: "",
+    category: "income"
   },
   {
     fileName: "hh_oadivs.csv",
     population: false,
     shortName: "oadivs",
     longName: "SSI and disability, retirement, survivor and veteran benefits",
-    desc: ""
+    desc: "",
+    category: "welfare"
   },
   {
     fileName: "hh_eitcred.csv",
     population: false,
     shortName: "eitc",
     longName: "Earned Income Tax Credit",
-    desc: ""
+    desc: "",
+    category: "welfare"
   },
   {
     fileName: "hh_child.csv",
     population: false,
     shortName: "child",
     longName: "Child support programs and child tax credits",
-    desc: ""
+    desc: "",
+    category: "welfare"
   },
   {
     fileName: "hh_snap_plus.csv",
     population: false,
     shortName: "snapp",
     longName: "SNAP, AFDC, TANF and energy subsidies",
-    desc: ""
+    desc: "",
+    category: "welfare"
   },
   {
     fileName: "hh_eduwrkunem.csv",
     population: false,
     shortName: "eduwrkunem",
     longName: "Education, Worker Compensation and unemployment benefits",
-    desc: ""
+    desc: "",
+    category: "welfare"
   },
   {
     fileName: "hh_socialsec.csv",
     population: false,
     shortName: "socialsec",
     longName: "Social Security benefits",
-    desc: ""
+    desc: "",
+    category: "welfare"
+  },
+  {
+    fileName: "uig_empty.csv",
+    population: false,
+    shortName: "uig",
+    listName: "Universal Income Guarantee",
+    longName: "Hypothetical Universal Income Guarantee",
+    desc: "",
+    category: "uig"
   }
 ];
 const bins = [
@@ -118,7 +152,7 @@ d3.csv(`hh_t_persons.csv`).then(data => {
         if (e.hasOwnProperty("position")) {
           data[i].positions.push(e.position);
         } else {
-          data[i].populationDetails.push(e.population);
+          data[i].populationDetails[e.population.name] = e.population;
         }
       }
     });
@@ -126,6 +160,7 @@ d3.csv(`hh_t_persons.csv`).then(data => {
   data.map((e, i) => {
     e.bin = bins[i].string;
     e.binDetails = bins[i];
+    delete e.population;
   });
   console.log(data);
 });
@@ -143,16 +178,19 @@ const processCSV = (data, names, population) => {
     } else {
       e.position = {
         val: parseInt(e.b),
+        valueBefore: parseInt(e.b),
         moe: parseInt(e.se),
+        moeBefore: parseInt(e.se),
         name: names.shortName,
         longName: names.longName,
-        desc: names.desc
+        desc: names.desc,
+        category: names.category
       };
     }
     e.bin = e[""];
     e.id = i;
     e.positions = [];
-    e.populationDetails = [];
+    e.populationDetails = {};
     delete e[""];
     delete e.b;
     delete e.crit;

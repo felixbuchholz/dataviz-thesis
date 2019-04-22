@@ -19,14 +19,18 @@ $deactive-benefits: rgba(0,0,0,0.3);
 
 $colors: (
   primary: rgba(87,176,234,1),
-  minc: rgba(128,128,128,1),
+  uig: rgba(87,176,234,1),
+  income: rgba(0,0,0,0.5),
+  minc: rgba(0,0,0,0.5),
   oadivs: rgba(255, 138, 24,1),
   socialsec:rgba(240, 234, 0, 1),
   child:rgba(228, 36, 28, 1),
   snapp:rgba(77, 175, 74, 1),
   eitc:rgba(152, 78, 168, 1),
   eduwrkunem:rgba(247, 129, 191, 1),
-  deactive-benefits: rgba(0,0,0,0.3),
+  deactive-income: rgba(0,0,0,0.3),
+  deactive-welfare: rgba(0,0,0,0.3),
+  deactive-uig: rgba(87,176,234,0.8),
 );
 
 // Credit: https://frontstuff.io/generate-all-your-utility-classes-with-sass-maps

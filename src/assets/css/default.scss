@@ -6,8 +6,11 @@
   padding: 26px;
 }
 
-.tipmove-move {
-  transition: position 0.3s 0.1s ease-in-out;
+// .tipmove-move {
+//   transition: position 0.3s 0.1s ease-in-out;
+// }
+.more-stroke {
+  stroke-width: 1;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -18,9 +21,13 @@
   opacity: 0;
 }
 
-g, path, div {
+div {
+  transition: all 0.4s;
+}
+
+g, path {
   transition-property: all;
-  transition-duration: 0.4s;
+  transition-duration: 1s;
 }
 
 @media (min-width: 550px) {
