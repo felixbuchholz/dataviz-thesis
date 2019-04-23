@@ -1,5 +1,5 @@
 .grid-container {display: grid;
-  grid-template-columns: 1fr 55% 1fr;
+  grid-template-columns: 1fr 50% 1fr;
   // grid-column-gap: 32px;
   grid-template-rows: auto;
   grid-template-areas: 
@@ -9,6 +9,10 @@
   grid-area: "margin-left";
   justify-self: end;
 }
+.positions {
+  transition: all 0.4s;
+}
+
 .margin-right {
   grid-area: margin-right;
   justify-self: start;
@@ -22,11 +26,21 @@
 }
 .interface, .budget {
   padding: 32px;
-  width: 70%;
+  // width for budget??? 
+}
+
+.simple-flex {
+  display: flex;
+  justify-content: space-between;
 }
 
 .interface {
   margin-left: auto;
+  width: 70%;
+}
+.border-top-with-note {
+  border-top: 1px dashed rgba(0,0,0,0.4);
+  // border-bottom: 1px dashed rgba(0,0,0,0.4);
 }
 
 .budget {
@@ -50,4 +64,12 @@
   .chart {
     width: 100%;
   }
+}
+
+.low-opacity {
+  opacity: 0.1;
+}
+
+.low-opacity:hover {
+  opacity: 0.8;
 }

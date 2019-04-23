@@ -29,6 +29,18 @@ a {
   text-decoration: none;
   color: rgba(87,176,234,1)
 }
+
+.small {
+  font-size: 1.4rem;
+  letter-spacing: 0.01rem;
+  font-weight: 300;
+}
+
+.regular {
+  font-style: inherit;
+  font-weight: 400;
+}
+
 .bold {
   font-style: inherit;
   font-weight: bolder;
@@ -47,7 +59,10 @@ a {
 .right {
   padding-left: 36%;
 }
-.hug {
+.align-right {
+  text-align: right;
+}
+.hug-bottom {
   margin-bottom: 1rem;
 }
 .unhug {
@@ -58,13 +73,15 @@ a {
   margin-top: 3.75rem;
 }
 .unhug-bottom {
-  margin-top: 3.75rem;
+  margin-bottom: 3.75rem;
 }
-.small {
-  font-size: 1.4rem;
-  letter-spacing: 0.01rem;
-  font-weight: 300;
+.unhug-bigtime {
+  margin-top: 40rem;
 }
+.note-top-unhug {
+  margin-top: 1rem;
+}
+
 
 html {
   font-size: 62.5%;

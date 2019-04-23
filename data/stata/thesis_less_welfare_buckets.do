@@ -476,9 +476,37 @@ mat at = a'
 esttab matrix(at, fmt(2)) using hh_t_adults.csv, plain replace eqlabels(none) mlabels(none)
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
-	
+
+
+
+
 * -----------------------------------------------------------------------------
-* ### Welfare 
+* ### Welfare
+
+
+
+* 1. Work related Transfers
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+* #### Earned Income Tax Credit
+
+* eitcred
+	gen clean_eitcred=eitcred
+	* Replace "Not in universe" by zero
+	replace clean_eitcred = 0 if clean_eitcred == 9999
+
+* EITC sum by household
+* 	bys serial: egen hh_clean_eitcred=total(clean_eitcred)
+* - Clean up, retain values just for head of household
+* 	replace hh_clean_eitcred = 0 if pernum != 1
+* Get EITC value by bins
+* 	svy: mean hh_clean_eitcred if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+* return list
+* matrix a = r(table)
+* matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+* mat at = a'	
+* esttab matrix(at, fmt(2)) using hh_eitcred.csv, plain replace eqlabels(none) mlabels(none)
 
 * -----------------------------------------------------------------------------
 * #### Workers compensation
@@ -493,38 +521,33 @@ esttab matrix(at, fmt(2)) using hh_t_adults.csv, plain replace eqlabels(none) ml
 	
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
-* Bucket: Education, Work and Unemployment benefits
-egen float clean_eduwrkunem_total = rowtotal(clean_wel_inceduc clean_wel_incunemp clean_incwkcom)
+* Bucket: EITC, Worker compensation, Education and Unemployment benefits
+egen float clean_1work_total = rowtotal(clean_incwkcom clean_eitcred clean_wel_inceduc clean_wel_incunemp)
 
 * by household
-bys serial: egen hh_clean_eduwrkunem_total=total(clean_eduwrkunem_total)
+bys serial: egen hh_clean_1work_total = total(clean_1work_total)
 * cleanup
-replace hh_clean_eduwrkunem_total = 0 if pernum != 1
+replace hh_clean_1work_total = 0 if pernum != 1
 
-svy: mean hh_clean_eduwrkunem_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+svy: mean hh_clean_1work_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
 
 return list
 matrix a = r(table)
 matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
 mat at = a'	
-esttab matrix(at, fmt(2)) using hh_eduwrkunem.csv, plain replace eqlabels(none) mlabels(none)
+esttab matrix(at, fmt(2)) using hh_1work.csv, plain replace eqlabels(none) mlabels(none)
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
-	
 
 
+
+
+
+
+* x. Social Security SPLIT
 * -----------------------------------------------------------------------------
-* #### Veterans' Administration payments
+* -----------------------------------------------------------------------------
 
-* incvet
-	gen clean_incvet=incvet
-	* Replace "Not in universe" by zero
-	replace clean_incvet = 0 if clean_incvet == 99999
-	* Replace topcode, no values provided in topcode list 
-	* https://cps.ipums.org/cps/topcodes_tables.shtml#2017top
-	replace clean_incvet = 0 if clean_incvet == 99997
-	* 12 observations in the data
-	
 * -----------------------------------------------------------------------------
 * #### Social Securtiy
 
@@ -535,84 +558,46 @@ esttab matrix(at, fmt(2)) using hh_eduwrkunem.csv, plain replace eqlabels(none) 
 	* Replace topcode
 	* replace clean_incwkcom = 0 if clean_incwkcom == 99997
 	* No observations in the data
+	
+* SPLIT !
 
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-* clean_incss
-* 
-* egen float clean_oadivs_total = rowtotal(clean_incssi clean_wel_increti_tot clean_wel_incdisa_tot clean_incvet)
+	gen clean_incss_child = clean_incss
+	gen clean_incss_ret = clean_incss
+	gen clean_incss_disa = clean_incss
 
-* by household
-bys serial: egen hh_clean_incss=total(clean_incss)
-* cleanup
-replace hh_clean_incss = 0 if pernum != 1
-
-svy: mean hh_clean_incss if pernum == 1, over(hh_clean_mkt_inc_total_cat)
-
-return list
-matrix a = r(table)
-matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
-mat at = a'	
-esttab matrix(at, fmt(2)) using hh_socialsec.csv, plain replace eqlabels(none) mlabels(none)
-* -----------------------------------------------------------------------------
+	* Dependent children, on behalf of children, codes:  6, 7
+	replace clean_incss_child = 0 if whyss1 == 0 |  whyss1 == 1 | whyss1 == 2 |  whyss1 == 3 |  whyss1 == 4 |  whyss1 == 5 | whyss1 == 8
+	
+	* Retired, widowed, spouse, surviving child 1, 3, 4, 5
+	replace clean_incss_ret = 0 if whyss1 == 0 |  whyss1 == 2 |  whyss1 == 0 | whyss1 == 6 | whyss1 == 7 |  whyss1 == 8
+	
+	* Disability and other 2, 8
+	replace clean_incss_disa = 0 if whyss1 == 0 |  whyss1 == 1 |  whyss1 == 3 |  whyss1 == 4 |  whyss1 == 5 |  whyss1 == 6 |  whyss1 == 7
+	
+	
 * -----------------------------------------------------------------------------
 
-* -----------------------------------------------------------------------------
-* #### Supplemental Security Income
 
-* incssi
-	gen clean_incssi=incssi
+
+
+
+* 2. Family Assistance, SNAP and other
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+* #### "AFDC/TANF | Other | All", https://cps.ipums.org/cps-action/variables/INCWELFR#comparability_section
+
+* incwelfr
+	gen clean_incwelfr=incwelfr
 	* Replace "Not in universe" by zero
-	replace clean_incssi = 0 if clean_incssi == 99999
+	replace clean_incwelfr = 0 if clean_incwelfr == 99999
 
 * -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-* Bucket: Old Age, Disability, Veteran Status
-* 
-* clean_incss
-* 
-egen float clean_oadivs_total = rowtotal(clean_incssi clean_wel_increti_tot clean_wel_incdisa_tot clean_incvet)
-
-* by household
-bys serial: egen hh_clean_oadivs_total=total(clean_oadivs_total)
-* cleanup
-replace hh_clean_oadivs_total = 0 if pernum != 1
-
-svy: mean hh_clean_oadivs_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
-
-return list
-matrix a = r(table)
-matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
-mat at = a'	
-esttab matrix(at, fmt(2)) using hh_oadivs.csv, plain replace eqlabels(none) mlabels(none)
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-
+* #### SNAP 
+* Needs no cleaning
 
 * -----------------------------------------------------------------------------
-* #### Earned Income Tax Credit
-
-* eitcred
-	gen clean_eitcred=eitcred
-	* Replace "Not in universe" by zero
-	replace clean_eitcred = 0 if clean_eitcred == 9999
-
-* EITC sum by household
-	bys serial: egen hh_clean_eitcred=total(clean_eitcred)
-* - Clean up, retain values just for head of household
-	replace hh_clean_eitcred = 0 if pernum != 1
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-* Get EITC value by bins
-	svy: mean hh_clean_eitcred if pernum == 1, over(hh_clean_mkt_inc_total_cat)
-
-return list
-matrix a = r(table)
-matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
-mat at = a'	
-esttab matrix(at, fmt(2)) using hh_eitcred.csv, plain replace eqlabels(none) mlabels(none)
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
+* #### Energy subsidy
+* Needs no cleaning
 
 * -----------------------------------------------------------------------------
 * #### Child support
@@ -642,31 +627,131 @@ esttab matrix(at, fmt(2)) using hh_eitcred.csv, plain replace eqlabels(none) mla
 	
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
-* Bucket: Child
-egen float clean_child_total = rowtotal(clean_incchild clean_ctccrd clean_actccrd)
+* Bucket Family Assistance, SNAP and other: AFDC/TANF, Child support, child tax credit, child, Social security child benefits, SNAP, Energy Subsidy
 
-* BucketChild by household
-bys serial: egen hh_clean_child_total=total(clean_child_total)
+egen float clean_2family_total = rowtotal(clean_incwelfr clean_incchild clean_ctccrd clean_actccrd clean_incss_child spmsnap heatval)
+
+* BucketPov by household
+bys serial: egen hh_clean_2family_total = total(clean_2family_total)
 * cleanup
-replace hh_clean_child_total = 0 if pernum != 1
+replace hh_clean_2family_total = 0 if pernum != 1
 
-svy: mean hh_clean_child_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+svy: mean hh_clean_2family_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
 
 return list
 matrix a = r(table)
 matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
 mat at = a'	
-esttab matrix(at, fmt(2)) using hh_child.csv, plain replace eqlabels(none) mlabels(none)
+esttab matrix(at, fmt(2)) using hh_2family.csv, plain replace eqlabels(none) mlabels(none)
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+* 3. Retirment, Veteran & survivor status
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
 
 * -----------------------------------------------------------------------------
-* #### "AFDC/TANF | Other | All", https://cps.ipums.org/cps-action/variables/INCWELFR#comparability_section
+* #### Veterans' Administration payments
 
-* incwelfr
-	gen clean_incwelfr=incwelfr
+* incvet
+	gen clean_incvet=incvet
 	* Replace "Not in universe" by zero
-	replace clean_incwelfr = 0 if clean_incwelfr == 99999
+	replace clean_incvet = 0 if clean_incvet == 99999
+	* Replace topcode, no values provided in topcode list 
+	* https://cps.ipums.org/cps/topcodes_tables.shtml#2017top
+	replace clean_incvet = 0 if clean_incvet == 99997
+	* 12 observations in the data
+	
+
+	
+	
+
+
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+* Bucket: Retirement, veteran & survivor status
+
+egen float clean_3retirement_total = rowtotal(clean_wel_increti_tot clean_incvet clean_incss_ret)
+
+* by household
+bys serial: egen hh_clean_3retirement_total = total(clean_3retirement_total)
+* cleanup
+replace hh_clean_3retirement_total = 0 if pernum != 1
+
+svy: mean hh_clean_3retirement_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at, fmt(2)) using hh_3retirement.csv, plain replace eqlabels(none) mlabels(none)
+
+
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+
+
+
+* 4. Disability status and other Social Security benefits
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+
+* -----------------------------------------------------------------------------
+* #### Supplemental Security Income
+
+* incssi
+	gen clean_incssi = incssi
+	* Replace "Not in universe" by zero
+	replace clean_incssi = 0 if clean_incssi == 99999
+
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+* Bucket: Disability and "other" in Social Security benefits
+* 
+* 
+egen float clean_4disa_total = rowtotal(clean_incssi clean_wel_incdisa_tot clean_incss_disa)
+
+* by household
+bys serial: egen hh_clean_4disa_total = total(clean_4disa_total)
+* cleanup
+replace hh_clean_4disa_total = 0 if pernum != 1
+
+svy: mean hh_clean_4disa_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+return list
+matrix a = r(table)
+matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+mat at = a'	
+esttab matrix(at, fmt(2)) using hh_4disa.csv, plain replace eqlabels(none) mlabels(none)
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+* ## OLD BUCKETS
 
 * -----------------------------------------------------------------------------
 * #### SNAP 
@@ -695,43 +780,50 @@ esttab matrix(at, fmt(2)) using hh_child.csv, plain replace eqlabels(none) mlabe
 * Get the energy subsidy value by bins
 	* svy: mean hh_heatval if pernum == 1, over(hh_incomecat)
 	
-
+	
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
-* BucketPov: SNAP, Energy Subsidy, AFDC/TANF
+* OLD Bucket: Child
+* egen float clean_child_total = rowtotal(clean_incchild clean_ctccrd clean_actccrd)
 
-egen float snap_plus_total = rowtotal(spmsnap heatval clean_incwelfr)
-
-* BucketPov by household
-bys serial: egen hh_snap_plus_total=total(snap_plus_total)
+* BucketChild by household
+* bys serial: egen hh_clean_child_total=total(clean_child_total)
 * cleanup
-replace hh_snap_plus_total = 0 if pernum != 1
+* replace hh_clean_child_total = 0 if pernum != 1
 
-svy: mean hh_snap_plus_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+* svy: mean hh_clean_child_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
 
-return list
-matrix a = r(table)
-matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
-mat at = a'	
-esttab matrix(at, fmt(2)) using hh_snap_plus.csv, plain replace eqlabels(none) mlabels(none)
+* return list
+* matrix a = r(table)
+* matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+* mat at = a'	
+* esttab matrix(at, fmt(2)) using hh_child.csv, plain replace eqlabels(none) mlabels(none)
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+
+* -----------------------------------------------------------------------------
+* -----------------------------------------------------------------------------
+* Old bucket clean_incss
+
+
+* by household
+* bys serial: egen hh_clean_incss=total(clean_incss)
+* cleanup
+* replace hh_clean_incss = 0 if pernum != 1
+
+* svy: mean hh_clean_incss if pernum == 1, over(hh_clean_mkt_inc_total_cat)
+
+* return list
+* matrix a = r(table)
+* matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
+* mat at = a'	
+* esttab matrix(at, fmt(2)) using hh_socialsec.csv, plain replace eqlabels(none) mlabels(none)
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
 
 
 * -----------------------------------------------------------------------------
-* ### Save to output, template 
-
-* Total income before taxes, without welfare:
-	* svy: mean hh_inc_pretax_nowel if pernum == 1, over(hh_incomecat)
-
-* Return the result to be able to access the table
-	* return list
-
-* Write the result to the incom.csv file 
-	* putexcel set "/Users/felixbuchholz/repos/thesis/data/stata/income.csv", replace
-	* putexcel A1=matrix(r(table)), names
-
-
+* -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
 * ## Annotation:
 	* Clean and narket income and welfare overview: 

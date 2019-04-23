@@ -6,11 +6,10 @@
   padding: 26px;
 }
 
-// .tipmove-move {
-//   transition: position 0.3s 0.1s ease-in-out;
-// }
-.more-stroke {
-  stroke-width: 1;
+@media (min-width: 550px) {
+  .tooltip {
+   width: 360px;
+  }
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -30,8 +29,6 @@ g, path {
   transition-duration: 1s;
 }
 
-@media (min-width: 550px) {
-  .tooltip {
-   width: 360px;
-  }
+.more-stroke {
+  stroke-width: 1;
 }

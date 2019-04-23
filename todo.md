@@ -24,6 +24,9 @@
   - Data: **You need the household information: number of households per bin, avg. household size, avg.number of adults per household**
   - Totals: calculate with if/else on position[i].checked
   - sumSavings - (((threshold-meanIncome)/2)*households)=0
+  - 
+totalSavings - SUM(BINS) = 0 
+BIN1 = (Threshold - meanIncome[BIN1])*0.5 * totalHouseholds[BIN1]
 
 - Responsiveness:
   - If min-width then the tooltip has a fixed position,

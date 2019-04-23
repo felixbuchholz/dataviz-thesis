@@ -1,35 +1,13 @@
 <template>
   <div class="grid-container">
     <div class="margin-left">
-      <div class="interface">
-        <h5 class="sans">Change the parameters of this scheme:</h5>
-        <div class="parameters">
-          <span class="sans">The UIG should go to the</span>
-          <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
-          <div class="group bignumberinput">
-            <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
-            <input
-              type="number"
-              id="incomebrackets"
-              required="required"
-              class="bignumberinput sans"
-              max="9"
-              v-model="numOfUIGBins"
-            />
-            <div for="incomebrackets" class="controls bold sans control-minus">
-              -
-            </div>
-            <label for="incomebrackets" class="bignumberinput sans"
-              >lowest income brackets</label
-            >
-            <div class="controls bold sans control-plus">+</div>
-            <div class="bar bignumberinput"></div>
-          </div>
-        </div>
-        <div class="uig">
-          <!-- <p class="sans">A UIG is active:</p> -->
+      <div v-if="isLoaded" class="interface">
+        <!-- <br /> -->
+        <h5 class="sans small regular unhug-top">Configure the scheme:</h5>
+        <div class="uig unhug-top border-top-with-note">
+          <p class="sans small note-top-unhug">Should a UIG be active?</p>
           <label class="checkbox-container sans color-primary checkbox-primary">
-            Universal Income Guarantee
+            <div class="center">Universal Income Guarantee</div>
             <input
               v-if="isLoaded"
               v-show="positionsArray[positionsArray.length - 1].checked"
@@ -40,9 +18,42 @@
             <span class="checkmark checkmark-primary"></span>
           </label>
         </div>
-        <hr />
-        <div class="positions">
-          <p class="sans">These programs should be in place:</p>
+        <!-- <h5 class="sans">Change the parameters of this scheme:</h5> -->
+        <transition name="fade">
+          <div v-show="onlyUIG[0].checked" class="parameters">
+            <p class="sans small note-top-unhug hug-bottom">
+              – Yes, and the UIG should go to the
+            </p>
+            <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
+            <div class="group bignumberinput">
+              <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+              <input
+                type="number"
+                id="incomebrackets"
+                required="required"
+                class="bignumberinput sans"
+                max="9"
+                v-model="numOfUIGBins"
+                @change="doAfterIncomeBracketsChanged"
+              />
+              <div
+                for="incomebrackets"
+                class="controls bold sans control-minus"
+              >
+                -
+              </div>
+              <label for="incomebrackets" class="bignumberinput sans"
+                >lowest income brackets</label
+              >
+              <div class="controls bold sans control-plus">+</div>
+              <div class="bar bignumberinput"></div>
+            </div>
+          </div>
+        </transition>
+        <div class="positions border-top-with-note">
+          <p class="sans small note-top-unhug">
+            Programs in which of these categories should be in place?
+          </p>
           <div class="transfer-checkboxes">
             <label
               v-for="(e, i) in positionsOnlyWelfare"
@@ -51,7 +62,7 @@
                 `checkbox-container sans color-${e.name} checkbox-${e.name}`
               "
             >
-              {{ e.name }}
+              <div class="center">{{ e.listName }}</div>
               <input
                 type="checkbox"
                 v-model="e.checked"
@@ -61,13 +72,12 @@
             </label>
           </div>
         </div>
-        <hr />
-        <div class="income">
-          <p class="sans small unhug-top">
-            Include market income in comparison:
+        <div class="income border-top-with-note">
+          <p class="sans small note-top-unhug">
+            Include the market income in comparison?
           </p>
           <label class="checkbox-container sans">
-            Income
+            <div class="center">Market income</div>
             <input
               v-if="isLoaded"
               type="checkbox"
@@ -81,7 +91,18 @@
     </div>
     <div class="center-block">
       <div class="chart">
-        <h5 class="sans">Current distribution of incomes</h5>
+        <h5 class="sans hug-bottom">UIG scheme 1:</h5>
+        <span class="sans"
+          >Replace selected welfare programs and set a transfer <br />
+          to the
+          <span class="bold">
+            lowest
+            <span v-if="isLoaded" class="color-uig">{{ numOfUIGBins }}</span>
+            brackets
+          </span>
+          in the household income distribution</span
+        >
+
         <div v-if="tooltip.id != null">
           <transition-group name="tipmove" tag="div">
             <div
@@ -190,7 +211,7 @@
                 text-anchor="middle"
                 fill="currentColor"
               >
-                Market income per household, ranges in 2017 $
+                Market income before taxes per household, ranges in 2017 $
               </text>
               <g
                 v-axis:x="scale"
@@ -203,23 +224,36 @@
                 text-anchor="middle"
                 fill="currentColor"
               >
-                Household income and benefits, in 2017 $
+                Household income, before taxes with benefits and tax credits, in
+                2017 $
               </text>
               <g v-axis:y="scale" class="y-axis"></g>
             </g>
           </svg>
         </transition>
+        <div></div>
+      </div>
+    </div>
+    <div class="margin-right">
+      <div v-if="isLoaded" class="budget">
+        <h5 class="sans small regular unhug-top">
+          Budget effects of this scheme:
+        </h5>
         <div>
+          <p class="sans small">Current subtotal welfare savings:</p>
+          <p class="sans bold align-right">{{ currentTotalSavingsF }}</p>
+          <p class="sans small">Current subtotal UIG spendings:</p>
+          <p class="sans bold align-right">{{ currentTotalSpendingsF }}</p>
+          <div class="simple-flex border-top-with-note">
+            <p class="sans bold note-top-unhug">
+              Balance:
+            </p>
+            <p class="sans bold note-top-unhug" v-html="currentBalanceHTML"></p>
+          </div>
+        </div>
+        <div class="unhug-bigtime low-opacity">
           <h5>Temporary Interaction</h5>
           <button class="sans bold" @click="scaleYAxis">scale y-axis</button>
-
-          <!-- Leave in here to test the animation -->
-          <!-- <input
-        v-if="isLoaded"
-        type="number"
-        v-model.number="data[0].positions[0].val"
-        v-on:input="onChange"
-      /> -->
           <p class="unhug">
             <a
               class="sans"
@@ -227,20 +261,13 @@
               >Layout</a
             >
           </p>
-        </div>
-      </div>
-    </div>
-    <div class="margin-right">
-      <div class="budget">
-        <h5 class="sans">
-          Budget effects of UIG scheme <span class="primary-color">1</span>
-        </h5>
-        <div>
-          <p>Current total welfare savings:</p>
-          <h2 class="bold sans">{{ currentTotalSavingsF }}</h2>
-          <p>
-            Which is: <span>{{ currentTotalSavings }}</span>
-          </p>
+          <!-- Leave in here to test the animation -->
+          <!-- <input
+              v-if="isLoaded"
+              type="number"
+              v-model.number="data[0].positions[0].val"
+              v-on:input="onChange"
+            /> -->
         </div>
       </div>
     </div>
@@ -261,14 +288,14 @@ export default {
       positionsArray: [],
       totalMax: 0,
       svgWidth: 400,
-      svgHeight: 750,
+      svgHeight: 700,
       margin: { top: 20, left: 105, bottom: 120, right: 2 },
       tooltip: { id: -1, left: null, top: null, bottom: null, right: null },
       show: true,
       mouseDown: false,
       isLoaded: false,
       moe: false,
-      numOfUIGBins: 4
+      numOfUIGBins: 0
     };
   },
   computed: {
@@ -336,12 +363,49 @@ export default {
       return sum;
     },
     currentTotalSavingsF() {
-      const f = d3.format("($.2s");
-      return f(this.currentTotalSavings);
+      const f = d3.format("$.4s");
+      const d3FormatString = f(this.currentTotalSavings);
+      return this.lazyfixFormat(d3FormatString);
     },
     UIGthreshold() {
       const binIndex = this.numOfUIGBins - 1;
       return this.data[binIndex].binDetails.ul;
+    },
+    currentTotalSpendings() {
+      let sum = 0;
+      for (let i = 0; i < this.numOfUIGBins; i++) {
+        const positionOfUIG = this.positionsArray.length - 1;
+        const meanCostsInThisBracket = this.data[i].positions[positionOfUIG]
+          .val;
+        console.log(meanCostsInThisBracket);
+        const householdsInThisBracket = this.data[i].populationDetails.hhtotal
+          .val;
+        const totalCostsInThisBracket =
+          meanCostsInThisBracket * householdsInThisBracket;
+        sum += totalCostsInThisBracket;
+      }
+      return sum;
+    },
+    currentTotalSpendingsF() {
+      const f = d3.format("$.4s");
+      const d3FormatString = f(this.currentTotalSpendings);
+      return this.lazyfixFormat(d3FormatString);
+    },
+    currentBalance() {
+      const balance = this.currentTotalSavings - this.currentTotalSpendings;
+      return balance;
+    },
+    currentBalanceF() {
+      const f = d3.format("$.4s");
+      const d3FormatString = f(this.currentBalance);
+      return this.lazyfixFormat(d3FormatString);
+    },
+    currentBalanceHTML() {
+      let posOrNeg = this.currentBalance >= 0 ? "positive" : "negative";
+      const htmlString = `<span class="color-${posOrNeg}">${
+        this.currentBalanceF
+      }</span>`;
+      return htmlString;
     }
   },
   watch: {
@@ -356,6 +420,8 @@ export default {
       handler(update) {
         console.log("positionsArray has changed");
         setTimeout(() => {
+          this.computeData();
+          this.calculateUIGInAllBins();
           this.calculateTotalIncomePerBin();
           this.calculateMaxMax();
           this.computeAllPaths();
@@ -388,7 +454,7 @@ export default {
   },
   methods: {
     loadData() {
-      d3.json("data/test-stata.json").then(d => {
+      d3.json("data/stata.json").then(d => {
         // console.log(d);
         this.data = d;
         this.doAfterDataIsLoaded();
@@ -416,6 +482,13 @@ export default {
         this.calculateSavingsOfOnePosition(i);
       }
     },
+    lazyfixFormat(string) {
+      const lazyfix = string
+        .replace("M", " million")
+        .replace("G", " billion")
+        .replace("T", " trillion");
+      return lazyfix;
+    },
     calculateSavingsOfOnePosition(index) {
       let sum = 0;
       for (const e of this.data) {
@@ -429,13 +502,28 @@ export default {
     initiallyUncheckUIG() {
       this.positionsArray[this.positionsArray.length - 1].checked = false;
     },
+    doAfterIncomeBracketsChanged() {
+      console.log("input changed");
+      setTimeout(() => {
+        this.computeData();
+        this.calculateUIGInAllBins();
+        this.calculateTotalIncomePerBin();
+        this.calculateMaxMax();
+        this.computeAllPaths();
+      }, 1200);
+    },
     calculateUIGPerBin(i) {
       let e = this.data[i];
       let UIGPositionInBin = e.positions[e.positions.length - 1];
       let incomeInBin = e.positions[0].valueBefore;
-      // Negative marginal tax rate
-      UIGPositionInBin.value = (this.UIGthreshold - incomeInBin) * 0.5;
-      UIGPositionInBin.valueBefore = (this.UIGthreshold - incomeInBin) * 0.5;
+      // Negative marginal tax rate = 50 %
+      if (this.onlyUIG[0].checked) {
+        UIGPositionInBin.val = (this.UIGthreshold - incomeInBin) * 0.5;
+        UIGPositionInBin.valueBefore = (this.UIGthreshold - incomeInBin) * 0.5;
+      } else {
+        UIGPositionInBin.val = 0;
+        UIGPositionInBin.valueBefore = 0;
+      }
     },
     calculateUIGInAllBins() {
       for (let i = 0; i < this.numOfUIGBins; i++) {
@@ -481,6 +569,7 @@ export default {
         return {
           name: x.name,
           longName: x.longName,
+          listName: x.listName,
           desc: x.desc,
           checked: true
         };
