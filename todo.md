@@ -1,3 +1,13 @@
+! Feedback Daniel:
+  - Input and Output at the same level -> balance in big! move the $-sign to the label, remove the .decimal point
+  - Add only the rounded numbers
+  - number in the center of the column 
+  - Population is not another graph, but small numbers on top of the bars
+  - the zoom is good
+  - remove invalid input from the input thing
+  - use the line as an indicator to lock the initial state
+  - 
+
 - axis (how to reduce)
 - typo
 - population
@@ -24,7 +34,9 @@
   - Data: **You need the household information: number of households per bin, avg. household size, avg.number of adults per household**
   - Totals: calculate with if/else on position[i].checked
   - sumSavings - (((threshold-meanIncome)/2)*households)=0
-  - 
+  - grid!
+  - moe, aaron
+
 totalSavings - SUM(BINS) = 0 
 BIN1 = (Threshold - meanIncome[BIN1])*0.5 * totalHouseholds[BIN1]
 
@@ -33,6 +45,10 @@ BIN1 = (Threshold - meanIncome[BIN1])*0.5 * totalHouseholds[BIN1]
   - **If window.innerHeight < 550px!!!**
   - Reformat mix-ins to scss
   - Scss function to make all the classes that I do manually?
+
+
+- video src=""
+
 
 
 

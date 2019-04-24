@@ -28,24 +28,29 @@
             <div class="group bignumberinput">
               <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
               <input
-                type="number"
+                type="text"
+                pattern="\d*"
+                maxlength="1"
                 id="incomebrackets"
                 required="required"
                 class="bignumberinput sans"
                 max="9"
-                v-model="numOfUIGBins"
-                @change="doAfterIncomeBracketsChanged"
+                v-model.number="numOfUIGBins"
+                @change="doAfterIncomeBracketsChanged()"
               />
               <div
                 for="incomebrackets"
                 class="controls bold sans control-minus"
+                @click="minusBins()"
               >
                 -
               </div>
               <label for="incomebrackets" class="bignumberinput sans"
                 >lowest income brackets</label
               >
-              <div class="controls bold sans control-plus">+</div>
+              <div class="controls bold sans control-plus" @click="plusBins()">
+                +
+              </div>
               <div class="bar bignumberinput"></div>
             </div>
           </div>
@@ -134,6 +139,12 @@
             id="incomedistribution"
           >
             <g :transform="`translate(${margin.left}, ${margin.top})`">
+              <!-- Credit grid-lines: Andrew Levinson
+                  https://github.com/AndrewLevinson/thesis/blob/master/src/components/ChartOne.vue
+               -->
+              <g v-if="isLoaded">
+                <g v-grid:gridLine="scale" class="grid-lines"></g>
+              </g>
               <g v-for="(e, i) in data" :key="i" :id="`bin${i}`">
                 <transition name="fade">
                   <g v-if="show" :id="`${e.id}`">
@@ -237,16 +248,28 @@
     <div class="margin-right">
       <div v-if="isLoaded" class="budget">
         <h5 class="sans small regular unhug-top">
-          Budget effects of this scheme:
+          Overall balance effects of this scheme:
         </h5>
         <div>
-          <p class="sans small">Current subtotal welfare savings:</p>
-          <p class="sans bold align-right">{{ currentTotalSavingsF }}</p>
-          <p class="sans small">Current subtotal UIG spendings:</p>
-          <p class="sans bold align-right">{{ currentTotalSpendingsF }}</p>
+          <div class="border-top-with-note unhug-top">
+            <transition name="fade">
+              <div v-show="currentTotalSavings != 0">
+                <p class="sans small note-top-unhug">
+                  Current subtotal welfare savings ($):
+                </p>
+                <p class="sans bold align-right">{{ currentTotalSavingsF }}</p>
+              </div>
+            </transition>
+            <transition name="fade">
+              <div v-show="currentTotalSpendings != 0">
+                <p class="sans small">Current subtotal UIG spendings ($):</p>
+                <p class="sans bold align-right">{{ currentTotalSpendingsF }}</p>
+              </div>
+            </transition>
+          </div>
           <div class="simple-flex border-top-with-note">
             <p class="sans bold note-top-unhug">
-              Balance:
+              Balance ($):
             </p>
             <p class="sans bold note-top-unhug" v-html="currentBalanceHTML"></p>
           </div>
@@ -328,10 +351,14 @@ export default {
         //     return 1 * this.maxValue;
         //   }
         // ])
-        .domain([0, this.maxValue])
+        .domain([0, this.maxValue * 1.01])
         // .domain([0, Math.max(...this.data.map(x => x.totalIncome))])
         .rangeRound([this.height, 0]);
-      return { x, y };
+      const gridLine = d3
+        .scaleLinear()
+        .domain([0, this.maxValue * 1.01])
+        .rangeRound([this.height, 0]);
+      return { x, y, gridLine };
     },
     positionsOnlyWelfare() {
       return this.positionsArray.slice(1, this.positionsArray.length - 1);
@@ -363,13 +390,17 @@ export default {
       return sum;
     },
     currentTotalSavingsF() {
-      const f = d3.format("$.4s");
+      const f = d3.format(".3s");
       const d3FormatString = f(this.currentTotalSavings);
       return this.lazyfixFormat(d3FormatString);
     },
     UIGthreshold() {
-      const binIndex = this.numOfUIGBins - 1;
-      return this.data[binIndex].binDetails.ul;
+      if (this.isLoaded && this.numOfUIGBins > 0) {
+        const binIndex = this.numOfUIGBins - 1;
+        return this.data[binIndex].binDetails.ul;
+      } else {
+        return 0;
+      }
     },
     currentTotalSpendings() {
       let sum = 0;
@@ -377,7 +408,7 @@ export default {
         const positionOfUIG = this.positionsArray.length - 1;
         const meanCostsInThisBracket = this.data[i].positions[positionOfUIG]
           .val;
-        console.log(meanCostsInThisBracket);
+        // console.log(meanCostsInThisBracket);
         const householdsInThisBracket = this.data[i].populationDetails.hhtotal
           .val;
         const totalCostsInThisBracket =
@@ -387,7 +418,7 @@ export default {
       return sum;
     },
     currentTotalSpendingsF() {
-      const f = d3.format("$.4s");
+      const f = d3.format(".3s");
       const d3FormatString = f(this.currentTotalSpendings);
       return this.lazyfixFormat(d3FormatString);
     },
@@ -396,15 +427,22 @@ export default {
       return balance;
     },
     currentBalanceF() {
-      const f = d3.format("$.4s");
+      const f = d3.format(".3s");
       const d3FormatString = f(this.currentBalance);
-      return this.lazyfixFormat(d3FormatString);
+      const formatArray = this.lazyfixFormat(d3FormatString).split(" ");
+      if (formatArray[0] == 0) {
+        formatArray[0] = parseInt(formatArray[0])
+      }
+      if (typeof(formatArray[1]) == "undefined") {
+        formatArray[1] = "";
+      }
+      return formatArray;
     },
     currentBalanceHTML() {
       let posOrNeg = this.currentBalance >= 0 ? "positive" : "negative";
-      const htmlString = `<span class="color-${posOrNeg}">${
-        this.currentBalanceF
-      }</span>`;
+      const htmlString = `<div class="align-right color-${posOrNeg}"><span class="huge">${
+        this.currentBalanceF[0]
+      }</span><p class="huge-label">${this.currentBalanceF[1]}</p></div>`;
       return htmlString;
     }
   },
@@ -418,7 +456,7 @@ export default {
     positionsArray: {
       deep: true,
       handler(update) {
-        console.log("positionsArray has changed");
+        // console.log("positionsArray has changed");
         setTimeout(() => {
           this.computeData();
           this.calculateUIGInAllBins();
@@ -427,6 +465,9 @@ export default {
           this.computeAllPaths();
         }, 1200);
       }
+    },
+    numOfUIGBins() {
+      this.doAfterIncomeBracketsChanged();
     },
     tooltip() {
       // console.log("tooltip has changed");
@@ -503,30 +544,41 @@ export default {
       this.positionsArray[this.positionsArray.length - 1].checked = false;
     },
     doAfterIncomeBracketsChanged() {
-      console.log("input changed");
-      setTimeout(() => {
-        this.computeData();
-        this.calculateUIGInAllBins();
-        this.calculateTotalIncomePerBin();
-        this.calculateMaxMax();
-        this.computeAllPaths();
-      }, 1200);
+      // console.log("input changed");
+      if (this.numOfUIGBins > 0 && this.numOfUIGBins < 10) {
+        setTimeout(() => {
+          this.computeData();
+          this.calculateUIGInAllBins();
+          this.calculateTotalIncomePerBin();
+          this.calculateUpperAndLowerLimit();
+          this.computePathsOfOnePosition(this.positionsArray.length - 1);
+          this.calculateMaxMax();
+          this.computeAllPaths();
+        }, 500);
+      }
     },
     calculateUIGPerBin(i) {
       let e = this.data[i];
       let UIGPositionInBin = e.positions[e.positions.length - 1];
       let incomeInBin = e.positions[0].valueBefore;
       // Negative marginal tax rate = 50 %
-      if (this.onlyUIG[0].checked) {
+      // console.log("num", i, this.numOfUIGBins);
+      if (this.onlyUIG[0].checked && i < this.numOfUIGBins) {
         UIGPositionInBin.val = (this.UIGthreshold - incomeInBin) * 0.5;
         UIGPositionInBin.valueBefore = (this.UIGthreshold - incomeInBin) * 0.5;
+        UIGPositionInBin.valUpLim = (this.UIGthreshold - incomeInBin) * 0.5;
+        UIGPositionInBin.valLowLim = (this.UIGthreshold - incomeInBin) * 0.5;
+        UIGPositionInBin.total = (this.UIGthreshold - incomeInBin) * 0.5;
       } else {
         UIGPositionInBin.val = 0;
         UIGPositionInBin.valueBefore = 0;
+        UIGPositionInBin.valUpLim = 0;
+        UIGPositionInBin.valLowLim = 0;
+        UIGPositionInBin.total = 0;
       }
     },
     calculateUIGInAllBins() {
-      for (let i = 0; i < this.numOfUIGBins; i++) {
+      for (let i = 0; i < this.data.length; i++) {
         this.calculateUIGPerBin(i);
       }
     },
@@ -623,6 +675,16 @@ export default {
         for (const [j, f] of e.positions.entries()) {
           f["path"] = this.computePath(f.val, j);
         }
+      }
+    },
+    plusBins() {
+      if (this.numOfUIGBins < 9) {
+        this.numOfUIGBins++;
+      }
+    },
+    minusBins() {
+      if (this.numOfUIGBins > 0) {
+        this.numOfUIGBins--;
       }
     },
     mouseenter(e) {
@@ -726,6 +788,7 @@ export default {
         }
       }
       this.computeData();
+      this.calculateUpperAndLowerLimit();
       this.computePathsOfOnePosition(index);
     },
     scaleYAxis() {
@@ -822,6 +885,20 @@ export default {
           .attr("text-anchor", "end")
           .attr("alignment-baseline", "after-edge");
       }
+    },
+    grid(el, binding) {
+      const axis = binding.arg; // x or y
+      const axisMethod = { gridLine: "axisLeft" }[axis];
+      // The line below assigns the x or y function of the scale object
+      const methodArg = binding.value[axis];
+      // d3.axisBottom(scale.x)
+      d3.select(el).call(
+        d3[axisMethod](methodArg)
+          .tickFormat("")
+          // Fix for actual width
+          .tickSize(-1000)
+          .ticks(15)
+      );
     }
   },
   beforeDestroy() {

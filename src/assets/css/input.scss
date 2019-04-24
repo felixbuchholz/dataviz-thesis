@@ -3,13 +3,17 @@ $main-color: rgba(255,255,255,0.01);
 $secondary-color: rgba(87,176,234,1);
 $width: 550px; // Change Me
 
+.move-right {
+  margin-left: 0%;
+}
+
 .controls {
   position: absolute;
   font-size: 2rem;
   font-weight: 900;
   cursor: pointer;
   padding: 6px 12px;
-  top: 1.8rem;
+  top: 1.2rem;
   // opacity: 0;
   color: $secondary-color;
   // color: white; 
@@ -21,12 +25,11 @@ $width: 550px; // Change Me
   background: $secondary-color;
 }
 .control-minus {
-  left: 0rem;
+  left: 22%;
 }
 .control-plus {
   left: 83%;
 }
-
 
 .group.bignumberinput {
   width: 100%;
@@ -39,8 +42,10 @@ $width: 550px; // Change Me
 
 label.bignumberinput {
   position: absolute;
+  text-align: center;
   top: 2.8rem;
-  left: 3.8rem;
+  left: 10%;
+  width: 80%;
   color: $secondary-color;
   font-size: 1.6rem;
   line-height: 1.5rem;
@@ -50,8 +55,9 @@ label.bignumberinput {
 }
 
 input.bignumberinput {
+  text-align: center;
   display: block;
-  margin-left: 4rem;
+  // margin-left: 42%;
   margin-top: 0rem;
   width: 100%;
   // padding-top: $width/15;
@@ -61,11 +67,11 @@ input.bignumberinput {
   color:$secondary-color;
   background: $main-color;
   font-size: 5rem;
+  font-weight: 900;
   transition: .3s 0.2s ease;
   &:invalid {
     color: gray;
     ~label {
-      left:0;
       color: gray;
     }
     ~.controls {
@@ -80,15 +86,17 @@ input.bignumberinput {
     // border-bottom-color: rgba(white, .5);
     ~label {
       top: 7.4rem;
-      left: 0rem;
       font-size: 1.6rem;
       color: $secondary-color;
+      text-align: center;
+
     }
     ~.control-plus {
-      left:8rem
+      left: 64%;
     }
     ~.bar {
-      margin-left: 3.8rem;
+      // text-align: center;
+      margin-left: 43%;
       width: 4rem;
       height: 0.1rem;
     }
@@ -98,19 +106,20 @@ input.bignumberinput {
     // border-bottom-color: $secondary-color;
     ~label {
       top: 7.4rem;
-      left: 3.8rem;
+      // left: 3.8rem;
       font-size: 1.4rem;
       font-weight: 900;
       color: $secondary-color;
+      text-align: center;
     }
     ~.bar {
-      margin-left: 3.8rem;
+      margin-left: 43%;
       width: 4rem;
       height: 0.4rem;
       background: $secondary-color;
     }
     ~.controls {
-      color: $secondary-color;
+      // color: $secondary-color;
     }
     ~input {
       color: $secondary-color;

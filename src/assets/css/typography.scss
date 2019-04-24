@@ -36,6 +36,16 @@ a {
   font-weight: 300;
 }
 
+.huge {
+  font-size: 5rem;
+  margin-bottom: 0.5rem;
+  // line-height: 1rem;
+}
+
+.huge-label {
+  line-height: 0.6rem;
+}
+
 .regular {
   font-style: inherit;
   font-weight: 400;
