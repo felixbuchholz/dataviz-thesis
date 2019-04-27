@@ -23,9 +23,8 @@ $width: 550px; // Change Me
 .controls:hover {
   color: white; 
   background: $secondary-color;
-}
-.control-minus {
-  left: 22%;
+}.control-minus {
+  left: 0%;
 }
 .control-plus {
   left: 83%;
@@ -70,16 +69,16 @@ input.bignumberinput {
   font-weight: 900;
   transition: .3s 0.2s ease;
   &:invalid {
-    color: gray;
+    color: grey;
     ~label {
-      color: gray;
+      color: grey;
     }
     ~.controls {
-      color: gray;
+      color: grey;
       opacity: 0;
     }
     ~.bar {
-      background: gray;
+      background: grey;
     }
   }
   &:valid {
@@ -93,6 +92,9 @@ input.bignumberinput {
     }
     ~.control-plus {
       left: 64%;
+    }
+    ~.control-minus {
+      left: 22%;
     }
     ~.bar {
       // text-align: center;

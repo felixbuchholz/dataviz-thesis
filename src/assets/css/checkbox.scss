@@ -1,3 +1,7 @@
+.positions-less-opacity {
+  opacity: 0.1;
+}
+
 @mixin  border {
   border-radius: 2px;
   border-style: solid;
@@ -49,6 +53,9 @@
   height: 2.4rem;
   width: 2.4rem;
   color: rgba(150,150,150,1);
+  // background-image: url("cross.jpg");
+  // background-repeat: no-repeat;
+  // background-size: 20px;
   @include border;
 }
 

@@ -5,63 +5,92 @@
         <!-- <br /> -->
         <h5 class="sans small regular unhug-top">Configure the scheme:</h5>
         <div class="uig unhug-top border-top-with-note">
-          <p class="sans small note-top-unhug">Should a UIG be active?</p>
-          <label class="checkbox-container sans color-primary checkbox-primary">
-            <div class="center">Universal Income Guarantee</div>
-            <input
-              v-if="isLoaded"
-              v-show="positionsArray[positionsArray.length - 1].checked"
-              type="checkbox"
-              v-model="positionsArray[positionsArray.length - 1].checked"
-              @click="togglePosition(positionsArray.length - 1)"
-            />
-            <span class="checkmark checkmark-primary"></span>
-          </label>
-        </div>
-        <!-- <h5 class="sans">Change the parameters of this scheme:</h5> -->
-        <transition name="fade">
-          <div v-show="onlyUIG[0].checked" class="parameters">
-            <p class="sans small note-top-unhug hug-bottom">
-              – Yes, and the UIG should go to the
-            </p>
-            <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
-            <div class="group bignumberinput">
-              <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
-              <input
-                type="text"
-                pattern="\d*"
-                maxlength="1"
-                id="incomebrackets"
-                required="required"
-                class="bignumberinput sans"
-                max="9"
-                v-model.number="numOfUIGBins"
-                @change="doAfterIncomeBracketsChanged()"
-              />
-              <div
-                for="incomebrackets"
-                class="controls bold sans control-minus"
-                @click="minusBins()"
+          <div
+            :class="
+              `positions position${positionsArray.length -
+                1} transfer-checkboxes`
+            "
+            @mouseenter="mouseenterCheckboxes"
+            @mouseleave="mouseleaveCheckboxes"
+            :id="positionsArray.length - 1"
+          >
+            <p class="sans small note-top-unhug">Should a UIG be active?</p>
+            <div>
+              <label
+                class="checkbox-container sans color-primary checkbox-primary"
               >
-                -
-              </div>
-              <label for="incomebrackets" class="bignumberinput sans"
-                >lowest income brackets</label
-              >
-              <div class="controls bold sans control-plus" @click="plusBins()">
-                +
-              </div>
-              <div class="bar bignumberinput"></div>
+                <div class="center">Universal Income Guarantee</div>
+                <input
+                  v-if="isLoaded"
+                  v-show="positionsArray[positionsArray.length - 1].checked"
+                  type="checkbox"
+                  v-model="positionsArray[positionsArray.length - 1].checked"
+                  @click="togglePosition(positionsArray.length - 1)"
+                />
+                <span class="checkmark checkmark-primary"></span>
+              </label>
             </div>
+            <!-- <h5 class="sans">Change the parameters of this scheme:</h5> -->
+            <transition name="fade">
+              <div v-show="onlyUIG[0].checked" class="parameters">
+                <p class="sans small note-top-unhug hug-bottom">
+                  – Yes, and the UIG should go to the
+                </p>
+                <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
+                <div class="group bignumberinput">
+                  <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+                  <input
+                    type="text"
+                    pattern="\d*"
+                    maxlength="1"
+                    id="incomebrackets"
+                    required="required"
+                    class="bignumberinput sans"
+                    max="9"
+                    v-model.number="numOfUIGBins"
+                    @change="doAfterIncomeBracketsChanged()"
+                  />
+                  <div
+                    for="incomebrackets"
+                    class="controls bold sans control-minus"
+                    @click="minusBins()"
+                  >
+                    -
+                  </div>
+                  <label for="incomebrackets" class="bignumberinput sans"
+                    >lowest income brackets</label
+                  >
+                  <div
+                    class="controls bold sans control-plus"
+                    @click="plusBins()"
+                  >
+                    +
+                  </div>
+                  <div class="bar bignumberinput"></div>
+                </div>
+              </div>
+            </transition>
           </div>
-        </transition>
-        <div class="positions border-top-with-note">
+        </div>
+        <div class="border-top-with-note">
           <p class="sans small note-top-unhug">
             Programs in which of these categories should be in place?
           </p>
-          <div class="transfer-checkboxes">
+
+          <div
+            :class="
+              `positions position${positionsOnlyWelfareR.length -
+                i -
+                1 +
+                1} transfer-checkboxes`
+            "
+            v-for="(e, i) in positionsOnlyWelfareR"
+            :key="i + 1"
+            :id="positionsOnlyWelfareR.length - i"
+            @mouseenter="mouseenterCheckboxes"
+            @mouseleave="mouseleaveCheckboxes"
+          >
             <label
-              v-for="(e, i) in positionsOnlyWelfare"
               :key="i + 1"
               :class="
                 `checkbox-container sans color-${e.name} checkbox-${e.name}`
@@ -71,7 +100,9 @@
               <input
                 type="checkbox"
                 v-model="e.checked"
-                @click="togglePosition(i + 1)"
+                @click="
+                  togglePosition(positionsOnlyWelfareR.length - 1 - i + 1)
+                "
               />
               <span :class="`checkmark checkmark-${e.name}`"></span>
             </label>
@@ -81,16 +112,23 @@
           <p class="sans small note-top-unhug">
             Include the market income in comparison?
           </p>
-          <label class="checkbox-container sans">
-            <div class="center">Market income</div>
-            <input
-              v-if="isLoaded"
-              type="checkbox"
-              v-model="positionsArray[0].checked"
-              @click="togglePosition(0)"
-            />
-            <span class="checkmark"></span>
-          </label>
+          <div
+            :class="`positions position${0} transfer-checkboxes`"
+            @mouseenter="mouseenterCheckboxes"
+            @mouseleave="mouseleaveCheckboxes"
+            id="0"
+          >
+            <label class="checkbox-container sans">
+              <div class="center">Market income</div>
+              <input
+                v-if="isLoaded"
+                type="checkbox"
+                v-model="positionsArray[0].checked"
+                @click="togglePosition(0)"
+              />
+              <span class="checkmark"></span>
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +171,7 @@
 
         <transition name="fade">
           <svg
+            class="unhug-top"
             v-if="isLoaded"
             :width="svgWidth"
             :height="svgHeight"
@@ -161,9 +200,11 @@
                           <path
                             v-show="show & positionsArray[j].checked"
                             :class="
-                              `path ${f.category} stroke-${
-                                f.name
-                              } stroke-deactive-${f.category}`
+                              `positions path ${
+                                f.category
+                              } position${j} stroke-${f.name} stroke-deactive-${
+                                f.category
+                              }`
                             "
                             fill="none"
                             stroke="currentColor"
@@ -173,15 +214,29 @@
                           <path
                             v-show="show"
                             :class="
-                              ` path ${f.category} stroke-${
-                                f.name
-                              } stroke-deactive-${f.category}`
+                              `positions path ${
+                                f.category
+                              } position${j} stroke-${f.name} stroke-deactive-${
+                                f.category
+                              }`
                             "
                             fill="none"
                             stroke="currentColor"
                             stroke-width="0.5"
                             :d="f.path.fill"
                           />
+                          <text
+                            :x="scale.x.bandwidth() / 2"
+                            y="-10"
+                            :class="
+                              `positions text text-no-opacity bold fill-${
+                                f.name
+                              } position${j}`
+                            "
+                            text-anchor="middle"
+                          >
+                            $ {{ f.val }}
+                          </text>
                           <!-- <rect
                           v-show="show"
                           fill: "rgba(0,0,0,0.3)"
@@ -203,9 +258,9 @@
                   opacity="0"
                   fill="red"
                   :id="e.id"
-                  @mouseenter="mouseenter"
-                  @mousemove="mousemove"
-                  @mouseout="mouseleave"
+                  @mouseenter="mouseenterBars"
+                  @mousemove="mousemoveBars"
+                  @mouseout="mouseleaveBars"
                 />
               </g>
 
@@ -263,7 +318,9 @@
             <transition name="fade">
               <div v-show="currentTotalSpendings != 0">
                 <p class="sans small">Current subtotal UIG spendings ($):</p>
-                <p class="sans bold align-right">{{ currentTotalSpendingsF }}</p>
+                <p class="sans bold align-right">
+                  {{ currentTotalSpendingsF }}
+                </p>
               </div>
             </transition>
           </div>
@@ -363,6 +420,9 @@ export default {
     positionsOnlyWelfare() {
       return this.positionsArray.slice(1, this.positionsArray.length - 1);
     },
+    positionsOnlyWelfareR() {
+      return this.positionsOnlyWelfare.reverse();
+    },
     onlyIncome() {
       return this.positionsArray.slice(0, 1);
     },
@@ -431,9 +491,9 @@ export default {
       const d3FormatString = f(this.currentBalance);
       const formatArray = this.lazyfixFormat(d3FormatString).split(" ");
       if (formatArray[0] == 0) {
-        formatArray[0] = parseInt(formatArray[0])
+        formatArray[0] = parseInt(formatArray[0]);
       }
-      if (typeof(formatArray[1]) == "undefined") {
+      if (typeof formatArray[1] == "undefined") {
         formatArray[1] = "";
       }
       return formatArray;
@@ -687,7 +747,41 @@ export default {
         this.numOfUIGBins--;
       }
     },
-    mouseenter(e) {
+    mouseenterCheckboxes(e) {
+      // position indey in this case
+      const i = parseInt(e.target.id);
+      // console.log(i);
+      this.findPositionAndToggleDeactive(i);
+    },
+    mouseleaveCheckboxes(e) {
+      // position indey in this case
+      const i = parseInt(e.target.id);
+      // console.log(i);
+      this.findPositionAndToggleDeactive(i);
+    },
+    findPositionAndToggleDeactive(i) {
+      const positionNum = i;
+      [].map.call(this.$el.querySelectorAll(`.positions`), e => {
+        e.classList.toggle("positions-less-opacity");
+        // if (!e.classList.contains(`.position${positionNum}`)) {
+        // }
+      });
+      [].map.call(this.$el.querySelectorAll(`.position${positionNum}`), e => {
+        e.classList.toggle("positions-less-opacity");
+        e.classList.toggle("more-stroke");
+        // Colors
+        if (e.classList.contains("income")) {
+          e.classList.toggle("stroke-deactive-income");
+        } else if (e.classList.contains("welfare")) {
+          e.classList.toggle("stroke-deactive-welfare");
+        } else if (e.classList.contains("uig")) {
+          e.classList.toggle("stroke-deactive-uig");
+        } else if (e.classList.contains("text")) {
+          e.classList.toggle("text-no-opacity");
+        }
+      });
+    },
+    mouseenterBars(e) {
       const i = e.target.id;
       this.findBinAndToggleDeactive(e);
       // console.log(d3.select(`#tooltip${i}`));
@@ -711,7 +805,7 @@ export default {
         }
       });
     },
-    mousemove(e) {
+    mousemoveBars(e) {
       const i = e.target.id;
       let tooltip = this.$el.querySelector(`#tooltip${i}`);
       const tooltipHeight = tooltip.getBoundingClientRect().height;
@@ -737,7 +831,7 @@ export default {
         this.tooltip.top = mouse.y + 50;
       }
     },
-    mouseleave(e) {
+    mouseleaveBars(e) {
       this.findBinAndToggleDeactive(e);
       const i = e.target.id;
 
@@ -792,6 +886,7 @@ export default {
       this.computePathsOfOnePosition(index);
     },
     scaleYAxis() {
+      // if else
       setTimeout(() => {
         window.scrollBy({
           top: 2700,

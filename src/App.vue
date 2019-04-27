@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <landingPage />
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
@@ -10,7 +11,7 @@
           <br />
           <span class="italic">affect incomes in the US?</span>
         </h2>
-        <p class="subheadline">A comparison of two static models</p>
+        <h6 class="subheadline">A comparison of two static models</h6>
         <div class="unhug">
           <p class="intro">
             In order to understand the
@@ -80,12 +81,12 @@
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import landingPage from "./components/landingPage.vue";
 import graphModelOne from "./components/graphModelOne.vue";
 export default {
   name: "app",
   components: {
-    HelloWorld,
+    landingPage,
     graphModelOne
   },
   title: "Universal Income Guarantees"

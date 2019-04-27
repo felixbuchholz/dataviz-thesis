@@ -1,12 +1,17 @@
 ! Feedback Daniel:
+  - use the line as an indicator to lock the initial state
   - Input and Output at the same level -> balance in big! move the $-sign to the label, remove the .decimal point
   - Add only the rounded numbers
   - number in the center of the column 
   - Population is not another graph, but small numbers on top of the bars
   - the zoom is good
   - remove invalid input from the input thing
-  - use the line as an indicator to lock the initial state
-  - 
+  - Make the tooltip a "report", message: "click to get a full report on this bin"
+  - Make the margins sticky
+
+
+! Feedback Andrew:
+  - The background of the ckeckboxes is the texture
 
 - axis (how to reduce)
 - typo
