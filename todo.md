@@ -10,8 +10,13 @@
   - Make the margins sticky
 
 
+
 ! Feedback Andrew:
   - The background of the ckeckboxes is the texture
+
+- What happens, when the margins collapse?
+- status quo line
+- Source: https://trends.google.com/trends/explore?date=all&geo=US&q=universal%20basic%20income
 
 - axis (how to reduce)
 - typo

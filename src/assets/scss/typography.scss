@@ -5,6 +5,7 @@ Credit to Andrew Levinson
 
 @import url('https://fonts.googleapis.com/css?family=Merriweather+Sans:300,300i,400,400i,700,700i|Merriweather:300,300i,400,400i,700,700i');
 @import 'breakpoints';
+@import 'color_defs';
 
 html {
   font-size: 62.5%;
@@ -12,7 +13,7 @@ html {
 }
 
 body {
-  font-size: 1.6em;
+  font-size: 1.7em;
   line-height: 1.6;
   font-weight: 400;
   font-family: "Merriweather", serif;
@@ -23,6 +24,20 @@ body {
 }
 .sans {
   font-family: "Merriweather Sans", sans-serif;
+}
+.ul-no-indent {
+  // list-style-position: inside;
+  list-style-type: circle;
+  padding-left: 0;
+}
+.space-li {
+  margin: 1rem 0; 
+}
+.tiny-spacer {
+  height: 2rem;
+}
+.small-spacer {
+  height: 3.75rem;
 }
 
 button {
@@ -66,6 +81,22 @@ a {
   // line-height: 1rem;
 }
 
+.big {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  // line-height: 1rem;
+}
+
+.medium {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  // line-height: 1rem;
+}
+
+.huge-slam {
+  line-height: 1.5rem;
+}
+
 .huge-label {
   line-height: 0.6rem;
 }
@@ -101,6 +132,20 @@ a {
 .align-right {
   text-align: right;
 }
+.slam-top {
+  margin-top: 0rem;
+}
+.slam-bottom {
+  margin-bottom: 0rem;
+}
+.slam{
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+}
+
+.hug-top {
+  margin-top: 1rem;
+}
 .hug-bottom {
   margin-bottom: 1rem;
 }
@@ -110,6 +155,9 @@ a {
 }
 .unhug-top {
   margin-top: 3.75rem;
+}
+.unhug-top-small {
+  margin-top: 2.5rem;
 }
 .unhug-bottom {
   margin-bottom: 3.75rem;
@@ -121,6 +169,20 @@ a {
   margin-top: 1rem;
 }
 
+.spot-number {
+  margin: 2rem 0;
+}
+
+.source-for-spot-number {
+  margin-top: 0.5rem;
+}
+
+.note-typo {
+  font-size: 1.4rem;
+  font-family: "Merriweather Sans", sans-serif;
+  font-style: italic;
+  color: $font-light-color;
+}
 
 /* Typography
   –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -150,8 +212,8 @@ h2 {
 }
 
 h3 {
-  font-size: 2.4rem;
-  line-height: 1.3;
+  font-size: 2rem;
+  line-height: 1.5;
   letter-spacing: -0.1rem;
 }
 
@@ -172,6 +234,7 @@ h5 {
 h6 {
   font-size: 1.4rem;
   line-height: 1.6;
+  margin-top: 0rem;
   // letter-spacing: 0.05rem;
 }
 
@@ -189,14 +252,17 @@ text {
   font-family: "Merriweather Sans", sans-serif;
   font-weight: 300;
 }
+.sidegraph-axis, .sidegraph-axis text {
+  font-size: 1.2rem;
+}
 .graph-label {
   font-size: 1.6rem;
   line-height: 1.3;
   font-weight: 400;
 }
 p {
-  line-height: 1.7;
-  margin-bottom: 1.25rem;
+  line-height: 1.72;
+  margin-bottom: 1.5rem;
 }
 .intro {
   font-size: 2rem;
@@ -223,7 +289,14 @@ p {
 .subheadline {
   font-style: inherit;
   font-weight: 300;
-  display: inline;
+  display: inline-block;
   padding-bottom: 1.5rem;
   border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
+}
+
+.small-footnote {
+  display: inline;
+  position: absolute;
+  margin-top: 10px;
+  font-size: 1.3rem; 
 }

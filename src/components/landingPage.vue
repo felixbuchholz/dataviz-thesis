@@ -1,8 +1,8 @@
 <template>
   <div class="grid-container">
     <div class="margin-left"></div>
-    <div class="center-block">
-      <div class="landing">
+    <div class="center-block landing">
+      <div>
         <h1 class="hug-bottom">
           Universal Income Guarantees. <br />
           An opportunity to rethink welfare?
@@ -25,19 +25,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-$center-background-color: rgba(252, 252, 252, 1);
-
+@import "../assets/scss/color_defs.scss";
 .landing {
-  margin-top: 40vh;
+  margin-top: 36vh;
   margin-bottom: 40vh;
-  // background: $center-background-color;
-}
-h1 {
-  margin-bottom: 1rem;
-}
-.subheadline {
-  display: inline;
-  padding-bottom: 1.5rem;
-  border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
+  background: $body-background-color;
 }
 </style>

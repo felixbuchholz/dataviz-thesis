@@ -2,7 +2,7 @@
 @import 'breakpoints';
 
 .grid-container {display: grid;
-  grid-template-columns: 1fr 55% 1fr;
+  grid-template-columns: 1fr 50% 1fr;
   // grid-column-gap: 32px;
   grid-template-rows: auto;
   grid-template-areas: 
@@ -28,7 +28,6 @@
     width: 100%;
   }
 }
-
 .positions {
   transition: all 0.4s;
 }
@@ -40,13 +39,24 @@
 .center-block {
   // margin: 0 auto;
   // max-width: 740px;
-  padding: 32px;
+  padding: 0 32px;
   background: $center-background-color;
   grid-area: "center-block";
 }
 .interface, .budget {
   padding: 32px;
   // width for budget??? 
+}
+
+.note {
+  // position: relative;
+  width: 70%;
+  height: 0px;
+  padding: 0 32px;
+  font-size: 1.4rem;
+  font-family: "Merriweather Sans", sans-serif;
+  font-style: italic;
+  color: $font-light-color;
 }
 
 .simple-flex {
@@ -74,3 +84,37 @@
 .low-opacity:hover {
   opacity: 0.8;
 }
+
+.side-graph {
+  position: absolute;
+}
+
+.spacer {
+  height: 256px;
+}
+.spacer-sub {
+  height: 128px;
+}
+
+.sidegraph-axis {
+  opacity: 0.7;
+}
+.sidegraph-container,
+.chart {
+  width: 90%;
+}
+
+.sidegraph-container {
+  padding: 0 32px;
+  opacity: 0.2;
+  transition: opacity 0.4s;
+}
+// hover: fade-in axis
+.sidegraph-container:hover {
+  opacity: 1;
+}
+
+.spot-number {
+  text-align: center
+}
+

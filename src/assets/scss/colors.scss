@@ -12,7 +12,16 @@ body {
   background: $primary; /* Gecko Browsers */
   color: white;
 }
+// *-----------------------------
+// Utility
 
+.white {
+    color: $center-background-color;
+}
+
+// -----------------------------*
+
+// Credit: Sarah Dayan, https://frontstuff.io/generate-all-your-utility-classes-with-sass-maps
 $colors: (
   primary: rgba(87,176,234,1),
   uig: rgba(87,176,234,1),
@@ -26,10 +35,9 @@ $colors: (
   deactive-welfare: rgba(0,0,0,0.3),
   deactive-uig: rgba(87,176,234,0.8),
   positive: rgba(51,160,44,1),
-  negative: rgba(227,26,28, 1)
+  negative: rgba(227,26,28, 1),
+  standard: rgba(0,0,0,0.85)
 );
-
-// Credit: Sarah Dayan, https://frontstuff.io/generate-all-your-utility-classes-with-sass-maps
 @mixin color-modifiers {
   @each $name, $rgba in $colors {
     &-#{$name} {
