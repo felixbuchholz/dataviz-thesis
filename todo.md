@@ -1,4 +1,12 @@
 ! Feedback Daniel:
+  - Move out the zoom button and the axis-labels (1) superscript (annotation mode)
+  - Summarizing the insight sentence
+  - Anchors to go through the project
+  - h2 / h3 bigger 
+  - Better tooltip -> only current state + Population size
+  - Welfare without benefits
+
+! Feedback Daniel:
   - use the line as an indicator to lock the initial state
   - Input and Output at the same level -> balance in big! move the $-sign to the label, remove the .decimal point
   - Add only the rounded numbers
@@ -12,7 +20,7 @@
 
 
 ! Feedback Andrew:
-  - The background of the ckeckboxes is the texture
+  - The background of the checkboxes is the texture
 
 - What happens, when the margins collapse?
 - status quo line
@@ -45,7 +53,7 @@
   - Totals: calculate with if/else on position[i].checked
   - sumSavings - (((threshold-meanIncome)/2)*households)=0
   - grid!
-  - moe, aaron
+  - moe, Aaron
 
 totalSavings - SUM(BINS) = 0 
 BIN1 = (Threshold - meanIncome[BIN1])*0.5 * totalHouseholds[BIN1]
@@ -77,7 +85,7 @@ What’s the plan?
 - I have a data object, with all the elements
 - I have unique identifiers
 - I can process all the paths and store them in an object
-- I can use the object and the unique identifiers to retrieve the paths in the dom
+- I can use the object and the unique identifiers to retrieve the paths in the DOM
 - If I update the paths, I only want to update those that have changed data, therefore I need to store some information on how it was generated: scale.x.bandwidth(), height, value
 
 do a new computed property: data with paths
