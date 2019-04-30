@@ -110,7 +110,7 @@
         </div>
         <div class="income border-top-with-note">
           <p class="sans small note-top-unhug">
-            Show the market income in comparison?
+            Include the market income in comparison?
           </p>
           <div
             :class="`positions position${0} transfer-checkboxes`"
@@ -134,7 +134,7 @@
     </div>
     <div class="center-block">
       <div class="chart">
-        <h5 class="sans hug-bottom" id="graph-headline1">UIG scheme 1:</h5>
+        <h5 class="sans hug-bottom">UIG scheme 2 (Currently a placeholder):</h5>
         <span class="sans"
           >Replace selected welfare programs and set a transfer <br />
           to the
@@ -168,6 +168,7 @@
             </div>
           </transition-group>
         </div>
+
         <transition name="fade">
           <svg
             class="unhug-top"
@@ -186,17 +187,6 @@
               <g v-for="(e, i) in data" :key="i" :id="`bin${i}`">
                 <transition name="fade">
                   <g v-if="show" :id="`${e.id}`">
-                    <line
-                      class="positions"
-                      :x1="scale.x(e.bin) - scale.x.bandwidth() * 0.3"
-                      :y1="lineYPosition(e)"
-                      :x2="scale.x(e.bin) + scale.x.bandwidth() * 1.3"
-                      :y2="lineYPosition(e)"
-                      :stroke="decideStrokeColor(i)"
-                      stroke-width="2"
-                      stroke-dasharray="1 3"
-                      stroke-linecap="round"
-                    />
                     <g v-for="(f, j) in e.positions" :key="`${i}${f.name}`">
                       <transition name="fade">
                         <g
@@ -208,9 +198,7 @@
                           "
                         >
                           <path
-                            v-show="
-                              show & positionsArray[j].checked & (f.val > 0)
-                            "
+                            v-show="show & positionsArray[j].checked"
                             :class="
                               `positions path ${
                                 f.category
@@ -247,8 +235,7 @@
                             "
                             text-anchor="middle"
                           >
-                            <!-- transform="rotate(-45) translate(-2,4)" -->
-                            $ {{ showCurrentWelfareOrIncomeBefore(f, j) }}
+                            $ {{ f.val }}
                           </text>
                           <!-- <rect
                           v-show="show"
@@ -312,179 +299,55 @@
         </transition>
         <div></div>
       </div>
-      <div class="icon-medium" @click="scaleYAxis">
-        <zoomIcon class="zoom-icon" />
-        <p class="small sans bold color-primary plusOrMinus">{{ zoomSign }}</p>
-        <p class="small sans color-primary zoomText">zoom y-axis</p>
-      </div>
-      <!-- <button class="sans bold" @click="scaleYAxis">scale y-axis</button> -->
-      <div class="spacer"></div>
     </div>
     <div class="margin-right">
-      <div v-if="isLoaded" class="budget grid-vertical-container">
-        <div class="budget-calculations">
-          <h5 class="sans small regular unhug-top">
-            Overall balance effects of this scheme:
-          </h5>
-          <div>
-            <div class="border-top-with-note unhug-top">
-              <transition name="fade">
-                <div v-show="currentTotalSavings != 0">
-                  <p class="sans small note-top-unhug">
-                    Current subtotal welfare savings ($):
-                  </p>
-                  <p class="sans bold align-right">
-                    {{ currentTotalSavingsF }}
-                  </p>
-                </div>
-              </transition>
-              <transition name="fade">
-                <div v-show="currentTotalSpendings != 0">
-                  <p class="sans small">Current subtotal UIG spendings ($):</p>
-                  <p class="sans bold align-right">
-                    {{ currentTotalSpendingsF }}
-                  </p>
-                </div>
-              </transition>
-            </div>
-            <div class="simple-flex border-top-with-note">
-              <p class="sans bold note-top-unhug">
-                Balance ($):
-              </p>
-              <p
-                class="sans bold note-top-unhug"
-                v-html="currentBalanceHTML"
-              ></p>
-            </div>
-          </div>
-        </div>
-        <div class="spacer-auto"></div>
-        <div class="legend-for-graph">
-          <div class="income border-top-with-note">
-            <p class="sans small note-top-unhug">
-              Legend:
-            </p>
-            <div class="simple-flex-center">
-              <svg
-                class="inline-svg"
-                v-if="isLoaded"
-                :width="scale.x.bandwidth() * 1.6"
-                height="3"
-              >
-                <line
-                  x1="0"
-                  y1="1"
-                  :x2="scale.x.bandwidth() * 1.6"
-                  y2="1"
-                  stroke="rgba(0,0,0,0.6)"
-                  stroke-width="2"
-                  stroke-dasharray="1 3"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <p class="sans small legend-description">
-                Situation before changes
-              </p>
-            </div>
-            <div class="simple-flex-center">
-              <svg
-                class="inline-svg"
-                v-if="isLoaded"
-                :width="scale.x.bandwidth() * 1.6"
-                height="3"
-              >
-                <line
-                  x1="0"
-                  y1="1"
-                  :x2="scale.x.bandwidth() * 1.6"
-                  y2="1"
-                  stroke="rgba(51,160,44,1)"
-                  stroke-width="2"
-                  stroke-dasharray="1 3"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <p class="sans small color-positive legend-description">
-                More after changes
-              </p>
-            </div>
-            <div class="simple-flex-center">
-              <svg
-                class="inline-svg"
-                v-if="isLoaded"
-                :width="scale.x.bandwidth() * 1.6"
-                height="3"
-              >
-                <line
-                  x1="0"
-                  y1="1"
-                  :x2="scale.x.bandwidth() * 1.6"
-                  y2="1"
-                  stroke="rgba(227,26,28, 1)"
-                  stroke-width="2"
-                  stroke-dasharray="1 3"
-                  stroke-linecap="round"
-                />
-              </svg>
-              <p class="sans small color-negative legend-description">
-                Less after changes
-              </p>
-            </div>
-            <div class="unhug-top-small">
-              <div class="simple-flex-center">
-                <svg
-                  class="inline-svg"
-                  v-if="isLoaded"
-                  :width="scale.x.bandwidth() * 1.6"
-                  height="30"
-                >
-                  <path
-                    :transform="`translate(1, 1)`"
-                    stroke-width="0.5"
-                    fill="none"
-                    stroke="currentColor"
-                    :d="legendPathTransfers.fill"
-                  />
-                  <path
-                    :transform="`translate(1, 1)`"
-                    stroke-width="0.5"
-                    fill="none"
-                    stroke="currentColor"
-                    :d="legendPathTransfers.stroke"
-                  />
-                </svg>
-                <p class="sans small legend-description">
-                  Welfare or UIG transfers
+      <div v-if="isLoaded" class="budget">
+        <h5 class="sans small regular unhug-top">
+          Overall balance effects of this scheme:
+        </h5>
+        <div>
+          <div class="border-top-with-note unhug-top">
+            <transition name="fade">
+              <div v-show="currentTotalSavings != 0">
+                <p class="sans small note-top-unhug">
+                  Current subtotal welfare savings ($):
+                </p>
+                <p class="sans bold align-right">{{ currentTotalSavingsF }}</p>
+              </div>
+            </transition>
+            <transition name="fade">
+              <div v-show="currentTotalSpendings != 0">
+                <p class="sans small">Current subtotal UIG spendings ($):</p>
+                <p class="sans bold align-right">
+                  {{ currentTotalSpendingsF }}
                 </p>
               </div>
-            </div>
-            <div class="simple-flex-center">
-              <svg
-                class="inline-svg"
-                v-if="isLoaded"
-                :width="scale.x.bandwidth() * 1.6"
-                height="30"
-              >
-                <path
-                  :transform="`translate(1, 1)`"
-                  stroke-width="0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  :d="legendPathMarketIncome.fill"
-                />
-                <path
-                  :transform="`translate(1, 1)`"
-                  stroke-width="0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  :d="legendPathMarketIncome.stroke"
-                />
-              </svg>
-              <p class="sans small legend-description">
-                Market income
-              </p>
-            </div>
+            </transition>
           </div>
+          <div class="simple-flex border-top-with-note">
+            <p class="sans bold note-top-unhug">
+              Balance ($):
+            </p>
+            <p class="sans bold note-top-unhug" v-html="currentBalanceHTML"></p>
+          </div>
+        </div>
+        <div class="unhug-bigtime low-opacity">
+          <h5>Temporary Interaction</h5>
+          <button class="sans bold" @click="scaleYAxis">scale y-axis</button>
+          <p class="unhug">
+            <a
+              class="sans"
+              href="https://github.com/felixbuchholz/thesis2019/blob/master/data/thesis.pdf"
+              >Layout</a
+            >
+          </p>
+          <!-- Leave in here to test the animation -->
+          <!-- <input
+              v-if="isLoaded"
+              type="number"
+              v-model.number="data[0].positions[0].val"
+              v-on:input="onChange"
+            /> -->
         </div>
       </div>
     </div>
@@ -493,13 +356,9 @@
 <script>
 import * as d3 from "d3";
 import { rough } from "../assets/lib/rough.js";
-import zoomIcon from "../../public/assets/svg/zoom.svg";
 
 export default {
   name: "graphModelOne",
-  components: {
-    zoomIcon
-  },
   props: {
     msg: String
   },
@@ -516,9 +375,7 @@ export default {
       mouseDown: false,
       isLoaded: false,
       moe: false,
-      yAxisScaled: false,
-      numOfUIGBins: 0,
-      zoomSign: "+"
+      numOfUIGBins: 0
     };
   },
   computed: {
@@ -542,7 +399,7 @@ export default {
         .scaleBand()
         .domain(this.data.map(x => x.bin))
         .rangeRound([0, this.width])
-        .padding(0.4);
+        .padding(0.2);
       const y = d3
         .scaleLinear()
         // .domain([
@@ -560,17 +417,10 @@ export default {
         .rangeRound([this.height, 0]);
       return { x, y, gridLine };
     },
-    legendPathMarketIncome() {
-      return this.computeGenericPath(this.scale.x.bandwidth() * 1.55, 26, 0);
-    },
-    legendPathTransfers() {
-      return this.computeGenericPath(this.scale.x.bandwidth() * 1.55, 26, 1);
-    },
     positionsOnlyWelfare() {
       return this.positionsArray.slice(1, this.positionsArray.length - 1);
     },
     positionsOnlyWelfareR() {
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       return this.positionsOnlyWelfare.reverse();
     },
     onlyIncome() {
@@ -665,7 +515,6 @@ export default {
     },
     positionsArray: {
       deep: true,
-      // eslint-disable-next-line no-unused-vars
       handler(update) {
         // console.log("positionsArray has changed");
         setTimeout(() => {
@@ -714,7 +563,6 @@ export default {
     },
     doAfterDataIsLoaded() {
       this.isLoaded = true;
-      this.computeDataOnlyOnce();
       this.computeData();
       this.positionsArrayCreate();
       this.calculateSavingsOfAllPositions();
@@ -727,82 +575,10 @@ export default {
       // Idea: you can change the initial state here later by using another function
       // this.positionArrayToggleForAll(false);
     },
-    computeDataOnlyOnce() {
-      this.calculateTotalIncomePerBinBefore();
-      this.calculateTotalWelfarePerBinBefore();
-    },
     computeData() {
       this.calculateUpperAndLowerLimit();
     },
-    calculateUpperAndLowerLimit() {
-      for (const e of this.data) {
-        for (const f of e.positions) {
-          f.valLowLim = f.val - f.moe;
-          f.valUpLim = f.val + f.moe;
-          if (this.moe) {
-            f.total = f.val + f.moe;
-          } else {
-            f.total = f.val;
-          }
-        }
-      }
-    },
-    calculateTotalIncomePerBin() {
-      for (const e of this.data) {
-        let sum = 0;
-        for (const f of e.positions) {
-          sum += f.val;
-        }
-        e.totalIncome = sum;
-      }
-      this.calculateTotalCurrentTransfersPerBin();
-    },
-    calculateTotalIncomePerBinBefore() {
-      for (const e of this.data) {
-        let sum = 0;
-        for (const f of e.positions) {
-          sum += f.valueBefore;
-        }
-        e.totalIncomeBefore = sum;
-      }
-    },
-    calculateTotalWelfarePerBinBefore() {
-      for (const e of this.data) {
-        let sum = 0;
-        for (const [j, f] of e.positions.entries()) {
-          if (j != 0 && j != e.positions.length - 1) {
-            sum += f.val;
-          }
-        }
-        e.totalWelfareBefore = sum;
-      }
-    },
-    calculateTotalCurrentTransfersPerBin() {
-      for (const e of this.data) {
-        let sum = 0;
-        for (const [j, f] of e.positions.entries()) {
-          if (j != 0) {
-            sum += f.val;
-          }
-        }
-        e.totalCurrentTransfers = sum;
-      }
-      this.calculateIncomeDifferencePerBin();
-    },
-    calculateIncomeDifferencePerBin() {
-      for (const e of this.data) {
-        e.incomeDifference = e.totalCurrentTransfers - e.totalWelfareBefore;
-        if (e.incomeDifference == 0) {
-          e.incomeDifferenceCat = "neutral";
-        } else if (e.incomeDifference > 0) {
-          e.incomeDifferenceCat = "positive";
-        } else if (e.incomeDifference < 0) {
-          e.incomeDifferenceCat = "negative";
-        }
-      }
-    },
     calculateSavingsOfAllPositions() {
-      // eslint-disable-next-line no-unused-vars
       for (const [i, e] of this.positionsOnlyWelfare.entries()) {
         this.calculateSavingsOfOnePosition(i);
       }
@@ -828,8 +604,8 @@ export default {
       this.positionsArray[this.positionsArray.length - 1].checked = false;
     },
     doAfterIncomeBracketsChanged() {
-      console.log("input changed");
-      if (this.numOfUIGBins >= 0 && this.numOfUIGBins < 10) {
+      // console.log("input changed");
+      if (this.numOfUIGBins > 0 && this.numOfUIGBins < 10) {
         setTimeout(() => {
           this.computeData();
           this.calculateUIGInAllBins();
@@ -866,6 +642,15 @@ export default {
         this.calculateUIGPerBin(i);
       }
     },
+    calculateTotalIncomePerBin() {
+      for (const e of this.data) {
+        let sum = 0;
+        for (const f of e.positions) {
+          sum += f.val;
+        }
+        e.totalIncome = sum;
+      }
+    },
     calculateMaxMax() {
       let max = 0;
       for (const e of this.data) {
@@ -876,6 +661,19 @@ export default {
       }
       this.totalMax = max;
       return max;
+    },
+    calculateUpperAndLowerLimit() {
+      for (const e of this.data) {
+        for (const f of e.positions) {
+          f.valLowLim = f.val - f.moe;
+          f.valUpLim = f.val + f.moe;
+          if (this.moe) {
+            f.total = f.val + f.moe;
+          } else {
+            f.total = f.val;
+          }
+        }
+      }
     },
     positionsArrayCreate() {
       // console.log(this.data[0].positions);
@@ -923,35 +721,6 @@ export default {
       let path = generator.toPaths(rect);
       return { stroke: path[1].d, fill: path[0].d };
     },
-    computeGenericPath(width, height, j) {
-      const x = 0;
-      const y = 0;
-      const w = width;
-      const h = height;
-      let hachureAngle = -(90 - 25);
-      let hachureGap = 7;
-      let fillWeight = 3;
-      let fillStyle = "cross-hatch";
-      // let fillStyle = "zigzag-line";
-      if (j > 0) {
-        hachureAngle = -(90 - 25);
-        hachureGap = 4;
-        fillWeight = 1.5;
-        fillStyle = "hachure";
-      }
-      let generator = rough.generator();
-      let rect = generator.rectangle(x, y, w, h, {
-        fill: "rgba(0,0,0,1)",
-        stroke: "rgba(0,0,0,1)",
-        roughness: 0.8,
-        fillWeight: fillWeight,
-        hachureGap: hachureGap,
-        hachureAngle: hachureAngle,
-        fillStyle: fillStyle
-      });
-      let path = generator.toPaths(rect);
-      return { stroke: path[1].d, fill: path[0].d };
-    },
     computePathsOfOnePosition(i) {
       const index = i;
       // eslint-disable-next-line no-unused-vars
@@ -968,26 +737,6 @@ export default {
         }
       }
     },
-    lineYPosition(e) {
-      let valueToScale = 0;
-      if (this.positionsArray[0].checked == true) {
-        valueToScale = e.totalIncomeBefore;
-      } else {
-        valueToScale = e.totalWelfareBefore;
-      }
-      return this.scale.y(valueToScale);
-    },
-    decideStrokeColor(i) {
-      let color = "rgba(0,0,0,0.6)";
-      if (this.data[i].incomeDifferenceCat == "neutral") {
-        color = "rgba(0,0,0,0.6)";
-      } else if (this.data[i].incomeDifferenceCat == "positive") {
-        color = "rgba(51,160,44,1)"; // green
-      } else {
-        color = "rgba(227,26,28, 1)"; // red
-      }
-      return color;
-    },
     plusBins() {
       if (this.numOfUIGBins < 9) {
         this.numOfUIGBins++;
@@ -1003,25 +752,6 @@ export default {
       const i = parseInt(e.target.id);
       // console.log(i);
       this.findPositionAndToggleDeactive(i);
-    },
-    showCurrentWelfareOrIncomeBefore(f, j) {
-      let valueToShow = "";
-      // console.log(f, j);
-      if (j == 0) {
-        valueToShow = f.valueBefore;
-        if (this.positionsArray[0].checked == false) {
-          [].map.call(this.$el.querySelectorAll(`text.position0`), e => {
-            e.classList.add("rotateText");
-          });
-        } else {
-          [].map.call(this.$el.querySelectorAll(`text.position0`), e => {
-            e.classList.remove("rotateText");
-          });
-        }
-      } else {
-        valueToShow = f.val;
-      }
-      return valueToShow;
     },
     mouseleaveCheckboxes(e) {
       // position indey in this case
@@ -1061,7 +791,7 @@ export default {
         .duration(400)
         .style("opacity", 1);
     },
-    findBinAndToggleDeactive(e) {
+    findBinAndToggleDeactive(e, i) {
       const binNum = e.target.id;
       [].map.call(this.$el.querySelectorAll(`#bin${binNum} .path`), e => {
         e.classList.toggle("more-stroke");
@@ -1157,30 +887,15 @@ export default {
     },
     scaleYAxis() {
       // if else
-      if (this.yAxisScaled == false) {
-        this.yAxisScaled = true;
-        this.zoomSign = "-";
-        setTimeout(() => {
-          window.scrollBy({
-            top: 2300,
-            left: 0,
-            behavior: "smooth"
-          });
-        }, 800);
-        this.svgHeight = 3000;
-        this.computeAllPaths();
-      } else {
-        this.yAxisScaled = false;
-        this.zoomSign = "+";
-        setTimeout(() => {
-          this.svgHeight = 700;
-          this.computeAllPaths();
-        }, 800);
-        const element_to_scroll_to = document.getElementById("graph-headline1");
-        element_to_scroll_to.scrollIntoView({
+      setTimeout(() => {
+        window.scrollBy({
+          top: 2700,
+          left: 0,
           behavior: "smooth"
         });
-      }
+      }, 800);
+      this.svgHeight = 3000;
+      this.computeAllPaths();
     },
     // eslint-disable-next-line no-unused-vars
     onResize(event) {
@@ -1241,7 +956,6 @@ export default {
     }
   },
   directives: {
-    // eslint-disable-next-line no-unused-vars
     axis(el, binding, update) {
       // console.log(update);
       const axis = binding.arg; // x or y

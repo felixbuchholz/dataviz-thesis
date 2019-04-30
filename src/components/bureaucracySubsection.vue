@@ -73,7 +73,9 @@
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
-      <div class="center-block">**Graph**</div>
+      <div class="center-block">
+        <img src="../../public/assets/mockup/welfare-trap.jpg" alt="" />
+      </div>
       <div class="margin-right"></div>
     </div>
     <!-- * -->
@@ -96,7 +98,9 @@
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
-      <div class="center-block">**Graph**</div>
+      <div class="center-block">
+        <img src="../../public/assets/mockup/nit-model.jpg" alt="" />
+      </div>
       <div class="margin-right"></div>
     </div>
     <!-- * -->

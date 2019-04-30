@@ -57,7 +57,6 @@
 
 <script>
 import * as d3 from "d3";
-import { parse } from "path";
 export default {
   name: "graphSide",
   props: {
@@ -95,7 +94,7 @@ export default {
       // console.log("window has been resized");
       // console.log(this.$el);
       const chartElement = this.$el.querySelectorAll(".chart")[0];
-      console.log(chartElement);
+      // console.log(chartElement);
       const padding = parseInt(
         getComputedStyle(chartElement).padding.substring(0, 2)
       );

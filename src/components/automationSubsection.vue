@@ -15,11 +15,8 @@
       <div class="margin-right"></div>
     </div>
     <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">**Graph**</div>
-      <div class="margin-right"></div>
-    </div>
+    <graphCenterAutomationWage />
+
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
@@ -35,7 +32,9 @@
             artificial intelligence.</span
           >
         </p>
-        <div class="right">** Graph **</div>
+        <div class="right">
+          <img src="../../public/assets/mockup/job-benchmark.jpg" alt="" />
+        </div>
       </div>
       <div class="margin-right"></div>
     </div>
@@ -89,10 +88,10 @@
 </template>
 
 <script>
-// import graphSide from "../components/graphSide.vue";
+import graphCenterAutomationWage from "../components/graphCenterAutomationWage.vue";
 export default {
   name: "automationSubsection",
-  components: {},
+  components: { graphCenterAutomationWage },
   props: {
     msg: String
   },

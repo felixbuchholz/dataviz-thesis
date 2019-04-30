@@ -257,11 +257,7 @@
       <div class="margin-right"></div>
     </div>
     <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">**Graph**</div>
-      <div class="margin-right"></div>
-    </div>
+    <!-- <graphModelTwo /> -->
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
@@ -372,10 +368,13 @@
 
 <script>
 import graphModelOne from "../components/graphModelOne.vue";
+import graphModelTwo from "../components/graphModelTwo.vue";
 export default {
-  name: "secondSection",
+  name: "thirdSection",
   components: {
-    graphModelOne
+    graphModelOne,
+    // eslint-disable-next-line vue/no-unused-components
+    graphModelTwo
   },
   props: {
     msg: String

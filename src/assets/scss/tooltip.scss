@@ -11,24 +11,6 @@
    width: 360px;
   }
 }
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .4s;
-  opacity: 1;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-div {
-  transition: all 0.4s;
-}
-
-g, path {
-  transition-property: all;
-  transition-duration: 1s;
-}
-
 .more-stroke {
   stroke-width: 1;
 }
