@@ -110,7 +110,7 @@
         </div>
         <div class="income border-top-with-note">
           <p class="sans small note-top-unhug">
-            Show the market income in comparison?
+            Show the income without benefits in comparison?
           </p>
           <div
             :class="`positions position${0} transfer-checkboxes`"
@@ -119,7 +119,7 @@
             id="0"
           >
             <label class="checkbox-container sans">
-              <div class="center">Market income</div>
+              <div class="center">Income without benefits</div>
               <input
                 v-if="isLoaded"
                 type="checkbox"
@@ -290,7 +290,7 @@
                 text-anchor="middle"
                 fill="currentColor"
               >
-                Market income before taxes per household, ranges in 2017 $
+                Income without benefits before taxes per household, ranges in 2017 $
               </text>
               <g
                 v-axis:x="scale"
@@ -481,7 +481,7 @@
                 />
               </svg>
               <p class="sans small legend-description">
-                Market income
+                Income without benefits
               </p>
             </div>
           </div>
