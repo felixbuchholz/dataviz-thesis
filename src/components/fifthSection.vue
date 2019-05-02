@@ -14,10 +14,18 @@
           <span class="italic">Where</span> to go from here?
         </h2>
         <h6 class="subheadline">
-          More information and the next steps
+          Next steps and where to get more information
         </h6>
       </div>
-      <div class="margin-right"></div>
+      <div class="margin-right">
+        <div class="margin-container">
+          <a href="#section-4">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon up" />
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
     <!-- * -->
     <div class="grid-container">
@@ -54,10 +62,12 @@
 
 <script>
 // import graphSide from "../components/graphSide.vue";
+import arrowIcon from "../../public/assets/svg/arrow.svg";
 export default {
   name: "fifthSection",
   components: {
     // graphSide
+    arrowIcon
   },
   props: {
     msg: String

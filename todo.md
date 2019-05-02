@@ -5,6 +5,13 @@
   - h2 / h3 bigger 
   - Better tooltip -> only current state + Population size
   - Welfare without benefits
+  - Description!
+  - Video: 1280 x 764
+
+Legend y: Household income with benefits and tax credits, before taxes ($), 2017
+Legend x: Household without benefits, before taxes ($), 2017
+
+- make income and welfare transfers hoverable!
 
 ! Feedback Daniel:
   - use the line as an indicator to lock the initial state

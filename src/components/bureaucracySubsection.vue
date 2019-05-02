@@ -2,7 +2,15 @@
   <div class="subsection">
     <!-- * Template * -->
     <div class="grid-container">
-      <div class="margin-left"></div>
+      <div class="margin-left">
+        <div class="margin-container">
+          <a href="#fairness">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon" />
+            </div>
+          </a>
+        </div>
+      </div>
       <div class="center-block">
         <h6 class="topheadline slam-bottom light" id="bureaucracy">
           Second entry point
@@ -12,7 +20,15 @@
           be more <span class="italic">effective?</span>
         </h3>
       </div>
-      <div class="margin-right"></div>
+      <div class="margin-right">
+        <div class="margin-container">
+          <a href="#automation">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon up" />
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
     <!-- * -->
     <div class="grid-container">
@@ -143,9 +159,10 @@
 
 <script>
 // import graphSide from "../components/graphSide.vue";
+import arrowIcon from "../../public/assets/svg/arrow.svg";
 export default {
   name: "bureaucracySubsection",
-  components: {},
+  components: { arrowIcon },
   props: {
     msg: String
   },

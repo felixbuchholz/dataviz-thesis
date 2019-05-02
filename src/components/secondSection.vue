@@ -8,7 +8,15 @@
     </div>
     <!-- * -->
     <div class="grid-container">
-      <div class="margin-left"></div>
+      <div class="margin-left">
+        <div class="margin-container">
+          <a href="#automation">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon" />
+            </div>
+          </a>
+        </div>
+      </div>
       <div class="center-block">
         <h2 class="hug-bottom" id="section-2">
           <span class="italic">Why</span> should we talk about <br />
@@ -16,7 +24,15 @@
         </h2>
         <h6 class="subheadline">Three possible entry points</h6>
       </div>
-      <div class="margin-right"></div>
+      <div class="margin-right">
+        <div class="margin-container">
+          <a href="#section-1">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon up" />
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
     <!-- * -->
     <div class="grid-container">
@@ -98,12 +114,15 @@
 import automationSubsection from "../components/automationSubsection.vue";
 import bureaucracySubsection from "../components/bureaucracySubsection.vue";
 import fairnessSubsection from "../components/fairnessSubsection.vue";
+import arrowIcon from "../../public/assets/svg/arrow.svg";
+
 export default {
   name: "secondSection",
   components: {
     automationSubsection,
     bureaucracySubsection,
-    fairnessSubsection
+    fairnessSubsection,
+    arrowIcon
   },
   props: {
     msg: String

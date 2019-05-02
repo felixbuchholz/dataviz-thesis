@@ -8,7 +8,15 @@
     </div>
     <!-- * -->
     <div class="grid-container">
-      <div class="margin-left"></div>
+      <div class="margin-left">
+        <div class="margin-container">
+          <a href="#section-5">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon" />
+            </div>
+          </a>
+        </div>
+      </div>
       <div class="center-block">
         <h2 class="hug-bottom" id="section-4">
           <span class="italic">What</span> are the
@@ -21,7 +29,15 @@
           Financing and expected effects are closely connected
         </h6>
       </div>
-      <div class="margin-right"></div>
+      <div class="margin-right">
+        <div class="margin-container">
+          <a href="#section-3">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon up" />
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
     <!-- * -->
     <div class="grid-container">
@@ -259,11 +275,11 @@
 </template>
 
 <script>
-// import graphSide from "../components/graphSide.vue";
+import arrowIcon from "../../public/assets/svg/arrow.svg";
 export default {
   name: "forthSection",
   components: {
-    // graphSide
+    arrowIcon
   },
   props: {
     msg: String

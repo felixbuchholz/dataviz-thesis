@@ -8,7 +8,15 @@
     </div>
     <!-- * -->
     <div class="grid-container">
-      <div class="margin-left"></div>
+      <div class="margin-left">
+        <div class="margin-container">
+          <a href="#section-2">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon" />
+            </div>
+          </a>
+        </div>
+      </div>
       <div class="center-block">
         <h2 class="hug-bottom" id="section-1">
           <span class="italic">What</span> are we talking about, <br />
@@ -17,7 +25,8 @@
         </h2>
         <h6 class="subheadline">Current interest & uncertainties</h6>
       </div>
-      <div class="margin-right"></div>
+      <div class="margin-right">
+      </div>
     </div>
     <!-- * -->
     <div class="grid-container">
@@ -119,10 +128,12 @@
 
 <script>
 import graphSideGoogle from "../components/graphSideGoogle.vue";
+import arrowIcon from "../../public/assets/svg/arrow.svg";
 export default {
   name: "firstSection",
   components: {
-    graphSideGoogle
+    graphSideGoogle,
+    arrowIcon
   },
   props: {
     msg: String

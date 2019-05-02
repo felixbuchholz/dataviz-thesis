@@ -8,7 +8,15 @@
     </div>
     <!-- * -->
     <div class="grid-container">
-      <div class="margin-left"></div>
+      <div class="margin-left">
+        <div class="margin-container">
+          <a href="#section-4">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon" />
+            </div>
+          </a>
+        </div>
+      </div>
       <div class="center-block">
         <h2 class="hug-bottom" id="section-3">
           <span class="italic">How</span> would a universal income guarantee
@@ -17,7 +25,15 @@
         </h2>
         <h6 class="subheadline">A comparison of two static models</h6>
       </div>
-      <div class="margin-right"></div>
+      <div class="margin-right">
+        <div class="margin-container">
+          <a href="#fairness">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon up" />
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
     <!-- * -->
     <div class="grid-container">
@@ -369,12 +385,15 @@
 <script>
 import graphModelOne from "../components/graphModelOne.vue";
 import graphModelTwo from "../components/graphModelTwo.vue";
+import arrowIcon from "../../public/assets/svg/arrow.svg";
+
 export default {
   name: "thirdSection",
   components: {
     graphModelOne,
     // eslint-disable-next-line vue/no-unused-components
-    graphModelTwo
+    graphModelTwo,
+    arrowIcon
   },
   props: {
     msg: String

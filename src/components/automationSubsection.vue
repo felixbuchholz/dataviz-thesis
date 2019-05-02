@@ -2,7 +2,15 @@
   <div class="subsection">
     <!-- * Template * -->
     <div class="grid-container">
-      <div class="margin-left"></div>
+      <div class="margin-left">
+        <div class="margin-container">
+          <a href="#bureaucracy">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon" />
+            </div>
+          </a>
+        </div>
+      </div>
       <div class="center-block">
         <h6 class="topheadline slam-bottom light" id="automation">
           First entry point
@@ -12,7 +20,15 @@
           <span class="italic">Artificial Intelligence?</span>
         </h3>
       </div>
-      <div class="margin-right"></div>
+      <div class="margin-right">
+        <div class="margin-container">
+          <a href="#section-2">
+            <div class="icon-small unhug-top-small">
+              <arrowIcon class="arrow-icon up" />
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
     <!-- * -->
     <graphCenterAutomationWage />
@@ -89,9 +105,11 @@
 
 <script>
 import graphCenterAutomationWage from "../components/graphCenterAutomationWage.vue";
+import arrowIcon from "../../public/assets/svg/arrow.svg";
+
 export default {
   name: "automationSubsection",
-  components: { graphCenterAutomationWage },
+  components: { graphCenterAutomationWage, arrowIcon },
   props: {
     msg: String
   },

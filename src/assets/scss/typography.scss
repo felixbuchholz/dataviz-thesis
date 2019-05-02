@@ -40,13 +40,31 @@ body {
   height: 3.75rem;
 }
 
-button {
-  margin-right: 10px;
-  padding: 10px;
+.return-button {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-flow: row nowrap;
+  margin:0;
+}
+
+.insight button {
+  margin: 2px -5px;
+  padding: 5px;
   background: rgba(87,176,234,0);
   color: rgba(87,176,234,1);
   border-radius: 2px;
-  border: 3px solid rgba(87,176,234,1);
+  border: none;
+  cursor: pointer;
+}
+
+button {
+  margin: 2px;
+  padding: 8px;
+  background: rgba(87,176,234,0);
+  color: rgba(87,176,234,1);
+  border-radius: 2px;
+  border: 2px solid rgba(87,176,234,1);
   cursor: pointer;
 }
 
@@ -158,6 +176,9 @@ a {
 }
 .unhug-top-small {
   margin-top: 2.5rem;
+}
+.unhug-top-tiny {
+  margin-top: 0.7rem;
 }
 .unhug-bottom {
   margin-bottom: 3.75rem;
@@ -299,4 +320,8 @@ p {
   position: absolute;
   margin-top: 10px;
   font-size: 1.3rem; 
+}
+
+.insight {
+  line-height: 1.8;
 }

@@ -23,10 +23,14 @@ g, path, line {
   transition: opacity 0.4s;
 }
 
-.legend-for-graph {
-  opacity: 0.4;
+.blur {
+  filter: blur(25px);
 }
 
-.legend-for-graph:hover {
-  opacity: 1;
-}
+// .legend-for-graph {
+//   opacity: 0.4;
+// }
+
+// .legend-for-graph:hover {
+//   opacity: 1;
+// }

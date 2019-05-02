@@ -111,6 +111,11 @@ export default {
   color: $primary;
   // lazy transition
   transition: all 0.5s;
+  background: rgba(235,235,235,0.5);
+}
+
+.menu-button.is-active {
+  background: none;
 }
 
 .overlay {
