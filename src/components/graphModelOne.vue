@@ -337,8 +337,7 @@
             >distribution of household incomes and welfare transfers</span
           >
           in the US in 2017. <br />
-          <span class="regular">It is interactive!</span> –
-          You can
+          <span class="regular">It is interactive!</span> – You can
           <button class="button" @click="readyToChange">directly change</button>
           the parameters of this scheme or read a
           <button class="button" @click="startIntro">
@@ -351,7 +350,7 @@
           indicates the sum income and benefits. Each bar stack represents an
           income group. The stacks are grouped and sorted by
           <span class="regular">income without benefits.</span>
-          <button @click="goToLegendB">… continue </button> or
+          <button @click="goToLegendB">… continue</button> or
           <button @click="readyToChange">skip the rest of the intro?</button>
         </div>
         <div v-if="insight == 'introLegendB'">
@@ -380,8 +379,8 @@
           before you made any changes. It will turn
           <span class="regular color-negative">red</span> if the result of this
           group is <span class="regular">negative.</span> It turns
-          <span class="regular color-positive">green</span> if the group <span class="regular">profits</span>
-          from your configuration. <br />
+          <span class="regular color-positive">green</span> if the group
+          <span class="regular">profits</span> from your configuration. <br />
           <button @click="goToLegendC">
             Learn one more thing about the legend
           </button>
@@ -439,7 +438,8 @@
           </svg>
           <br />
           <br />
-          In the next step we can <button @click="goToScaleA">think about the scale </button> or
+          In the next step we can
+          <button @click="goToScaleA">think about the scale</button> or
           <button @click="readyToChange">skip the rest of the intro?</button>
         </div>
         <div v-if="insight == 'readyToChange'">
@@ -491,8 +491,9 @@
           <span class="regular"
             >the idea is to replace current welfare benefits with a UIG.</span
           >
-          You can <span class="regular">hover</span> over the different categories to see how they affect
-          incomes in all groups and select them individually. But for now –
+          You can <span class="regular">hover</span> over the different
+          categories to see how they affect incomes in all groups and select
+          them individually. But for now –
           <span v-if="!allWelfareUnchecked">
             <button @click="uncheckAll">
               let’s un-check all of them!
@@ -944,6 +945,19 @@ export default {
         }
       }
       return sum == 0;
+    },
+    positiveBins() {
+      let binArray = [];
+      for (const bin of this.data) {
+        if (bin.totalWelfareBefore < bin.totalCurrentTransfers) {
+          console.log(bin.bin);
+          let percentageOfTotalPopulation =
+            bin.populationDetails.tpersons.val / (3.2 * Math.pow(10, 8));
+          bin["percentageOfTotalPopulation"] = percentageOfTotalPopulation;
+          binArray.push(bin);
+        }
+      }
+      return binArray;
     }
   },
   watch: {

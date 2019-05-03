@@ -1,3 +1,5 @@
+const totalPersons = 320371997;
+
 const colors = [
   "rgba(87,176,234,1)",
   "rgba(255, 138, 24,1)",
