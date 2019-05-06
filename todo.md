@@ -1,7 +1,11 @@
 Total GDP: 
 https://www.imf.org/external/pubs/ft/weo/2018/01/weodata/weorept.aspx?pr.x=98&pr.y=12&sy=1980&ey=2023&scsm=1&ssd=1&sort=country&ds=.&br=1&c=111&s=NGDP_RPCH,NGDPD,NGDPDPC,PCPIPCH,LUR,GGXONLB_NGDP,GGXWDG_NGDP,BCA_NGDPD&grp=0&a=
 
-Total Federal expenditures
+Total Federal expenditures: https://fred.stlouisfed.org/series/M318191A027NBEA
+
+Credit: vue-scrollama, v-schow-slide
+
+
 
 ! Feedback Daniel:
   - Move out the zoom button and the axis-labels (1) superscript (annotation mode)

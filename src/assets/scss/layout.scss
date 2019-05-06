@@ -136,11 +136,15 @@
   display: grid;
   grid-template-rows: auto 1fr auto;
   grid-template-columns: 100%;
-  grid-template-areas: 
+  grid-template-areas:
   "top"
   "center"
   "bottom";
 }
+
+// .budget-headline {
+//   grid-area: "budget-headline";
+// }
 
 .budget-calculations {
     grid-area: "top";
@@ -159,6 +163,34 @@
   margin-left: auto;
   width: 70%;
 }
+
+.grid-vertical-container-interface {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  // grid-template-columns: 100%;
+  grid-template-areas: 
+  "interface-headline"
+  "interface-welfare"
+  "interface-zoom";
+}
+
+.interface-headline {
+  grid-area: "interface-headline";
+}
+
+// .interface-uig {
+//   grid-area: "interface-uig";
+// }
+
+.interface-welfare {
+  grid-area: "interface-welfare";
+}
+
+.interface-zoom {
+  grid-area: "interface-zoom";
+}
+
+
 
 .inline-svg {
   display: inline;
@@ -251,6 +283,10 @@
   margin-left: 8.4px;
   line-height: 1.1;
 }
+.pom-scroll-adjust {
+  margin-top: -31.5px;
+  margin-left: 8.2px;
+}
 
 .zoomText {
   margin:0;
@@ -298,4 +334,19 @@ img {
 .rotateText {
   text-anchor: start;
   transform: rotate(-45deg) translate(-2px,4px);
+}
+
+.insight {
+  // height: 15vh;
+  margin-bottom: 160px;
+}
+
+// TODO: lazy hr
+hr {
+  opacity: 0
+}
+
+.hidden-steps {
+  transition: none;
+  visibility: hidden;
 }

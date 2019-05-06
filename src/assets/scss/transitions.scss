@@ -1,5 +1,9 @@
-div {
+.tooltip-container, .tooltip {
   transition: all 0.4s;
+}
+
+div {
+  transition: filter 0.4s;
 }
 
 g, path, line {

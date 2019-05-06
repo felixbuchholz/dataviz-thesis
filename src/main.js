@@ -9,9 +9,12 @@ import App from "./App.vue";
 // import "./assets/css/typography.scss";
 import "./assets/scss/manifest.scss";
 
-import titleMixin from "./mixins/titleMixin";
+import VShowSlide from 'v-show-slide'
+Vue.use(VShowSlide)
 
+import titleMixin from "./mixins/titleMixin";
 Vue.mixin(titleMixin);
+
 Vue.config.productionTip = false;
 
 new Vue({

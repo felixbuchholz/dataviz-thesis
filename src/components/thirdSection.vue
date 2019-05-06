@@ -143,6 +143,7 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
+        <div class="spacer"></div>
         <p class="right">
           At its conception, one of the main goals of this approach was to
           alleviate poverty. At its conception, one of the main goals of this

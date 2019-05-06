@@ -2,7 +2,9 @@
 Credit to Skeleton.css
 Credit to Andrew Levinson
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-
+@mixin sans {
+  font-family: "Merriweather Sans", sans-serif;
+}
 @import url('https://fonts.googleapis.com/css?family=Merriweather+Sans:300,300i,400,400i,700,700i|Merriweather:300,300i,400,400i,700,700i');
 @import 'breakpoints';
 @import 'color_defs';
@@ -23,7 +25,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 .sans {
-  font-family: "Merriweather Sans", sans-serif;
+  @include sans;
 }
 .ul-no-indent {
   // list-style-position: inside;
@@ -150,6 +152,9 @@ a {
 .align-right {
   text-align: right;
 }
+.align-center {
+  text-align: center;
+}
 .slam-top {
   margin-top: 0rem;
 }
@@ -176,6 +181,9 @@ a {
 }
 .unhug-top-small {
   margin-top: 2.5rem;
+}
+.unhug-top-175 {
+  margin-top: 1.75rem;
 }
 .unhug-top-tiny {
   margin-top: 0.7rem;
@@ -213,6 +221,10 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
+}
+
+h2, h5 {
+  padding-top: 32px
 }
 
 h1 {

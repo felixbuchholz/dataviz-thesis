@@ -183,15 +183,15 @@ d3.csv(`hh_t_persons.csv`).then(data => {
           // console.log(e.population);
           if (e.population.name == "hhtotal") {
             let f = d3.format(".2f");
-            data[i].populationDetails["percentageOfTotalHousholds"] = parseFloat(f(
-              (e.population.val / totalHouseholds) * 100
-            ));
+            data[i].populationDetails[
+              "percentageOfTotalHousholds"
+            ] = parseFloat(f((e.population.val / totalHouseholds) * 100));
           }
           if (e.population.name == "tpersons") {
             let f = d3.format(".2f");
-            data[i].populationDetails["percentageOfTotalPersons"] = parseFloat(f(
-              (e.population.val / totalPersons) * 100
-            ));
+            data[i].populationDetails["percentageOfTotalPersons"] = parseFloat(
+              f((e.population.val / totalPersons) * 100)
+            );
           }
           data[i].populationDetails[e.population.name] = e.population;
         }
