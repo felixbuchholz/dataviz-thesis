@@ -1,4 +1,5 @@
 const totalPersons = 320371997;
+const totalHouseholds = 126519331;
 
 const colors = [
   "rgba(87,176,234,1)",
@@ -16,6 +17,7 @@ const names = [
     shortName: "hhtotal",
     listName: "Total households in range",
     longName: "Total count of households in income range",
+    ttName: "Households in this group",
     desc: "",
     category: "population"
   },
@@ -25,6 +27,7 @@ const names = [
     shortName: "tpersons",
     listName: "Total persons in range",
     longName: "Total count of persons in income range",
+    ttName: "People in this group",
     desc: "",
     category: "population"
   },
@@ -34,6 +37,7 @@ const names = [
     shortName: "tadults",
     listName: "Total adults in range",
     longName: "Total count of adults  in income range",
+    ttName: "Adults in this group",
     desc: "",
     category: "population"
   },
@@ -43,6 +47,7 @@ const names = [
     shortName: "mpersons",
     listName: "Avg. persons per household",
     longName: "Mean count of person per household in income range",
+    ttName: "Avg. household size",
     desc: "",
     category: "population"
   },
@@ -52,6 +57,7 @@ const names = [
     shortName: "madults",
     listName: "Avg. adults per household",
     longName: "Mean count of adults per household in income range",
+    ttName: "Avg. number of adults per household",
     desc: "",
     category: "population"
   },
@@ -61,6 +67,7 @@ const names = [
     population: false,
     shortName: "minc",
     longName: "Mean market income",
+    ttName: "Income without benefits",
     desc: "",
     category: "income"
   },
@@ -70,6 +77,7 @@ const names = [
     shortName: "retirement",
     longName: "Benefits due to retirement, veteran & survivor status",
     listName: "Retirement, veteran and survivor status",
+    ttName: "Retirement, veteran and survivor status",
     desc:
       "Income from Social Security due to retirment (biggest share in this group by far), retirement benefits from government programs and all income from the Department of Veterans Affairs (includes transfers due to diability, data could not be distinguished in this regard",
     technical: "clean_wel_increti_tot clean_incvet clean_incss_ret",
@@ -81,6 +89,7 @@ const names = [
     shortName: "work",
     longName: "Category Work & Education, e.g. EITC",
     listName: "Work related, education",
+    ttName: "Work related, education",
     desc:
       "EITC, Worker compensation, Education programs (without veteran education programs), Unemployment benefits",
     technical:
@@ -94,6 +103,7 @@ const names = [
     longName:
       "Family and child support also including SNAP, AFDC/TANF, child support, child tax credit, Social security child benefits, support for heating",
     listName: "Family and child assistance, SNAP",
+    ttName: "Family and child assistance, SNAP",
     desc:
       "Family Assistance, SNAP and other: AFDC/TANF, Child support, child tax credit, child, Social security child benefits, SNAP, Energy Subsidy",
     technical:
@@ -107,6 +117,7 @@ const names = [
     longName:
       "Supplemental Security Income, other benefits due to disability status and ‘other’ in social security income",
     listName: "Disability status and ‘other’",
+    ttName: "Disability status and ‘other’",
     desc:
       "Supplemental Security Income, other benefits due to disability status and ‘other’ in social security income",
     technical: "clean_incssi clean_wel_incdisa_tot clean_incss_disa",
@@ -118,6 +129,7 @@ const names = [
     shortName: "uig",
     listName: "Universal Income Guarantee",
     longName: "Hypothetical Universal Income Guarantee",
+    ttName: "Universal Income Guarantee",
     desc: "",
     category: "uig"
   }
@@ -168,6 +180,19 @@ d3.csv(`hh_t_persons.csv`).then(data => {
         if (e.hasOwnProperty("position")) {
           data[i].positions.push(e.position);
         } else {
+          // console.log(e.population);
+          if (e.population.name == "hhtotal") {
+            let f = d3.format(".2f");
+            data[i].populationDetails["percentageOfTotalHousholds"] = parseFloat(f(
+              (e.population.val / totalHouseholds) * 100
+            ));
+          }
+          if (e.population.name == "tpersons") {
+            let f = d3.format(".2f");
+            data[i].populationDetails["percentageOfTotalPersons"] = parseFloat(f(
+              (e.population.val / totalPersons) * 100
+            ));
+          }
           data[i].populationDetails[e.population.name] = e.population;
         }
       }
@@ -184,13 +209,25 @@ d3.csv(`hh_t_persons.csv`).then(data => {
 const processCSV = (data, names, population) => {
   data.map((e, i) => {
     if (population) {
-      e.population = {
-        val: parseInt(e.b),
-        moe: parseInt(e.se),
-        name: names.shortName,
-        longName: names.longName,
-        desc: names.desc
-      };
+      console.log(names.shortName, e.b);
+      if (names.shortName == "mpersons" || names.shortName == "madults") {
+        e.population = {
+          val: parseFloat(e.b),
+          moe: parseFloat(e.se),
+          name: names.shortName,
+          longName: names.longName,
+          ttName: names.ttName,
+          desc: names.desc
+        };
+      } else {
+        e.population = {
+          val: parseInt(e.b),
+          moe: parseInt(e.se),
+          name: names.shortName,
+          longName: names.longName,
+          desc: names.desc
+        };
+      }
     } else {
       e.position = {
         val: parseInt(e.b),
@@ -199,6 +236,7 @@ const processCSV = (data, names, population) => {
         moeBefore: parseInt(e.se),
         name: names.shortName,
         longName: names.longName,
+        ttName: names.ttName,
         listName: names.listName,
         desc: names.desc,
         category: names.category

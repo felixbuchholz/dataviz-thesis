@@ -153,16 +153,16 @@
     <div class="center-block">
       <div class="chart">
         <h5 class="sans hug-bottom" id="graph-headline1">UIG scheme 1:</h5>
-        <span class="sans"
-          >Select welfare programs to be replaced and provide a UIG to the
+        <span class="sans">
+          Select welfare programs to be replaced and provide a UIG to the
           <span class="bold">
             lowest
             <span v-if="isLoaded & (numOfUIGBins > 0)" class="color-uig">{{
               numOfUIGBins
             }}</span>
             income brackets
-          </span></span
-        >
+          </span>
+        </span>
         <div v-if="tooltip.id != null">
           <transition-group name="tipmove" tag="div">
             <div
@@ -196,7 +196,7 @@
             <g :transform="`translate(${margin.left}, ${margin.top})`">
               <!-- Credit grid-lines: Andrew Levinson
                   https://github.com/AndrewLevinson/thesis/blob/master/src/components/ChartOne.vue
-               -->
+              -->
               <g v-if="isLoaded">
                 <g v-grid:gridLine="scale" class="grid-lines"></g>
               </g>
@@ -226,7 +226,7 @@
                             stroke="currentColor"
                             stroke-width="0.5"
                             :d="f.path.fill"
-                          />
+                          ></path>
                           <path
                             v-show="
                               show & positionsArray[j].checked & (f.val > 0)
@@ -242,7 +242,7 @@
                             stroke="currentColor"
                             stroke-width="0.8"
                             :d="f.path.stroke"
-                          />
+                          ></path>
 
                           <text
                             :x="scale.x.bandwidth() / 2"
@@ -262,7 +262,7 @@
                           fill: "rgba(0,0,0,0.3)"
                           :width="scale.x.bandwidth()"
                           :height="height - scale.y(f.val)"
-                        /> -->
+                          />-->
                         </g>
                       </transition>
                     </g>
@@ -275,7 +275,7 @@
                         stroke-width="3"
                         stroke-dasharray="0.5 5"
                         stroke-linecap="round"
-                      />
+                      ></line>
                     </g>
                   </g>
                 </transition>
@@ -292,7 +292,8 @@
                   @mouseenter="mouseenterBars"
                   @mousemove="mousemoveBars"
                   @mouseout="mouseleaveBars"
-                />
+                  @click="clickBars"
+                ></rect>
               </g>
 
               <rect
@@ -301,7 +302,7 @@
                 :height="margin.bottom"
                 :width="width"
                 fill="#fcfcfc"
-              />
+              ></rect>
               <text
                 class="graph-label"
                 :transform="`translate(${width}, ${height + 25})`"
@@ -336,7 +337,8 @@
           <span class="regular"
             >distribution of household incomes and welfare transfers</span
           >
-          in the US in 2017. <br />
+          in the US in 2017.
+          <br />
           <span class="regular">It is interactive!</span> – You can
           <button class="button" @click="readyToChange">directly change</button>
           the parameters of this scheme or read a
@@ -345,8 +347,8 @@
           </button>
         </div>
         <div v-if="insight == 'introLegendA'">
-          <span class="regular">Let’s take a look at the legend:</span> <br />
-          The <span class="regular">height</span> of the bars in the chart
+          <span class="regular">Let’s take a look at the legend:</span>
+          <br />The <span class="regular">height</span> of the bars in the chart
           indicates the sum income and benefits. Each bar stack represents an
           income group. The stacks are grouped and sorted by
           <span class="regular">income without benefits.</span>
@@ -354,7 +356,7 @@
           <button @click="readyToChange">skip the rest of the intro?</button>
         </div>
         <div v-if="insight == 'introLegendB'">
-          <span class="regular">This line </span>
+          <span class="regular">This line</span>
           <svg
             class="inline-svg"
             v-if="isLoaded"
@@ -370,7 +372,7 @@
               stroke-width="2"
               stroke-dasharray="1 3"
               stroke-linecap="round"
-            />
+            ></line>
           </svg>
           above each stacked bar group
           <span class="regular"
@@ -380,7 +382,8 @@
           <span class="regular color-negative">red</span> if the result of this
           group is <span class="regular">negative.</span> It turns
           <span class="regular color-positive">green</span> if the group
-          <span class="regular">profits</span> from your configuration. <br />
+          <span class="regular">profits</span> from your configuration.
+          <br />
           <button @click="goToLegendC">
             Learn one more thing about the legend
           </button>
@@ -401,20 +404,21 @@
               fill="none"
               stroke="currentColor"
               :d="legendPathMarketIncomeSmall.fill"
-            />
+            ></path>
             <path
               :transform="`translate(1, 1)`"
               stroke-width="0.5"
               fill="none"
               stroke="currentColor"
               :d="legendPathMarketIncomeSmall.stroke"
-            />
+            ></path>
           </svg>
-          for the <span class="regular">income without benefits</span> (but
-          before taxes) and this one for
+          for the
+          <span class="regular">income without benefits</span> (but before
+          taxes) and this one for
           <span class="regular"
-            >welfare benefits, tax credits and the UIG:
-          </span>
+            >welfare benefits, tax credits and the UIG:</span
+          >
           <svg
             class="inline-svg"
             v-if="isLoaded"
@@ -427,28 +431,57 @@
               fill="none"
               stroke="currentColor"
               :d="legendPathTransfersSmall.fill"
-            />
+            ></path>
             <path
               :transform="`translate(1, 1)`"
               stroke-width="0.5"
               fill="none"
               stroke="currentColor"
               :d="legendPathTransfersSmall.stroke"
-            />
+            ></path>
           </svg>
           <br />
-          <br />
-          In the next step we can
+          <br />In the next step we can
           <button @click="goToScaleA">think about the scale</button> or
           <button @click="readyToChange">skip the rest of the intro?</button>
         </div>
         <div v-if="insight == 'readyToChange'">
-          A UIG is active and the income threshold is
-          <span class="color-primary"> {{ UIGthresholdF }} $. </span> <br />
-          X people in y housholds will benefit from an average household income
-          increase of z. <br /><span class="regular">But</span> X people in y
-          housholds will experience an average decrease of household income of
-          z.
+          <transition name="fade">
+            <div v-show="uigChanged">
+              <span class="regular"
+                >Households earning less than {{ UIGthresholdF }} $ receive a
+                UIG.</span
+              >
+              They represent
+              {{ currentTotalRecipientPercentagePopulationF }} % of the
+              population and receive on average
+              <span :class="`regular color-${currentAvgPosOrNeg}`">
+                {{ currentAvgIncomeDifferenceRecipientHouseholds }} $
+                {{ currentAvgMoreOrLess }}</span
+              >
+              benefits than before.
+            </div>
+          </transition>
+          <transition name="fade">
+            <div v-show="welfareChanged">
+              <span class="regular">
+                {{ connectingWordInInsight }}
+                {{ currentTotalNonRecipientHouseholdsF }} households not
+                receiving a UIG</span
+              >
+              will on average experience a loss of welfare benefits equal to
+              <span class="regular color-negative">
+                {{ avgPercentageChangeNonRecipients }} %
+              </span>
+              of their original income.
+            </div>
+          </transition>
+          <transition name="fade">
+            <div v-show="!anythingChanged">
+              This is the income distribution in the US without any changes in
+              2017.
+            </div>
+          </transition>
           <div class="return-button">
             <button @click="startIntro" class="small">
               Back to the intro?
@@ -456,7 +489,7 @@
           </div>
         </div>
         <div v-if="insight == 'introScaleA'">
-          <span class="regular">Let’s talk about scale! </span> Because incomes
+          <span class="regular">Let’s talk about scale!</span> Because incomes
           in the last group are so high, it’s hard to see the welfare benefits.
           <span class="regular">To get more detail,</span> you can un-check this
           box:
@@ -491,19 +524,16 @@
           <span class="regular"
             >the idea is to replace current welfare benefits with a UIG.</span
           >
-          You can <span class="regular">hover</span> over the different
-          categories to see how they affect incomes in all groups and select
-          them individually. But for now –
+          You can
+          <span class="regular">hover</span> over the different categories to
+          see how they affect incomes in all groups and select them
+          individually. But for now –
           <span v-if="!allWelfareUnchecked">
-            <button @click="uncheckAll">
-              let’s un-check all of them!
-            </button>
+            <button @click="uncheckAll">let’s un-check all of them!</button>
           </span>
           <span v-else-if="allWelfareUnchecked">
             Good!
-            <button @click="goToInterfaceB">
-              Ready to go to the UIG?
-            </button>
+            <button @click="goToInterfaceB">Ready to go to the UIG?</button>
           </span>
         </div>
         <div v-if="insight == 'introInterfaceB'">
@@ -520,17 +550,17 @@
           </label>
           Now we have to decide how many of the lower income groups should
           benefit from it. For now we will
-          <button @click="setUIGBinsTo5">
-            set it to five.
-          </button>
+          <button @click="setUIGBinsTo5">set it to five.</button>
           <span v-if="introUIGActive & (numOfUIGBins == 5)">
             Great! Now
-            <span class="regular"
-              >every household with an income less than the upper boundary of
-              group 5, </span
-            ><span class="regular color-primary">$ {{ UIGthresholdF }},</span>
-            will get <span class="regular">50 % of the difference</span> to the
-            threshold as an income guarantee.
+            <span class="regular">
+              every household with an income less than the upper boundary of
+              group 5,
+            </span>
+            <span class="regular color-primary">$ {{ UIGthresholdF }},</span>
+            will get
+            <span class="regular">50 % of the difference</span> to the threshold
+            as an income guarantee.
             <button class="button" @click="goToBudgetA">
               Should we go to the last step
             </button>
@@ -583,22 +613,28 @@
               </transition>
             </div>
             <div class="simple-flex border-top-with-note">
-              <p class="sans bold note-top-unhug">
-                Balance ($):
-              </p>
-              <p
-                class="sans bold note-top-unhug"
-                v-html="currentBalanceHTML"
-              ></p>
+              <p class="sans bold note-top-unhug">Balance ($):</p>
+              <div>
+                <div
+                  class="sans bold note-top-unhug"
+                  v-html="currentBalanceHTML"
+                ></div>
+                <p
+                  v-if="currentBalance != 0"
+                  class="small sans regular color-standard align-right"
+                >
+                  &#8776; {{ currentBalanceAsPercentageOfGDP }}&#8201;% of
+                  GDP,<br />
+                  {{ currentBalanceAsPercentageOfFedExp }}&#8201;% of fed. exp.
+                </p>
+              </div>
             </div>
           </div>
         </div>
         <div class="spacer-auto"></div>
         <div class="legend-for-graph">
           <div class="border-top-with-note blur" id="selectLegend">
-            <p class="sans small note-top-unhug">
-              Legend:
-            </p>
+            <p class="sans small note-top-unhug">Legend:</p>
             <div class="sans small note-top-unhug simple-flex-row-nowrap">
               <div class="bold">*Y:</div>
               <div class="unhug-left-tiny">
@@ -630,7 +666,7 @@
                     stroke-width="2"
                     stroke-dasharray="1 3"
                     stroke-linecap="round"
-                  />
+                  ></line>
                 </svg>
                 <p class="sans small legend-description">
                   Situation before changes
@@ -652,7 +688,7 @@
                     stroke-width="2"
                     stroke-dasharray="1 3"
                     stroke-linecap="round"
-                  />
+                  ></line>
                 </svg>
                 <p class="sans small color-positive legend-description">
                   More after changes
@@ -674,7 +710,7 @@
                     stroke-width="2"
                     stroke-dasharray="1 3"
                     stroke-linecap="round"
-                  />
+                  ></line>
                 </svg>
                 <p class="sans small color-negative legend-description">
                   Less after changes
@@ -695,14 +731,14 @@
                     fill="none"
                     stroke="currentColor"
                     :d="legendPathTransfers.fill"
-                  />
+                  ></path>
                   <path
                     :transform="`translate(1, 1)`"
                     stroke-width="0.5"
                     fill="none"
                     stroke="currentColor"
                     :d="legendPathTransfers.stroke"
-                  />
+                  ></path>
                 </svg>
                 <p class="sans small legend-description">
                   Welfare or UIG benefits
@@ -722,14 +758,14 @@
                   fill="none"
                   stroke="currentColor"
                   :d="legendPathMarketIncome.fill"
-                />
+                ></path>
                 <path
                   :transform="`translate(1, 1)`"
                   stroke-width="0.5"
                   fill="none"
                   stroke="currentColor"
                   :d="legendPathMarketIncome.stroke"
-                />
+                ></path>
               </svg>
               <p class="sans small legend-description">
                 Income without benefits
@@ -781,7 +817,13 @@ export default {
         "selectHeadline",
         "selectUIG",
         "selectBudget"
-      ]
+      ],
+      currentTotalIncomeDifferenceRecipientHouseholds: 0,
+      currentAvgIncomeDifferenceRecipientHouseholds: 0,
+      totalWeightedPercentageChangeNonRecipients: 0,
+      avgPercentageChangeNonRecipients: 0,
+      gdpUSA2017: 19390600000000,
+      fedGovExpUSA2017: 3980311000000
     };
   },
   computed: {
@@ -881,9 +923,51 @@ export default {
         return 0;
       }
     },
+    welfareChanged() {
+      let welfareChanged = false;
+      for (const position of this.positionsOnlyWelfare) {
+        if (position.checked == false) {
+          welfareChanged = true;
+        }
+      }
+      return welfareChanged;
+    },
+    uigChanged() {
+      let uigChanged = false;
+
+      if (this.numOfUIGBins > 0 && this.onlyUIG[0].checked == true) {
+        uigChanged = true;
+      }
+      return uigChanged;
+    },
+    anythingChanged() {
+      let anythingChanged = false;
+      if (this.welfareChanged || this.uigChanged) {
+        anythingChanged = true;
+      }
+      return anythingChanged;
+    },
+    bothChanged() {
+      let bothChanged = false;
+      if (this.welfareChanged && this.uigChanged) {
+        bothChanged = true;
+      }
+      return bothChanged;
+    },
+    connectingWordInInsight() {
+      let connectingWordInInsight = "With the current changes in welfare";
+      if (this.bothChanged) {
+        connectingWordInInsight = "But";
+      }
+      return connectingWordInInsight;
+    },
+
+    UIGthresholdText() {
+      return this.UIGthreshold + 1;
+    },
     UIGthresholdF() {
       const f = d3.format(",d");
-      const d3FormatString = f(this.UIGthreshold);
+      const d3FormatString = f(this.UIGthresholdText);
       return d3FormatString;
     },
     currentTotalSpendings() {
@@ -922,6 +1006,11 @@ export default {
       }
       return formatArray;
     },
+    gdpUSA2017F() {
+      const f = d3.format(".3s");
+      const d3FormatString = f(this.gdpUSA2017);
+      return this.lazyfixFormat(d3FormatString);
+    },
     balancePosOrNeg() {
       let posOrNeg = this.currentBalance >= 0 ? "positive" : "negative";
       if (this.currentBalance == 0) {
@@ -929,12 +1018,80 @@ export default {
       }
       return posOrNeg;
     },
+    currentBalanceAsPercentageOfGDP() {
+      let percentage = (this.currentBalance / this.gdpUSA2017) * 100;
+      percentage = parseFloat(percentage.toFixed(1));
+      return percentage;
+    },
+    currentBalanceAsPercentageOfFedExp() {
+      let percentage = (this.currentBalance / this.fedGovExpUSA2017) * 100;
+      percentage = parseFloat(percentage.toFixed(1));
+      return percentage;
+    },
     currentBalanceHTML() {
       let posOrNeg = this.currentBalance >= 0 ? "positive" : "negative";
-      const htmlString = `<div class="align-right color-${posOrNeg}"><span class="huge">${
+      const htmlString = `<div class="align-right color-${posOrNeg}"><div class="huge">${
         this.currentBalanceF[0]
-      }</span><p class="huge-label">${this.currentBalanceF[1]}</p></div>`;
+      }</div><div class="huge-label">${this.currentBalanceF[1]}</div></div>`;
       return htmlString;
+    },
+    currentTotalNonRecipientHouseholds() {
+      let sum = 0;
+      for (let i = 0; i < this.data.length; i++) {
+        if (i >= this.numOfUIGBins) {
+          sum += this.data[i].populationDetails.hhtotal.val;
+        }
+      }
+      return sum;
+    },
+    currentTotalNonRecipientHouseholdsF() {
+      const f = d3.format(".3s");
+      const d3FormatString = f(this.currentTotalNonRecipientHouseholds);
+      return this.lazyfixFormat(d3FormatString);
+    },
+    currentTotalRecipientHouseholds() {
+      let sum = 0;
+      for (let i = 0; i < this.numOfUIGBins; i++) {
+        sum += this.data[i].populationDetails.hhtotal.val;
+      }
+      return sum;
+    },
+    currentTotalRecipientHouseholdsF() {
+      const f = d3.format(".3s");
+      const d3FormatString = f(this.currentTotalRecipientHouseholds);
+      return this.lazyfixFormat(d3FormatString);
+    },
+    currentAvgPosOrNeg() {
+      let posOrNeg =
+        this.currentAvgIncomeDifferenceRecipientHouseholds >= 0
+          ? "positive"
+          : "negative";
+      if (this.currentAvgIncomeDifferenceRecipientHouseholds == 0) {
+        posOrNeg = "neutral";
+      }
+      return posOrNeg;
+    },
+    currentAvgMoreOrLess() {
+      let moreOrLess =
+        this.currentAvgIncomeDifferenceRecipientHouseholds >= 0
+          ? "more"
+          : "less";
+      if (this.currentAvgIncomeDifferenceRecipientHouseholds == 0) {
+        moreOrLess = "";
+      }
+      return moreOrLess;
+    },
+    currentTotalRecipientPercentagePopulation() {
+      let sum = 0;
+      for (let i = 0; i < this.numOfUIGBins; i++) {
+        sum += this.data[i].populationDetails.percentageOfTotalPersons;
+      }
+      return sum;
+    },
+    currentTotalRecipientPercentagePopulationF() {
+      const f = d3.format(".3s");
+      const d3FormatString = f(this.currentTotalRecipientPercentagePopulation);
+      return this.lazyfixFormat(d3FormatString);
     },
     allWelfareUnchecked() {
       let sum = 0;
@@ -978,7 +1135,7 @@ export default {
           this.calculateTotalIncomePerBin();
           this.calculateMaxMax();
           this.computeAllPaths();
-        }, 1200);
+        }, 800); // was 1200
       }
     },
     numOfUIGBins() {
@@ -998,8 +1155,8 @@ export default {
     this.onResize();
     let w = window.innerWidth;
     let h = window.innerHeight;
-    this.tooltip.left = w / 2;
-    this.tooltip.top = h / 2;
+    this.tooltip.left = 0;
+    this.tooltip.top = 0;
     window.addEventListener("resize", this.onResize);
     window.onmousedown = () => {
       this.mouseDown = true;
@@ -1013,7 +1170,7 @@ export default {
   },
   methods: {
     loadData() {
-      d3.json("data/stata2.json").then(d => {
+      d3.json("data/stata.json").then(d => {
         // console.log(d);
         this.data = d;
         this.doAfterDataIsLoaded();
@@ -1107,6 +1264,66 @@ export default {
           e.incomeDifferenceCat = "negative";
         }
       }
+      this.calculateIncomeDifferenceAllHouseholdsInBin();
+      this.calculateIncomeDifferencePercentagePerBin();
+    },
+    calculateIncomeDifferencePercentagePerBin() {
+      for (const e of this.data) {
+        let percentageChange = 0;
+        percentageChange = (e.incomeDifference / e.totalIncomeBefore) * 100;
+        percentageChange = parseFloat(percentageChange.toFixed(2));
+        e.incomeDifferencePercentage = percentageChange;
+      }
+      this.calculateWeightedPercentageChangePerBin();
+    },
+    calculateWeightedPercentageChangePerBin() {
+      for (const e of this.data) {
+        e.weightedPercentageChange =
+          e.incomeDifferencePercentage * e.populationDetails.hhtotal.val;
+      }
+      this.calculateTotalWeightedPercentageChangeNonRecipients();
+    },
+    calculateIncomeDifferenceAllHouseholdsInBin() {
+      for (const e of this.data) {
+        e.totalIncomeDifferenceAllHouseholdsInBin =
+          e.incomeDifference * e.populationDetails.hhtotal.val;
+        e.totalIncomeDifferenceAllHouseholdsInBinPerAdult =
+          e.totalIncomeDifferenceAllHouseholdsInBin /
+          e.populationDetails.madults.val;
+      }
+      this.calculateTotalIncomeDifferenceRecipients();
+    },
+    calculateTotalIncomeDifferenceRecipients() {
+      let sum = 0;
+      for (let i = 0; i < this.numOfUIGBins; i++) {
+        sum += this.data[i].totalIncomeDifferenceAllHouseholdsInBin;
+      }
+      this.currentTotalIncomeDifferenceRecipientHouseholds = sum;
+      this.calculateAvgIncomeDifferenceRecipients();
+    },
+    calculateAvgIncomeDifferenceRecipients() {
+      let avg =
+        this.currentTotalIncomeDifferenceRecipientHouseholds /
+        this.currentTotalRecipientHouseholds;
+      avg = parseInt(avg);
+      this.currentAvgIncomeDifferenceRecipientHouseholds = avg;
+    },
+    calculateTotalWeightedPercentageChangeNonRecipients() {
+      let sum = 0;
+      for (const [i, e] of this.data.entries()) {
+        if (i >= this.numOfUIGBins) {
+          sum += e.weightedPercentageChange;
+        }
+      }
+      this.totalWeightedPercentageChangeNonRecipients = sum;
+      this.calculateAvgPercentageChangeNonRecipients();
+    },
+    calculateAvgPercentageChangeNonRecipients() {
+      let avg =
+        this.totalWeightedPercentageChangeNonRecipients /
+        this.currentTotalNonRecipientHouseholds;
+      avg = parseFloat(avg.toFixed(2));
+      this.avgPercentageChangeNonRecipients = avg;
     },
     calculateSavingsOfAllPositions() {
       // eslint-disable-next-line no-unused-vars
@@ -1145,7 +1362,7 @@ export default {
           this.computePathsOfOnePosition(this.positionsArray.length - 1);
           this.calculateMaxMax();
           this.computeAllPaths();
-        }, 500);
+        }, 200); // was 500
       }
     },
     calculateUIGPerBin(i) {
@@ -1397,7 +1614,6 @@ export default {
       const i = e.target.id;
       let tooltip = this.$el.querySelector(`#tooltip${i}`);
       const tooltipHeight = tooltip.getBoundingClientRect().height;
-      // console.log(tooltip, tooltipHeight);
       let mouse = { x: e.clientX, y: e.clientY };
       let w = window.innerWidth;
       let h = window.innerHeight;
@@ -1405,18 +1621,15 @@ export default {
       // this.tooltip.left = mouse.x + barWidth;
       if (mouse.x < w / 2) {
         this.tooltip.left = mouse.x + barWidth;
-        this.tooltip.right = null;
       } else {
         this.tooltip.left = null;
         this.tooltip.left = mouse.x - 450;
       }
       if (mouse.y > h / 2) {
-        // console.log(d3.select(`#tooltip${i}`));
-        // this.tooltip.top = null;
-        this.tooltip.top = mouse.y - tooltipHeight - 35;
+        this.tooltip.top = mouse.y - tooltipHeight - 20;
       } else {
         // this.tooltip.bottom = null;
-        this.tooltip.top = mouse.y + 50;
+        this.tooltip.top = mouse.y + 30;
       }
     },
     mouseleaveBars(e) {
@@ -1429,23 +1642,71 @@ export default {
         .style("opacity", 0);
       // this.tooltip.id = null;
     },
+    clickBars(e) {
+      const i = e.target.id
+      console.log(e, e.target.id);
+      let element = this.$el.querySelector(`#tooltip${i}`);
+      element.classList.add("visible");
+    },
     // eslint-disable-next-line no-unused-vars
     touchedToolTip(e) {
       this.tooltip.id = -1;
     },
     formatTooltip(e) {
-      let positionshtml = "";
-      for (const position of e.positions) {
-        // console.log(position.name);
-        positionshtml += `<p class="tooltip-p color-${position.name}">${
-          position.longName
-        }: <br /> <span class="boldest">$ ${
-          position.val
-        }</span>  <span class="italic"> +/- $ ${position.moe}</span></p>`;
+      const f = d3.format(",d");
+      const fbig = d3.format(".2s");
+
+      let posOrNeg = e.incomeDifference >= 0 ? "positive" : "negative";
+      if (e.incomeDifference == 0) {
+        posOrNeg = "neutral";
       }
-      let tooltiphtml = `<p class="graph-label">Income range:<br /> <span class="">${
+
+      let positionshtml = "";
+
+      // <div class="italic tooltip-right"> +/- $ ${position.moe}</div>
+      for (const [i, position] of e.positions.entries()) {
+        if (this.positionsArray[i].checked == true || i == 0) {
+          positionshtml += `<div class="small simple-flex-bottom unhug-bottom-tooltip tooltip-p color-${
+            position.name
+          }">
+          <div>${position.ttName}:</div>
+           <div class="">$&nbsp;${f(position.val)}</div></div>`;
+        }
+      }
+      let percentagehtml = "";
+
+      if (this.anythingChanged) {
+        percentagehtml = `
+        <div class="unhug-top small simple-flex-bottom">
+          <div class="bold color-${posOrNeg}">
+            Income change:
+          </div>
+          <div class="bold color-${posOrNeg}">
+            ${e.incomeDifferencePercentage} %
+          </div>
+        </div>`
+      }
+
+      let tooltiphtml = `<div class="graph-label">Income range: <span class="">${
         e.bin
-      } $</span></p>${positionshtml}`;
+      } $</span></div>
+      <p class="small">
+        # of households: ${this.lazyfixFormat(fbig(e.populationDetails.hhtotal.val))} <br />
+        % of population: ${e.populationDetails.percentageOfTotalPersons} <br />
+        Original total income: $ ${f(e.totalIncomeBefore)} <br />
+        
+      </p>
+      <div class="tooltip-table-start">${positionshtml}</div>
+      <div class="small tooltip-table-end simple-flex-bottom">
+        <div class="color-medium">
+          Current income total:
+        </div>
+        <div class="color-medium">
+          $ ${f(e.totalIncome)}
+        </div>
+      </div>
+      <div>${percentagehtml}</div>
+      `;
       return tooltiphtml;
     },
     togglePosition(i) {
@@ -1525,7 +1786,7 @@ export default {
           this.show = true;
           this.computeAllPaths();
         }
-      }, 1000);
+      }, 600); // was 1000
     },
     // This is just to test the modal event, might not be that important
     // eslint-disable-next-line no-unused-vars

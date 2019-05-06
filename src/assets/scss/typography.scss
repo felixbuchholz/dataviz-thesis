@@ -116,7 +116,7 @@ a {
 }
 
 .huge-label {
-  line-height: 0.6rem;
+  line-height: 0.5rem;
 }
 
 .regular {
@@ -182,6 +182,9 @@ a {
 }
 .unhug-bottom {
   margin-bottom: 3.75rem;
+}
+.unhug-bottom-tooltip {
+  margin-bottom: 1rem;
 }
 .unhug-bigtime {
   margin-top: 40rem;
@@ -292,20 +295,14 @@ p {
   line-height: 1.4;
 }
 .tooltip-p {
-  font-weight: 300;
-  font-size: 1.35rem;
-  line-height: 1.2;
+  // font-weight: 300;
+  line-height: 1.4;
   @include phablet {
     font-size: 1.1rem;
-    line-height: 1.2;
+    line-height: 1.4;
   }
 }
 
-.tooltip-p {
-  font-weight: 300;
-  font-size: 1.1rem;
-  line-height: 1.2;
-}
 
 .subheadline {
   font-style: inherit;

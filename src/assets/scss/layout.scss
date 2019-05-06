@@ -100,6 +100,22 @@
   display: flex;
   justify-content: space-between;
 }
+.simple-flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.simple-flex-bottom {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.tooltip-right {
+  text-align: right;
+  width: 89px;
+}
 
 .simple-flex-row-nowrap {
   display: flex;
@@ -156,6 +172,18 @@
 .border-top-with-note {
   border-top: 1px dashed rgba(0,0,0,0.4);
   // border-bottom: 1px dashed rgba(0,0,0,0.4);
+}
+
+.tooltip-table-start {
+  border-top: 1px dashed rgba(0,0,0,0.4);
+  padding-top: 1rem;
+}
+
+.tooltip-table-end {
+  border-top: 1px dashed rgba(0,0,0,0.4);
+  border-bottom: 2px dashed rgba(0,0,0,0.4);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .low-opacity {
