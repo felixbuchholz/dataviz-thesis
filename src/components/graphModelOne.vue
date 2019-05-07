@@ -4,81 +4,84 @@
       <div v-if="isLoaded" class="interface grid-vertical-container-interface">
         <!-- <br /> -->
         <div class="interface-headline">
-        <div class="blur" id="selectHeadline">
-          <h5 class="sans small regular unhug-top">
-          Configure the scheme:
-        </h5>
-        </div>
-        <div class=" uig unhug-top border-top-with-note blur" id="selectUIG">
-          <div
-            :class="
-              `positions position${positionsArray.length -
-                1} transfer-checkboxes`
-            "
-            @mouseenter="mouseenterCheckboxes"
-            @mouseleave="mouseleaveCheckboxes"
-            :id="positionsArray.length - 1"
-          >
-            <p class="sans small note-top-unhug">Should a UIG be active?</p>
-            <div>
-              <label
-                class="checkbox-container sans color-primary checkbox-primary"
-              >
-                <div class="center">Universal Income Guarantee</div>
-                <input
-                  v-if="isLoaded"
-                  v-show="positionsArray[positionsArray.length - 1].checked"
-                  type="checkbox"
-                  v-model="positionsArray[positionsArray.length - 1].checked"
-                  @click="clickOnUIGCheckbox"
-                />
-                <span class="checkmark checkmark-primary"></span>
-              </label>
-            </div>
-            <!-- <h5 class="sans">Change the parameters of this scheme:</h5> -->
-            <transition name="fade">
-              <div v-show-slide="onlyUIG[0].checked" class="parameters">
-                <p class="sans small note-top-unhug hug-bottom">
-                  – Yes, and the UIG should go to the
-                </p>
-                <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
-                <div class="group bignumberinput">
-                  <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+          <div class="blur" id="selectHeadline">
+            <h5 class="sans small regular unhug-top">
+              Configure the scheme:
+            </h5>
+          </div>
+          <div class=" uig unhug-top border-top-with-note blur" id="selectUIG">
+            <div
+              :class="
+                `positions position${positionsArray.length -
+                  1} transfer-checkboxes`
+              "
+              @mouseenter="mouseenterCheckboxes"
+              @mouseleave="mouseleaveCheckboxes"
+              :id="positionsArray.length - 1"
+            >
+              <p class="sans small note-top-unhug">Should a UIG be active?</p>
+              <div>
+                <label
+                  class="checkbox-container sans color-primary checkbox-primary"
+                >
+                  <div class="center">Universal Income Guarantee</div>
                   <input
-                    type="text"
-                    pattern="\d*"
-                    maxlength="1"
-                    id="incomebrackets"
-                    required="required"
-                    class="bignumberinput sans"
-                    max="9"
-                    v-model.number="numOfUIGBins"
-                    @change="doAfterIncomeBracketsChanged()"
+                    v-if="isLoaded"
+                    v-show="positionsArray[positionsArray.length - 1].checked"
+                    type="checkbox"
+                    v-model="positionsArray[positionsArray.length - 1].checked"
+                    @click="clickOnUIGCheckbox"
                   />
-                  <div
-                    for="incomebrackets"
-                    class="controls bold sans control-minus"
-                    @click="minusBins()"
-                  >
-                    -
-                  </div>
-                  <label for="incomebrackets" class="bignumberinput sans"
-                    >lowest income brackets</label
-                  >
-                  <div
-                    class="controls bold sans control-plus"
-                    @click="plusBins()"
-                  >
-                    +
-                  </div>
-                  <div class="bar bignumberinput"></div>
-                </div>
+                  <span class="checkmark checkmark-primary"></span>
+                </label>
               </div>
-            </transition>
+              <!-- <h5 class="sans">Change the parameters of this scheme:</h5> -->
+              <transition name="fade">
+                <div v-show-slide="onlyUIG[0].checked" class="parameters">
+                  <p class="sans small note-top-unhug hug-bottom">
+                    – Yes, and the UIG should go to the
+                  </p>
+                  <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
+                  <div class="group bignumberinput">
+                    <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+                    <input
+                      type="text"
+                      pattern="\d*"
+                      maxlength="1"
+                      id="incomebrackets"
+                      required="required"
+                      class="bignumberinput sans"
+                      max="9"
+                      v-model.number="numOfUIGBins"
+                      @change="doAfterIncomeBracketsChanged()"
+                    />
+                    <div
+                      for="incomebrackets"
+                      class="controls bold sans control-minus"
+                      @click="minusBins()"
+                    >
+                      -
+                    </div>
+                    <label for="incomebrackets" class="bignumberinput sans"
+                      >lowest income brackets</label
+                    >
+                    <div
+                      class="controls bold sans control-plus"
+                      @click="plusBins()"
+                    >
+                      +
+                    </div>
+                    <div class="bar bignumberinput"></div>
+                  </div>
+                </div>
+              </transition>
+            </div>
           </div>
         </div>
-        </div>
-        <div class="interface-welfare border-top-with-note blur" id="selectWelfare">
+        <div
+          class="interface-welfare border-top-with-note blur"
+          id="selectWelfare"
+        >
           <p class="sans small note-top-unhug">
             Programs in which of these categories should be in place?
           </p>
@@ -114,7 +117,10 @@
             </label>
           </div>
         </div>
-        <div class="interface-zoom income border-top-with-note blur" id="selectScale">
+        <div
+          class="interface-zoom income border-top-with-note blur"
+          id="selectScale"
+        >
           <p class="sans small note-top-unhug">
             Show the income without benefits in comparison?
           </p>
@@ -895,7 +901,7 @@ export default {
       avgPercentageChangeNonRecipients: 0,
       gdpUSA2017: 19390600000000,
       fedGovExpUSA2017: 3980311000000,
-      featuresOpen: false,
+      featuresOpen: false
     };
   },
   computed: {
@@ -1169,7 +1175,6 @@ export default {
       let sum = 0;
       for (const e of this.positionsOnlyWelfare) {
         if (e.checked) {
-          console.log("here");
           sum++;
         }
       }
@@ -1179,7 +1184,7 @@ export default {
       let binArray = [];
       for (const bin of this.data) {
         if (bin.totalWelfareBefore < bin.totalCurrentTransfers) {
-          console.log(bin.bin);
+          // console.log(bin.bin);
           let percentageOfTotalPopulation =
             bin.populationDetails.tpersons.val / (3.2 * Math.pow(10, 8));
           bin["percentageOfTotalPopulation"] = percentageOfTotalPopulation;
@@ -1193,7 +1198,7 @@ export default {
     data: {
       deep: true,
       handler(update) {
-        console.log("data has changed", update);
+        // console.log("data has changed", update);
       }
     },
     positionsArray: {
@@ -1424,7 +1429,7 @@ export default {
       this.positionsArray[this.positionsArray.length - 1].checked = false;
     },
     doAfterIncomeBracketsChanged() {
-      console.log("input changed");
+      // console.log("input changed");
       if (this.numOfUIGBins >= 0 && this.numOfUIGBins < 10) {
         setTimeout(() => {
           this.computeData();
@@ -1716,7 +1721,7 @@ export default {
     },
     clickBars(e) {
       const i = e.target.id;
-      console.log(e, e.target.id);
+      // console.log(e, e.target.id);
       let element = this.$el.querySelector(`#tooltip${i}`);
       element.classList.add("visible");
     },
@@ -1792,10 +1797,10 @@ export default {
       // }, 510);
     },
     togglePosition(i) {
-      console.log(i);
+      // console.log(i);
       const index = i;
       let checkedAtIndex = this.positionsArray[index].checked;
-      console.log(checkedAtIndex);
+      // console.log(checkedAtIndex);
       if (checkedAtIndex == true) {
         checkedAtIndex = false;
         for (const e of this.data) {
@@ -1807,7 +1812,7 @@ export default {
         }
       } else if (checkedAtIndex == false) {
         checkedAtIndex = true;
-        console.log(checkedAtIndex);
+        // console.log(checkedAtIndex);
         for (const e of this.data) {
           const positionObject = e.positions[index];
           positionObject["val"] = positionObject["valueBefore"];
@@ -1825,7 +1830,7 @@ export default {
       // if else
       if (this.yAxisScaled == false) {
         [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
-            e.classList.add("hidden-steps");
+          e.classList.add("hidden-steps");
         });
         this.yAxisScaled = true;
         this.zoomSign = ["-", "out"];
@@ -2047,7 +2052,7 @@ export default {
       if (
         this.positionsArray[this.positionsArray.length - 1].checked == false
       ) {
-        console.log("… the thing is not checked ");
+        // console.log("… the thing is not checked ");
         this.positionsArray[0].checked = true;
         this.togglePosition(this.positionsArray.length - 1);
       }

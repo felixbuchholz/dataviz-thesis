@@ -86,11 +86,12 @@
       <div class="margin-right"></div>
     </div>
     <!-- * -->
+    <graphCenterWelfareTrap />
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <img src="../../public/assets/mockup/welfare-trap.jpg" alt="" />
+        <!-- <img src="../../public/assets/mockup/welfare-trap.jpg" alt="" /> -->
       </div>
       <div class="margin-right"></div>
     </div>
@@ -112,10 +113,11 @@
       <div class="margin-right"></div>
     </div>
     <!-- * -->
+    <graphCenterNIT />
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <img src="../../public/assets/mockup/nit-model.jpg" alt="" />
+        <!-- <img src="../../public/assets/mockup/nit-model.jpg" alt="" /> -->
       </div>
       <div class="margin-right"></div>
     </div>
@@ -158,11 +160,12 @@
 </template>
 
 <script>
-// import graphSide from "../components/graphSide.vue";
+import graphCenterWelfareTrap from "../components/graphCenterWelfareTrap.vue";
+import graphCenterNIT from "../components/graphCenterNIT.vue";
 import arrowIcon from "../../public/assets/svg/arrow.svg";
 export default {
   name: "bureaucracySubsection",
-  components: { arrowIcon },
+  components: { arrowIcon, graphCenterWelfareTrap, graphCenterNIT },
   props: {
     msg: String
   },

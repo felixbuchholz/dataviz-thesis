@@ -89,7 +89,7 @@ export default {
     loadData() {
       d3.json("data/automation-wage.json").then(d => {
         // console.log(JSON.stringify(d));
-        console.log(d);
+        // console.log(d);
         this.data = d;
         this.isLoaded = true;
       });
