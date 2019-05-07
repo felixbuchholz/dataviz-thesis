@@ -18,7 +18,7 @@
             <!-- Credit grid-lines: Andrew Levinson
                   https://github.com/AndrewLevinson/thesis/blob/master/src/components/ChartOne.vue
               -->
-            <g
+            <g>
               <g
                 v-grid:x="scale"
                 class="grid-lines"
@@ -124,6 +124,13 @@
               stroke="rgba(140,140,140,1)"
               stroke-width="1"
             />
+            <text
+              :x="scale.x(65000)"
+              :y="scale.y(60500)"
+              fill="rgba(140,140,140,1)"
+            >
+              * Taxes after
+            </text>
             <!-- *** -->
             <text
               class="graph-label-small"
@@ -228,6 +235,9 @@
               </g>
             </svg>
             <div>Income</div>
+          </div>
+          <div class="simple-flex-center unhug-top-small">
+            <div>* Taxes after: The tax rate after the break-even point can be different</div>
           </div>
           <p class="unhug-bottom-70 italic">Source</p>
         </div>
@@ -354,8 +364,7 @@ export default {
       // console.log("width has changed");
     }
   },
-  created() {
-  },
+  created() {},
   mounted() {
     this.onResize();
     let w = window.innerWidth;

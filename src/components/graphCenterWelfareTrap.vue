@@ -146,15 +146,15 @@
           <p class="note-top-unhug">Legend:</p>
           <div class="simple-flex-center">
             <div
-              style="width:8px;height:38px;background:rgba(100,100,100,1);margin-right:16px;"
+              style="width:8px;height:38px;background:rgba(87,176,234,1);margin-right:16px;"
             ></div>
-            <div>Income after taxes</div>
+            <div>Sum of income after taxes and benefits</div>
           </div>
           <div class="simple-flex-center unhug-top-tiny">
             <div
-              style="width:8px;height:38px;background:rgba(87,176,234,1);margin-right:16px;"
+              style="width:8px;height:38px;background:rgba(100,100,100,1);margin-right:16px;"
             ></div>
-            <div>Sum income after taxes plus benefits</div>
+            <div>Income after taxes</div>
           </div>
           <p>
             Numbers: hourly wage to reach the gross income when working 40

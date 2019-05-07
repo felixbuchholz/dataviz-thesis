@@ -1840,7 +1840,6 @@ export default {
             left: 0,
             behavior: "smooth"
           });
-          // this.readyToChange();
         }, 1000);
         this.svgHeight = 3000;
         this.computeAllPaths();
@@ -1853,16 +1852,14 @@ export default {
           this.yAxisScaled = false;
           this.svgHeight = 700;
           this.computeAllPaths();
-          // this.readyToChange();
         }, 1000);
         const element_to_scroll_to = document.getElementById("graph-headline1");
         element_to_scroll_to.scrollIntoView({
           behavior: "smooth"
         });
-        // this.readyToChange();
       }
       setTimeout(() => {
-        this.readyToChange();
+        // this.readyToChange();
       }, 1500);
     },
     // eslint-disable-next-line no-unused-vars
@@ -2016,6 +2013,10 @@ export default {
       this.unblurList(this.allIntroElements);
     },
     readyToChange() {
+      // Behavior on click back to intro and scroll up
+      // [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+      //   e.classList.add("hidden-steps");
+      // });
       // console.log("ready");
       this.unblurAll();
       this.insight = "readyToChange";
