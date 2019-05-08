@@ -255,7 +255,7 @@ import "intersection-observer"; // for cross-browser support
 import Scrollama from "vue-scrollama";
 
 export default {
-  name: "graphModelOne",
+  name: "graphCenterNIT",
   components: {
     zoomIcon,
     Scrollama

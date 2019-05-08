@@ -274,7 +274,7 @@
       <div class="margin-right"></div>
     </div>
     <!-- * -->
-    <!-- <graphModelTwo /> -->
+    <graphModelTwo />
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
@@ -392,7 +392,6 @@ export default {
   name: "thirdSection",
   components: {
     graphModelOne,
-    // eslint-disable-next-line vue/no-unused-components
     graphModelTwo,
     arrowIcon
   },

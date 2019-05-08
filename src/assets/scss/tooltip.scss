@@ -17,6 +17,13 @@
   stroke-width: 1;
 }
 
+.tooltip-hidden {
+  visibility: hidden;
+}
+.tooltip-zero-opacity {
+  opacity: 0;
+}
+
 // .visible {
 //   opacity: 1;
 // }

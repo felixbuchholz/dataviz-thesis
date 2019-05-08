@@ -176,7 +176,7 @@ import "intersection-observer"; // for cross-browser support
 import Scrollama from "vue-scrollama";
 
 export default {
-  name: "graphModelOne",
+  name: "graphCenterWelfareTrap",
   components: {
     zoomIcon,
     Scrollama

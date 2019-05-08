@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 <template>
   <div class="grid-container">
     <div class="margin-left">
@@ -5,11 +6,9 @@
         <!-- <br /> -->
         <div class="interface-headline">
           <div class="blur" id="selectHeadline">
-            <h5 class="sans small regular unhug-top">
-              Configure the scheme:
-            </h5>
+            <h5 class="sans small regular unhug-top">Configure the scheme:</h5>
           </div>
-          <div class=" uig unhug-top border-top-with-note blur" id="selectUIG">
+          <div class="uig unhug-top border-top-with-note blur" id="selectUIG">
             <div
               :class="
                 `positions position${positionsArray.length -
@@ -21,9 +20,7 @@
             >
               <p class="sans small note-top-unhug">Should a UIG be active?</p>
               <div>
-                <label
-                  class="checkbox-container sans color-primary checkbox-primary"
-                >
+                <label class="checkbox-container sans color-primary checkbox-primary">
                   <div class="center">Universal Income Guarantee</div>
                   <input
                     v-if="isLoaded"
@@ -31,16 +28,16 @@
                     type="checkbox"
                     v-model="positionsArray[positionsArray.length - 1].checked"
                     @click="clickOnUIGCheckbox"
-                  />
+                  >
                   <span class="checkmark checkmark-primary"></span>
                 </label>
               </div>
               <!-- <h5 class="sans">Change the parameters of this scheme:</h5> -->
               <transition name="fade">
                 <div v-show-slide="onlyUIG[0].checked" class="parameters">
-                  <p class="sans small note-top-unhug hug-bottom">
-                    – Yes, and the UIG should go to the
-                  </p>
+                  <p
+                    class="sans small note-top-unhug hug-bottom"
+                  >– Yes, and the UIG should go to the</p>
                   <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
                   <div class="group bignumberinput">
                     <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
@@ -54,23 +51,14 @@
                       max="9"
                       v-model.number="numOfUIGBins"
                       @change="doAfterIncomeBracketsChanged()"
-                    />
+                    >
                     <div
                       for="incomebrackets"
                       class="controls bold sans control-minus"
                       @click="minusBins()"
-                    >
-                      -
-                    </div>
-                    <label for="incomebrackets" class="bignumberinput sans"
-                      >lowest income brackets</label
-                    >
-                    <div
-                      class="controls bold sans control-plus"
-                      @click="plusBins()"
-                    >
-                      +
-                    </div>
+                    >-</div>
+                    <label for="incomebrackets" class="bignumberinput sans">lowest income brackets</label>
+                    <div class="controls bold sans control-plus" @click="plusBins()">+</div>
                     <div class="bar bignumberinput"></div>
                   </div>
                 </div>
@@ -78,13 +66,10 @@
             </div>
           </div>
         </div>
-        <div
-          class="interface-welfare border-top-with-note blur"
-          id="selectWelfare"
-        >
-          <p class="sans small note-top-unhug">
-            Programs in which of these categories should be in place?
-          </p>
+        <div class="interface-welfare border-top-with-note blur" id="selectWelfare">
+          <p
+            class="sans small note-top-unhug"
+          >Programs in which of these categories should be in place?</p>
 
           <div
             :class="
@@ -112,18 +97,13 @@
                 @click="
                   togglePosition(positionsOnlyWelfareR.length - 1 - i + 1)
                 "
-              />
+              >
               <span :class="`checkmark checkmark-${e.name}`"></span>
             </label>
           </div>
         </div>
-        <div
-          class="interface-zoom income border-top-with-note blur"
-          id="selectScale"
-        >
-          <p class="sans small note-top-unhug">
-            Show the income without benefits in comparison?
-          </p>
+        <div class="interface-zoom income border-top-with-note blur" id="selectScale">
+          <p class="sans small note-top-unhug">Show the income without benefits in comparison?</p>
           <div
             :class="`positions position${0} transfer-checkboxes`"
             @mouseenter="mouseenterCheckboxes"
@@ -137,35 +117,25 @@
                 type="checkbox"
                 v-model="positionsArray[0].checked"
                 @click="togglePosition(0)"
-              />
+              >
               <span class="checkmark"></span>
             </label>
           </div>
-          <p class="sans small note-top-unhug">
-            Focus on the lower six income brackets?
-          </p>
+          <p class="sans small note-top-unhug">Focus on the lower six income brackets?</p>
           <div class="zoom-container" @click="scaleYAxis">
             <div class="icon-medium">
-              <zoomIcon class="zoom-icon" />
-              <div class="small sans color-light plusOrMinus">
-                {{ zoomSign[0] }}
-              </div>
+              <zoomIcon class="zoom-icon"/>
+              <div class="small sans color-light plusOrMinus">{{ zoomSign[0] }}</div>
             </div>
             <div>
-              <p class="sans zoomText color-light">
-                Zoom {{ zoomSign[1] }} the Y-axis
-              </p>
+              <p class="sans zoomText color-light">Zoom {{ zoomSign[1] }} the Y-axis</p>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="center-block">
-      <Scrollama
-        @step-enter="stepEnterHandler"
-        @step-exit="stepExitHandler"
-        :offset="0.9"
-      >
+      <Scrollama @step-enter="stepEnterHandler" @step-exit="stepExitHandler" :offset="0.9">
         <div slot="graphic" class="graphic">
           <div class="chart">
             <h5 class="sans hug-bottom" id="graph-headline1">UIG scheme 1:</h5>
@@ -173,13 +143,25 @@
               Select welfare programs to be replaced and provide a UIG to the
               <span class="bold">
                 lowest
-                <span v-if="isLoaded & (numOfUIGBins > 0)" class="color-uig">{{
+                <span v-if="isLoaded & (numOfUIGBins > 0)" class="color-uig">
+                  {{
                   numOfUIGBins
-                }}</span>
+                  }}
+                </span>
                 income brackets
               </span>
             </span>
-            <div v-if="tooltip.id != null">
+            <!-- v-html="tooltip.html" -->
+            <div
+              class="tooltip-container tooltip sans tooltip-zero-opacity"
+              id="tooltip"
+              v-html="tooltip.html"
+              :style="
+                `position:fixed;left:${tooltip.left}px;top:${tooltip.top}px;`
+              "
+              @mouseenter="touchedToolTip"
+            ></div>
+            <!-- <div v-if="tooltip.id != null">
               <transition-group name="tipmove" tag="div">
                 <div
                   class="tooltip-container"
@@ -200,7 +182,7 @@
                   ></div>
                 </div>
               </transition-group>
-            </div>
+            </div>-->
 
             <transition name="fade">
               <svg
@@ -213,7 +195,7 @@
                 <g :transform="`translate(${margin.left}, ${margin.top})`">
                   <!-- Credit grid-lines: Andrew Levinson
                   https://github.com/AndrewLevinson/thesis/blob/master/src/components/ChartOne.vue
-              -->
+                  -->
                   <g v-if="isLoaded">
                     <g v-grid:gridLine="scale" class="grid-lines"></g>
                   </g>
@@ -278,7 +260,7 @@
                           fill: "rgba(0,0,0,0.3)"
                           :width="scale.x.bandwidth()"
                           :height="height - scale.y(f.val)"
-                          />-->
+                              />-->
                             </g>
                           </transition>
                         </g>
@@ -305,41 +287,29 @@
                       opacity="0"
                       fill="red"
                       :id="e.id"
-                      @mouseenter="mouseenterBars"
-                      @mousemove="mousemoveBars"
-                      @mouseout="mouseleaveBars"
+                      @mouseenter="mouseenterBarsOneTip"
+                      @mousemove="mousemoveBarsOneTip"
+                      @mouseout="mouseleaveBarsOneTip"
                       @click="clickBars"
                     ></rect>
+                    <!-- @mousemove="mousemoveBars"
+                    @mouseout="mouseleaveBars"-->
                   </g>
 
-                  <rect
-                    x="0"
-                    :y="height"
-                    :height="margin.bottom"
-                    :width="width"
-                    fill="#fcfcfc"
-                  ></rect>
+                  <rect x="0" :y="height" :height="margin.bottom" :width="width" fill="#fcfcfc"></rect>
                   <text
                     class="graph-label"
                     :transform="`translate(${width}, ${height + 25})`"
                     text-anchor="end"
                     fill="currentColor"
-                  >
-                    *X
-                  </text>
-                  <g
-                    v-axis:x="scale"
-                    :transform="`translate(${0}, ${height})`"
-                    class="x-axis"
-                  ></g>
+                  >*X</text>
+                  <g v-axis:x="scale" :transform="`translate(${0}, ${height})`" class="x-axis"></g>
                   <text
                     class="graph-label"
                     :transform="`translate(${0},-10)`"
                     text-anchor="end"
                     fill="currentColor"
-                  >
-                    *Y
-                  </text>
+                  >*Y</text>
                   <g v-axis:y="scale" class="y-axis"></g>
                 </g>
               </svg>
@@ -347,30 +317,23 @@
           </div>
         </div>
         <!-- Index 0 ******************************************************************** -->
-        <div
-          class="step1 scrolling-over-container"
-          data-step="a"
-          id="start-of-the-intro"
-        >
+        <div class="step1 scrolling-over-container" data-step="a" id="start-of-the-intro">
           <!-- v-if="insight == 'intro'" -->
           <div class="scrolling-over-content">
             <h3>Introduction</h3>
             <div class="unhug-bottom">
               The following graph shows the distribution of household incomes
               and welfare transfers in the US in 2017.
-            </div>
-            To learn how you can interact with it, you can just keep on
+            </div>To learn how you can interact with it, you can just keep on
             <span class="bold">scrolling.</span>
             <!-- <button class="button" @click="startIntro">
               scroll through a small introduction.
-            </button> -->
+            </button>-->
             <p>
               Or you can
-              <a href="#end-of-intro"
-                ><button class="button" @click="readyToChange">
-                  skip the introduction
-                </button></a
-              >
+              <a href="#end-of-intro">
+                <button class="button" @click="readyToChange">skip the introduction</button>
+              </a>
               and start using it.
             </p>
           </div>
@@ -380,8 +343,7 @@
           <!-- v-if="insight == 'introLegendA'" -->
           <div class="scrolling-over-content">
             <div>
-              <h4>Let’s take a look at the legend:</h4>
-              The height of the bars in the chart indicates the amount of income
+              <h4>Let’s take a look at the legend:</h4>The height of the bars in the chart indicates the amount of income
               and benefits. Each bar stack represents an income group. The
               stacks are grouped and sorted by income without benefits.
             </div>
@@ -406,9 +368,13 @@
               </svg>
               above each stacked bar group indicates how much the sum of income
               and benefits was before you made any changes. It will turn
-              <span class="regular color-negative">red</span> if the result of
+              <span
+                class="regular color-negative"
+              >red</span> if the result of
               this group is negative. It turns
-              <span class="regular color-positive">green</span> if the group
+              <span
+                class="regular color-positive"
+              >green</span> if the group
               profits from your configuration.
             </div>
             <div class="unhug-top">
@@ -464,16 +430,11 @@
         <div class="step3 scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             <div>
-              <h4>Let’s talk about scale!</h4>
-
-              Because incomes in the last group are so high, it’s hard to see
+              <h4>Let’s talk about scale!</h4>Because incomes in the last group are so high, it’s hard to see
               the welfare benefits.
-
-              <div class="unhug-top">
-                On the left you have 2 options to see more details:
-              </div>
+              <div class="unhug-top">On the left you have 2 options to see more details:</div>
               <div class="simple-flex unhug-top">
-                <div class="">
+                <div class>
                   Uncheck this box to hide incomes:
                   <label class="checkbox-container sans">
                     <div class="color-minc center">Income without benefits</div>
@@ -482,7 +443,7 @@
                       type="checkbox"
                       v-model="positionsArray[0].checked"
                       @click="togglePosition(0)"
-                    />
+                    >
                     <span class="checkmark"></span>
                   </label>
                 </div>
@@ -491,16 +452,12 @@
                   Zoom on the first 6 groups with this icon:
                   <div class="zoom-container unhug-top-175" @click="scaleYAxis">
                     <div class="icon-medium">
-                      <zoomIcon class="zoom-icon" />
+                      <zoomIcon class="zoom-icon"/>
                       <div
                         class="small sans color-light plusOrMinus pom-scroll-adjust"
-                      >
-                        {{ zoomSign[0] }}
-                      </div>
+                      >{{ zoomSign[0] }}</div>
                     </div>
-                    <p class="sans zoomText color-light">
-                      Zoom {{ zoomSign[1] }} the Y-axis
-                    </p>
+                    <p class="sans zoomText color-light">Zoom {{ zoomSign[1] }} the Y-axis</p>
                   </div>
                 </div>
               </div>
@@ -511,18 +468,13 @@
         <div class="step4 scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             <div>
-              <h4>The welfare interface</h4>
-              In this scheme the idea is to replace current welfare benefits
+              <h4>The welfare interface</h4>In this scheme the idea is to replace current welfare benefits
               with a UIG. You can hover over the different categories to see how
               they affect incomes in all groups and select them individually.
               <p v-if="!allWelfareUnchecked">
-                <button @click="uncheckAll">
-                  But for now – let’s un-check all of them!
-                </button>
+                <button @click="uncheckAll">But for now – let’s un-check all of them!</button>
               </p>
-              <p v-else-if="allWelfareUnchecked">
-                Ok!
-              </p>
+              <p v-else-if="allWelfareUnchecked">Ok!</p>
             </div>
           </div>
         </div>
@@ -541,28 +493,24 @@
                     type="checkbox"
                     v-model="positionsArray[positionsArray.length - 1].checked"
                     @click="togglePosition(positionsArray.length - 1)"
-                  />
+                  >
                   <span class="checkmark checkmark-primary"></span>
                 </label>
               </div>
               <transition name="fade">
-                <div
-                  v-if="isLoaded"
-                  v-show="onlyUIG[0].checked"
-                  class="unhug-top"
-                >
+                <div v-if="isLoaded" v-show="onlyUIG[0].checked" class="unhug-top">
                   Now we have to decide how many of the lower income groups
-                  should benefit from it. <br />
-                  Let’s
+                  should benefit from it.
+                  <br>Let’s
                   <button @click="setUIGBinsTo5">set it to 5.</button>
                 </div>
               </transition>
               <div v-if="uigChanged & (numOfUIGBins == 5)" class="unhug-top">
                 Great! Now every household with an income less than the upper
                 boundary of group 5,
-                <span class="regular color-primary"
-                  >$ {{ UIGthresholdF }},</span
-                >
+                <span
+                  class="regular color-primary"
+                >$ {{ UIGthresholdF }},</span>
                 will get 50 % of the difference to the threshold as an income
                 guarantee.
               </div>
@@ -573,40 +521,38 @@
         <div class="step6 scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             <div>
-              <h4>The balance</h4>
-              Our changes result in a overall balance of
-              <span :class="`bold color-${balancePosOrNeg}`"
-                >$ {{ currentBalanceF.join(" ") }}.</span
-              >
+              <h4>The balance</h4>Our changes result in a overall balance of
+              <span
+                :class="`bold color-${balancePosOrNeg}`"
+              >$ {{ currentBalanceF.join(" ") }}.</span>
               Still room to tweak this scheme! We could think about whether some
               welfare programs should still be active, or adjust the amount of
               groups that benefit from the UIG.
-              <br />
-              <br />
-              Scroll a little bit further… <br />
-              and you’ll see a summary of the effects of your changes below the
+              <br>
+              <br>Scroll a little bit further…
+              <br>and you’ll see a summary of the effects of your changes below the
               graph and can start using it.
               <p class="bold color-primary">Enjoy exploring!</p>
               <!-- <div class="unhug-top">
                 <button @click="readyToChange">Enjoy exploring!</button>
-              </div> -->
+              </div>-->
             </div>
           </div>
         </div>
         <!-- Index 6 ******************************************************************** -->
-        <div class="step7 " data-step="d" id="end-of-intro">
-          <hr />
+        <div class="step7" data-step="d" id="end-of-intro">
+          <hr>
         </div>
         <!-- Index 7 ******************************************************************** -->
         <div class="step8" data-step="d">
-          <hr />
+          <hr>
         </div>
         <!-- Template ******************************************************************** -->
         <!-- <div class="stepX scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             X
           </div>
-        </div> -->
+        </div>-->
       </Scrollama>
 
       <!-- <button class="sans bold" @click="scaleYAxis">scale y-axis</button> -->
@@ -614,17 +560,19 @@
         <div v-if="insight == 'readyToChange'">
           <transition name="fade">
             <div v-show="uigChanged">
-              <span class="regular"
-                >Households earning less than {{ UIGthresholdF }} $ receive a
-                UIG.</span
-              >
+              <span class="regular">
+                Households earning less than {{ UIGthresholdF }} $ receive a
+                UIG.
+              </span>
               They represent
               {{ currentTotalRecipientPercentagePopulationF }} % of the
               population and receive on average
-              <span :class="`regular color-${currentAvgPosOrNeg}`">
-                {{ currentAvgIncomeDifferenceRecipientHouseholds }} $
-                {{ currentAvgMoreOrLess }}</span
+              <span
+                :class="`regular color-${currentAvgPosOrNeg}`"
               >
+                {{ currentAvgIncomeDifferenceRecipientHouseholds }} $
+                {{ currentAvgMoreOrLess }}
+              </span>
               benefits than before.
             </div>
           </transition>
@@ -633,12 +581,12 @@
               <span class="regular">
                 {{ connectingWordInInsight }}
                 {{ currentTotalNonRecipientHouseholdsF }} households not
-                receiving a UIG</span
-              >
-              will on average experience a loss of welfare benefits equal to
-              <span class="regular color-negative">
-                {{ avgPercentageChangeNonRecipients }} %
+                receiving a UIG
               </span>
+              will on average experience a loss of welfare benefits equal to
+              <span
+                class="regular color-negative"
+              >{{ avgPercentageChangeNonRecipients }} %</span>
               of their original income.
             </div>
           </transition>
@@ -649,11 +597,9 @@
             </div>
           </transition>
           <div class="return-button">
-            <a href="#start-of-the-intro"
-              ><button @click="startIntro" class="small">
-                Back to the intro
-              </button></a
-            >
+            <a href="#start-of-the-intro">
+              <button @click="startIntro" class="small">Back to the intro</button>
+            </a>
           </div>
         </div>
       </div>
@@ -662,43 +608,30 @@
     <div class="margin-right">
       <div v-if="isLoaded" class="budget grid-vertical-container">
         <div class="budget-calculations blur" id="selectBudget">
-          <h5 class="sans small regular unhug-top">
-            Overall balance effects of this scheme:
-          </h5>
+          <h5 class="sans small regular unhug-top">Overall balance effects of this scheme:</h5>
           <div>
             <div class="border-top-with-note unhug-top">
               <transition name="fade">
                 <div v-show-slide="currentTotalSavings != 0">
-                  <p class="sans small note-top-unhug">
-                    Current subtotal welfare savings ($):
-                  </p>
-                  <p class="sans bold align-right">
-                    {{ currentTotalSavingsF }}
-                  </p>
+                  <p class="sans small note-top-unhug">Current subtotal welfare savings ($):</p>
+                  <p class="sans bold align-right">{{ currentTotalSavingsF }}</p>
                 </div>
               </transition>
               <transition name="fade">
                 <div v-show-slide="currentTotalSpendings != 0">
                   <p class="sans small">Current subtotal UIG spendings ($):</p>
-                  <p class="sans bold align-right">
-                    {{ currentTotalSpendingsF }}
-                  </p>
+                  <p class="sans bold align-right">{{ currentTotalSpendingsF }}</p>
                 </div>
               </transition>
             </div>
             <div class="simple-flex border-top-with-note">
               <p class="sans bold note-top-unhug">Balance ($):</p>
               <div>
-                <div
-                  class="sans bold note-top-unhug"
-                  v-html="currentBalanceHTML"
-                ></div>
-                <p
-                  v-if="currentBalance != 0"
-                  class="small sans regular color-standard align-right"
-                >
+                <div class="sans bold note-top-unhug" v-html="currentBalanceHTML"></div>
+                <p v-if="currentBalance != 0" class="small sans regular color-standard align-right">
                   &#8776; {{ currentBalanceAsPercentageOfGDP }}&#8201;% of
-                  GDP,<br />
+                  GDP,
+                  <br>
                   {{ currentBalanceAsPercentageOfFedExp }}&#8201;% of fed. exp.
                 </p>
               </div>
@@ -742,9 +675,7 @@
                     stroke-linecap="round"
                   ></line>
                 </svg>
-                <p class="sans small legend-description">
-                  Situation before changes
-                </p>
+                <p class="sans small legend-description">Situation before changes</p>
               </div>
               <div class="simple-flex-center">
                 <svg
@@ -764,9 +695,7 @@
                     stroke-linecap="round"
                   ></line>
                 </svg>
-                <p class="sans small color-positive legend-description">
-                  More after changes
-                </p>
+                <p class="sans small color-positive legend-description">More after changes</p>
               </div>
               <div class="simple-flex-center">
                 <svg
@@ -786,9 +715,7 @@
                     stroke-linecap="round"
                   ></line>
                 </svg>
-                <p class="sans small color-negative legend-description">
-                  Less after changes
-                </p>
+                <p class="sans small color-negative legend-description">Less after changes</p>
               </div>
             </div>
             <div class="unhug-top-small">
@@ -814,9 +741,7 @@
                     :d="legendPathTransfers.stroke"
                   ></path>
                 </svg>
-                <p class="sans small legend-description">
-                  Welfare or UIG benefits
-                </p>
+                <p class="sans small legend-description">Welfare or UIG benefits</p>
               </div>
             </div>
             <div class="simple-flex-center unhug-top-tiny">
@@ -841,9 +766,7 @@
                   :d="legendPathMarketIncome.stroke"
                 ></path>
               </svg>
-              <p class="sans small legend-description">
-                Income without benefits
-              </p>
+              <p class="sans small legend-description">Income without benefits</p>
             </div>
           </div>
         </div>
@@ -877,7 +800,7 @@ export default {
       svgWidth: 400,
       svgHeight: 660,
       margin: { top: 25, left: 40, bottom: 70, right: 2 },
-      tooltip: { id: -1, left: null, top: null, bottom: null, right: null },
+      tooltip: { id: -1, left: null, top: null, html: "Test" },
       show: true,
       mouseDown: false,
       isLoaded: false,
@@ -1668,10 +1591,21 @@ export default {
       this.findBinAndToggleDeactive(e);
       // console.log(d3.select(`#tooltip${i}`));
       this.tooltip.id = i;
-      d3.select(`#tooltip${i}`)
-        .transition()
-        .duration(400)
-        .style("opacity", 1);
+      // Element scope
+      let tooltip = this.$el.querySelector(`#tooltip${i}`);
+      tooltip.style.opacity = 1;
+      // d3.select(`#tooltip${i}`)
+      //   .transition()
+      //   .duration(400)
+      //   .style("opacity", 1);
+    },
+    mouseenterBarsOneTip(e) {
+      this.findBinAndToggleDeactive(e);
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      tooltip.classList.remove("tooltip-zero-opacity");
+      const i = e.target.id;
+      const element = this.data[i];
+      this.tooltip.html = this.formatTooltip(element);
     },
     findBinAndToggleDeactive(e) {
       const binNum = e.target.id;
@@ -1709,25 +1643,61 @@ export default {
         this.tooltip.top = mouse.y + 30;
       }
     },
+    mousemoveBarsOneTip(e) {
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      tooltip.classList.remove("tooltip-zero-opacity");
+      const tooltipHeight = tooltip.getBoundingClientRect().height;
+      let mouse = { x: e.clientX, y: e.clientY };
+      let w = window.innerWidth;
+      let h = window.innerHeight;
+      let barWidth = this.scale.x.bandwidth();
+      // this.tooltip.left = mouse.x + barWidth;
+      if (mouse.x < w / 2) {
+        this.tooltip.left = mouse.x + barWidth;
+      } else {
+        this.tooltip.left = null;
+        this.tooltip.left = mouse.x - 450;
+      }
+      if (mouse.y > h / 2) {
+        this.tooltip.top = mouse.y - tooltipHeight - 20;
+      } else {
+        // this.tooltip.bottom = null;
+        this.tooltip.top = mouse.y + 30;
+      }
+    },
     mouseleaveBars(e) {
       this.findBinAndToggleDeactive(e);
       const i = e.target.id;
-
-      d3.select(`#tooltip${i}`)
-        .transition()
-        .duration(300)
-        .style("opacity", 0);
+      // Element scope
+      let tooltip = this.$el.querySelector(`#tooltip${i}`);
+      tooltip.style.opacity = 0;
+      // console.log(tooltip);
+      // d3 document scope
+      // d3.select(`#tooltip${i}`)
+      //   .transition()
+      //   .duration(300)
+      //   .style("opacity", 0);
       // this.tooltip.id = null;
     },
+    mouseleaveBarsOneTip(e) {
+      this.findBinAndToggleDeactive(e);
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      tooltip.classList.add("tooltip-zero-opacity");
+    },
     clickBars(e) {
-      const i = e.target.id;
-      // console.log(e, e.target.id);
-      let element = this.$el.querySelector(`#tooltip${i}`);
-      element.classList.add("visible");
+      // const i = e.target.id;
+      // // console.log(e, e.target.id);
+      // let element = this.$el.querySelector(`#tooltip${i}`);
+      // element.classList.add("visible");
     },
     // eslint-disable-next-line no-unused-vars
     touchedToolTip(e) {
-      this.tooltip.id = -1;
+      console.log("happened");
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      setTimeout(() => {
+        tooltip.classList.remove("tooltip-hidden");
+      }, 800);
+      tooltip.classList.add("tooltip-hidden");
     },
     formatTooltip(e) {
       const f = d3.format(",d");
@@ -1764,9 +1734,7 @@ export default {
         </div>`;
       }
 
-      let tooltiphtml = `<div class="graph-label">Income range: <span class="">${
-        e.bin
-      } $</span></div>
+      let tooltiphtml = `<div class="graph-label">Income range: ${e.bin}</div>
       <p class="small">
         # of households: ${this.lazyfixFormat(
           fbig(e.populationDetails.hhtotal.val)
@@ -1990,7 +1958,9 @@ export default {
     },
     blurOne(identifier) {
       let element = this.$el.querySelector(`#${identifier}`);
-      element.classList.add("blur");
+      if (element) {
+        element.classList.add("blur");
+      }
     },
     blurList(array) {
       for (const identifier of array) {
@@ -2002,7 +1972,9 @@ export default {
     },
     unblurOne(identifier) {
       let element = this.$el.querySelector(`#${identifier}`);
-      element.classList.remove("blur");
+      if (element) {
+        element.classList.remove("blur");
+      }
     },
     unblurList(array) {
       for (const identifier of array) {
@@ -2119,4 +2091,180 @@ export default {
 };
 </script>
 <style src="vue-scrollama/dist/vue-scrollama.css"></style>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+// Credit: https://codepen.io/anon/pen/MRXvdp
+$main-color: rgba(255, 255, 255, 0.01);
+$secondary-color: rgba(87, 176, 234, 1);
+$width: 550px; // Change Me
+
+.move-right {
+  margin-left: 0%;
+}
+
+.controls {
+  position: absolute;
+  font-size: 2rem;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 6px 12px;
+  top: 1.2rem;
+  // opacity: 0;
+  color: $secondary-color;
+  // color: white;
+  // background: $secondary-color;
+  border-radius: 50%;
+}
+.controls:hover {
+  color: white;
+  background: $secondary-color;
+}
+.control-minus {
+  left: 0%;
+}
+.control-plus {
+  left: 83%;
+}
+
+.group.bignumberinput {
+  width: 100%;
+  height: $width/5;
+  overflow: hidden;
+  position: relative;
+}
+
+label.bignumberinput {
+  position: absolute;
+  text-align: center;
+  top: 2.8rem;
+  left: 10%;
+  width: 80%;
+  color: $secondary-color;
+  font-size: 1.6rem;
+  line-height: 1.5rem;
+  cursor: text;
+  transition: 0.25s ease;
+  // content: "enter a number";
+}
+
+input.bignumberinput {
+  text-align: center;
+  display: block;
+  // margin-left: 42%;
+  margin-top: 0rem;
+  width: 100%;
+  // padding-top: $width/15;
+  border: none;
+  border-radius: 0; // For iOS
+  // border-bottom: solid $width/150 rgba(white, .5);
+  color: $secondary-color;
+  background: $main-color;
+  font-size: 5rem;
+  font-weight: 900;
+  transition: 0.3s 0.2s ease;
+  &:invalid {
+    color: grey;
+    ~ label {
+      color: grey;
+    }
+    ~ .controls {
+      color: grey;
+      opacity: 0;
+    }
+    ~ .bar {
+      background: grey;
+    }
+  }
+  &:valid {
+    // border-bottom-color: rgba(white, .5);
+    ~ label {
+      top: 7.4rem;
+      font-size: 1.6rem;
+      color: $secondary-color;
+      text-align: center;
+    }
+    ~ .control-plus {
+      left: 64%;
+    }
+    ~ .control-minus {
+      left: 22%;
+    }
+    ~ .bar {
+      // text-align: center;
+      margin-left: 43%;
+      width: 4rem;
+      height: 0.1rem;
+    }
+  }
+  &:focus {
+    outline: none;
+    // border-bottom-color: $secondary-color;
+    ~ label {
+      top: 7.4rem;
+      // left: 3.8rem;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: $secondary-color;
+      text-align: center;
+    }
+    ~ .bar {
+      margin-left: 43%;
+      width: 4rem;
+      height: 0.4rem;
+      background: $secondary-color;
+    }
+    ~ .controls {
+      // color: $secondary-color;
+    }
+    ~ input {
+      color: $secondary-color;
+    }
+  }
+
+  // Stop Chrome's hideous pale yellow background on auto-fill
+
+  &:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px $main-color inset;
+    -webkit-text-fill-color: $secondary-color !important;
+    // border-bottom-color: rgba(white, .5);
+  }
+}
+
+.bar.bignumberinput {
+  // background: $secondary-color;
+  background: $secondary-color;
+  content: "";
+  width: 100%;
+  height: 0.1rem;
+  margin-top: 0.6rem;
+  position: relative;
+  // // transform: translateX(-100%);
+  // transition: .3s ease;
+
+  // &:before {
+  //   content: '';
+  //   // position: absolute;
+  //   width: 100%;
+  //   height: 250%;
+  //   left: 3.6rem;
+  //   background: $secondary-color;
+  //   // transform: translateX(-100%);
+
+  // }
+}
+
+::selection {
+  background: rgba($secondary-color, 0.3);
+}
+
+// Credit: Andrei Gheorghiu
+// https://stackoverflow.com/questions/45396280/customizing-increment-arrows-on-input-of-type-number-using-css
+input[type="number"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+</style>
