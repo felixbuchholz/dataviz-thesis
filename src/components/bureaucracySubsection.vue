@@ -46,46 +46,16 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <ul class="left ul-no-indent">
-          <li class="space-li">
-            Checking for eligibility can be
-            <span class="bold">intrusive</span> to people’s lives.
-          </li>
-        </ul>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <ul class="left ul-no-indent">
-          <li class="space-li">
-            Because every social and financial situation is different, it is
+        <p class="left"> Checking for eligibility can be
+            <span class="bold">intrusive</span> to people’s lives. It is
             <span class="bold">challenging to design</span> transfers to give
-            the right recipients the right amount of money
-          </li>
-        </ul>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <ul class="left ul-no-indent">
-          <li class="space-li">
-            The combination of benefits can lead to the so-called
+            the right recipients the right amount of money, because the combination of benefits can lead to the so-called
             <span class="bold">“welfare&nbsp;trap”:</span> The sudden drop in
             transfers when crossing a threshold of eligibility due to increased
-            earnings can disincentivize efforts to be independent of welfare.
-          </li>
-        </ul>
-        <div class="small-spacer"></div>
+            earnings can disincentivize efforts to be independent of welfare.</p>
       </div>
       <div class="margin-right"></div>
     </div>
-    <!-- * -->
     <graphCenterWelfareTrap />
     <!-- * -->
     <div class="grid-container">

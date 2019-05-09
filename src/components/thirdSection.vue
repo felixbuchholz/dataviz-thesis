@@ -49,11 +49,17 @@
           UIG would affect incomes.
         </p>
         <p class="intro">
-          We will look at two different models, that are still very
-          <span class="bold">general approaches</span> to income guarantees but
-          try to start thinking about how incomes after benefits would change
-          overall.
+          We will look at two different models
         </p>
+        <ol class="intro">
+          <li>
+            In the first we can see  <a href="#graph-headline1">how a UIG set to a fixed amount affects incomes</a>
+          </li>
+          <li>
+            The second model also talks about financing: <br/>
+            we will try to <a href="#graph-headline2">identify which current welfare can be replaced by a UIG</a>
+          </li>
+        </ol>
       </div>
       <div class="margin-right"></div>
     </div>
@@ -62,7 +68,24 @@
       <div class="margin-left"></div>
       <div class="center-block">
         <p class="left">
-          The first model puts a strong emphasis on
+          The first model model takes the approach shown in <a href="#graph-ideal-ubi">section two.</a> It is setting a fixed cash transfer per month as an income guarantee per person.
+          <!-- <span class="bold">
+           For example, &#36;&#8239;1,000 per adult and &#36;&#8239;500 per child per month.
+          </span>  -->
+            At the same time there will be a marginal tax rate of 50&#8239;%. For every dollar earned the net benfit will decrease by 50 cents. That means the benefit will fade out at a break-even point when earnings are twice as high as the fixed benefit amount.
+        </p>
+      </div>
+      <div class="margin-right"></div>
+    </div>
+    <!-- <graphModelOne /> -->
+    <graphModelTwo />
+    <!-- * -->
+    <div class="grid-container">
+      <div class="margin-left"></div>
+      <div class="center-block">
+        <p class="left">
+          The previous model obviously doesn’t consider any financing of the new costs. 
+          The next one is an attempt to account for that and puts a strong emphasis on
           <span class="bold">compatibility with the current</span>
           income tax model.
         </p>
@@ -74,15 +97,9 @@
       <div class="margin-left"></div>
       <div class="center-block">
         <p class="left">
-          The idea is to determine an income tax threshold below which
-          households don’t have to pay income tax. In addition to being an
-          allowance, this threshold would also determine the amount of a new tax
-          return. For example for every dollar below that threshold, a household
-          would receive 50 cents. If the limit is set at &#36;&#8239;24,000 and
-          a household has earned &#36;&#8239;12,000 the difference would be
-          &#36;&#8239;12,000. The difference multiplied by &#36;&#8239;0.50
-          would result in a &#36;&#8239;6,000 tax return or a combined income of
-          &#36;&#8239;18,000. Because of this construction, this concept is
+          Its strategy is to find out which current welfare transfers could be re-directed to an income guarantee to the lowest income groups.
+          Using the savings of substituted welfare expenses it will determine a upper threshold and all incomes that are below it will receive a tax refund of 50&#8239;% of that difference with the annual tax returns.
+          Because of this approach, it is is
           often called a
           <span class="bold">Negative Income Tax (NIT),</span> but other names
           like Basic Income are also sometimes used.
@@ -95,86 +112,29 @@
       <div class="margin-left"></div>
       <div class="center-block">
         <p class="left">
-          In tax terminology, we can also think of the rate of &#36;&#8239;0.50
-          per dollar less income as a negative marginal tax rate of 50&#8239;%.
-          Fifty percent is a value that is often chosen in UIG concepts because
-          it is
-          <span class="bold">considered a good compromise</span> of the need to
-          fade out a benefit with increased earnings and work incentives,
-          avoiding the welfare trap (see also the earlier section).
+          In the next graph you can select and de-select which welfare programs should be in place and how many of the lower income groups should benefit from the new income guarantee and hopefully find a <span class="bold"> satisfying solution!</span>
         </p>
       </div>
       <div class="margin-right"></div>
     </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="left">
-          The next question we need to answer for this model is:
-          <span class="bold">What is the right income threshold?</span> When the
-          model was conceived, there was no final answer, but instead, an
-          approach to compare different outcomes. – First, we would assess how
-          much is currently spent on welfare. (Second identify everything that
-          can be translated into a cash transfer.) And then calculate the
-          outcomes of transforming this amount into a UIG for different income
-          thresholds and compare and estimate which one would have a reasonable
-          benefit for most people.
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="left">
-          In the following interactive graph, we will see
-          <span class="bold">the results of these calculations</span>. You can
-          select and de-select which welfare programs should be in place and
-          which lower income brackets should be affected by the new income
-          guarantee.
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- <graphModelOne /> -->
-    <graphModelTwo />
+    
+    <graphModelOne />
+    <!-- <graphModelTwo /> -->
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
         <div class="spacer"></div>
         <p class="right">
-          At its conception, one of the main goals of this approach was to
-          alleviate poverty. At its conception, one of the main goals of this
-          approach was to alleviate poverty. It is definitely taking a step in
+          At its conception, one of the main goals of this
+          approach was to alleviate poverty. It is taking a step in
           that direction, but regarding this goal,
-          <span class="bold">it can also be criticized:</span>
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="right">
-          For example,
+          <span class="bold">it can also be criticized:</span>  For example,
           <span class="bold"
             >an annual tax return might not be adequate in situations of urgent
-            financial needs.</span
+            financial needs.</span 
           >
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="right">
-          To transfer the UIG to households might create
+          To distribute the UIG at a household level might also create
           <span class="bold">financial dependencies.</span> Guaranteeing an
           income to every person might have more positive effects on individual
           freedom and gender inequality.
@@ -186,7 +146,7 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <p class="right">
+        <p class="left">
           If the goal is to eradicate poverty, why not try to design a model why
           not introduce an income floor no individual would fall below?
         </p>
@@ -197,97 +157,12 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <p class="left">
-          The second model takes this approach. It is deliberately an open model
-          that starts by setting a UIG to
-          <span class="bold"
-            >&#36;&#8239;1,000 per adult and &#36;&#8239;500 per child per
-            month.</span
-          >
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="left">
-          This approach also uses the marginal tax rate introduced in the first
-          model, but now it’s calculated in the
-          <span class="bold">opposite direction.</span> For every dollar earned,
-          there is an income tax of 50 cents. The so-called break-even,where the
-          UIG benefit equals the income tax, is reached at earnings of
-          &#36;&#8239;2,000 per month for one adult.
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="left">
-          To
-          <span class="bold">estimate the net costs of this program</span> one
-          would look at how many people are below this break-even point and
-          calculate the UIG minus the marginal tax rate for the recipients. Due
-          to the open character of this model,
-          <span class="bold"
-            >we will discuss the financing considerations in a second
-            step.</span
-          >
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="left">
-          That’s also when we need to talk about
-          <a class="bold" href="#section-4">dynamic effects</a> since right now
-          we are only looking at static models, that
-          <span class="bold"
-            >assume the introduction of a UIG wouldn’t change the behavior of
-            market participants and their economic relations.</span
-          >
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="left">
-          In the next graph,
-          <span class="bold"
-            >you can set the amount of the UIG and see how it would affect the
-            income distribution.</span
-          >
-          The selection of which welfare program is in place is an additional
-          function transferred from the first model. As mentioned, we will talk
-          about financing in the following section.
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <graphModelOne />
-    <!-- <graphModelTwo /> -->
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
         <p class="right">
-          In contrast to the first approach, it is evident that this approach
+          In contrast to the NIT approach, it is evident that an income floor without replacing existing benefits
           adds a significant amount to the overall budget if the income
           guarantee should be above the poverty line. These additional costs
-          have to be financed. For proponents of UIGs the idea of
-          <span class="bold">printing money,</span> similar to the concept of
-          helicopter money <span class="bold">is not an option.</span>
+          have to be financed. Because it is obviously unsustainable, the solution to
+          <span class="bold">print money is not an option</span> for UIG proponents.
         </p>
       </div>
       <div class="margin-right"></div>
@@ -296,7 +171,7 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <p class="right">
+        <p class="left">
           This can pacify fears of massive inflation due to the implementation
           of a UIG. But it also implies that
           <span class="bold"
@@ -321,21 +196,6 @@
           resources). There are also voices that emphasize that
           <span class="bold">closing tax loopholes</span> would already finance
           a larger share of a UIG.
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="left">
-          In the next section, we will see, that advocates of a UIG also expect
-          <span class="bold">dynamic changes</span> that further reduce the cost
-          of this policies, like a
-          <span class="bold"
-            >reduction in health costs or more innovation and growth.</span
-          >
         </p>
       </div>
       <div class="margin-right"></div>

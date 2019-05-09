@@ -239,7 +239,7 @@
           <div class="simple-flex-center unhug-top-small">
             <div>* Taxes after: The tax rate after the break-even point can be different</div>
           </div>
-          <p class="unhug-bottom-70 italic">Source</p>
+          <a href="#graph-headline1"><p class="unhug-bottom-70 italic">Let’s see how this scheme would affect incomes in the US</p></a>
         </div>
       </div>
     </div>

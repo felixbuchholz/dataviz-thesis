@@ -51,6 +51,7 @@
                       class="bignumberinput sans"
                       max="9"
                       v-model.number="numOfUIGBins"
+                      tabindex="-1"
                       @change="doAfterIncomeBracketsChanged()"
                     />
                     <div
@@ -158,7 +159,7 @@
         </div>
       </div>
     </div>
-    <div class="center-block">
+    <div class="center-block" id="graph-headline2">
       <Scrollama
         @step-enter="stepEnterHandler"
         @step-exit="stepExitHandler"
@@ -166,7 +167,7 @@
       >
         <div slot="graphic" class="graphic">
           <div class="chart">
-            <h5 class="sans hug-bottom" id="graph-headline1">UIG scheme 1:</h5>
+            <h5 class="sans hug-bottom" >UIG scheme 2:</h5>
             <span class="sans">
               Select welfare programs to be replaced and provide a UIG to the
               <span class="bold">
@@ -352,11 +353,11 @@
         <div
           class="step1 scrolling-over-container"
           data-step="a"
-          id="start-of-the-intro"
+          id="start-of-the-intro2"
         >
           <!-- v-if="insight == 'intro'" -->
           <div class="scrolling-over-content">
-            <h3>Introduction</h3>
+            <h5>UIG Scheme 2, Introduction</h5>
             <div class="unhug-bottom">
               The following graph shows the distribution of household incomes
               and welfare transfers in the US in 2017.
@@ -368,7 +369,7 @@
             </button>-->
             <p>
               Or you can
-              <a href="#end-of-intro">
+              <a href="#end-of-intro2">
                 <button class="button" @click="readyToChange">
                   skip the introduction
                 </button>
@@ -382,7 +383,7 @@
           <!-- v-if="insight == 'introLegendA'" -->
           <div class="scrolling-over-content">
             <div>
-              <h4>Let’s take a look at the legend:</h4>
+              <h5>Let’s take a look at the legend:</h5>
               The height of the bars in the chart indicates the amount of income
               and benefits. Each bar stack represents an income group. The
               stacks are grouped and sorted by income without benefits.
@@ -466,7 +467,7 @@
         <div class="step3 scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             <div>
-              <h4>Let’s talk about scale!</h4>
+              <h5>Let’s talk about scale!</h5>
               Because incomes in the last group are so high, it’s hard to see
               the welfare benefits.
               <div class="unhug-top">
@@ -511,7 +512,7 @@
         <div class="step4 scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             <div>
-              <h4>The welfare interface</h4>
+              <h5>The welfare interface</h5>
               In this scheme the idea is to replace current welfare benefits
               with a UIG. You can hover over the different categories to see how
               they affect incomes in all groups and select them individually.
@@ -571,7 +572,7 @@
         <div class="step6 scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             <div>
-              <h4>The balance</h4>
+              <h5>The balance</h5>
               Our changes result in a overall balance of
               <span :class="`bold color-${balancePosOrNeg}`"
                 >$ {{ currentBalanceF.join(" ") }}.</span
@@ -591,7 +592,7 @@
           </div>
         </div>
         <!-- Index 6 ******************************************************************** -->
-        <div class="step7" data-step="d" id="end-of-intro">
+        <div class="step7" data-step="d" id="end-of-intro2">
           <hr />
         </div>
         <!-- Index 7 ******************************************************************** -->
@@ -646,7 +647,7 @@
             </div>
           </transition>
           <div class="return-button">
-            <a href="#start-of-the-intro">
+            <a href="#start-of-the-intro2">
               <button @click="startIntro" class="small">
                 Back to the intro
               </button>
@@ -1789,7 +1790,7 @@ export default {
     clickOnUIGCheckbox() {
       this.togglePosition(this.positionsArray.length - 1);
       // setTimeout(() => {
-      //   const endOfIntro = this.$el.querySelector("#end-of-intro");
+      //   const endOfIntro = this.$el.querySelector("#end-of-intro2");
       //   endOfIntro.scrollIntoView({ behavior: "smooth", block: "start" });
       //   console.log(endOfIntro);
       // }, 510);
@@ -1851,7 +1852,7 @@ export default {
           this.svgHeight = 700;
           this.computeAllPaths();
         }, 1000);
-        const element_to_scroll_to = document.getElementById("graph-headline1");
+        const element_to_scroll_to = document.getElementById("graph-headline2");
         element_to_scroll_to.scrollIntoView({
           behavior: "smooth"
         });
@@ -2007,15 +2008,12 @@ export default {
       this.unblurList(this.allIntroElements);
     },
     readyToChange() {
-      // Behavior on click back to intro and scroll up
-      // [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
-      //   e.classList.add("hidden-steps");
-      // });
-      // console.log("ready");
+      this.hideScrollovers();
       this.unblurAll();
       this.insight = "readyToChange";
     },
     startIntro() {
+      this.showScrollovers();
       this.blurAll();
     },
     goToLegendA() {
@@ -2057,8 +2055,19 @@ export default {
       this.introUIGActive = true;
     },
     goToBudgetA() {
+      this.showScrollovers();
       this.blurAll();
       this.unblurOne("selectBudget");
+    },
+    showScrollovers() {
+      [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+          e.classList.remove("hidden-steps");
+      });
+    },
+    hideScrollovers() {
+      [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+          e.classList.add("hidden-steps");
+      });
     }
   },
   directives: {
@@ -2288,5 +2297,48 @@ input[type="number"] {
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
+}
+.step1 {
+  // width: 100%;
+  margin-top: -86.5vh;
+  margin-bottom: 65vh;
+  // height: 50vh;
+  // background: rgba(252,252,252,0.95)
+}
+
+.step2 {
+  // margin-bottom: 0;
+ }
+
+.step2 {
+  margin-bottom: 78vh;
+}
+
+.step3 {
+  margin-bottom: 78vh;
+}
+
+.step4 {
+  margin-bottom: 78vh;
+}
+
+.step5 {
+  margin-bottom: 78vh;
+  // TODO: fix this somehow!
+  height: 40vh;
+  // background: rgba(252,252,252,0.8)
+
+}
+
+.step6 {
+  margin-bottom: 5vh;
+}
+
+.step7 {
+  margin-bottom: 52vh;
+}
+
+.step8 {
+  margin-bottom: 30vh;
 }
 </style>

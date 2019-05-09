@@ -73,10 +73,8 @@
       <div class="margin-left"></div>
       <div class="center-block">
         <p class="intro">
-          By no means are the mentioned arguments exhaustive of the debate, but
-          let’s start with these
-          <span class="bold">three entry points</span> (you can also skip to the
-          one of your interest):
+         Let’s start with these
+          <span class="bold">three entry points:</span>
         </p>
         <ol class="intro">
           <li>

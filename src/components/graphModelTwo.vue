@@ -67,7 +67,7 @@
                       id="incomebrackets"
                       required="required"
                       class="bignumberinput sans"
-                      max="30001"
+                      max="15000"
                       v-model.number="uigPerKid"
                       @change="doAfterBasicIncomeChanged()"
                     >
@@ -156,9 +156,9 @@
       <Scrollama @step-enter="stepEnterHandler" @step-exit="stepExitHandler" :offset="0.9">
         <div slot="graphic" class="graphic">
           <div class="chart">
-            <h5 class="sans hug-bottom">UIG scheme 2:</h5>
+            <h5 class="sans hug-bottom">UIG scheme 1:</h5>
             <span class="sans">
-              Every adult is granted an income guarantee of 1.000 $ a month
+              <!-- Every adult is granted an income guarantee of 1.000 $ a month -->
               <!-- <span class="bold">
                 lowest
                 <span v-if="isLoaded & (uigPerAdult > 0)" class="color-uig">{{
@@ -292,52 +292,238 @@
             </transition>
           </div>
         </div>
+        <!-- Index 0 ******************************************************************** -->
         <div class="step1 scrolling-over-container" data-step="a" id="start-of-the-intro">
           <div class="scrolling-over-content">
-            <button class="button" @click="readyToChange">skip the introduction</button>
+            <h5>UIG Scheme 1, Introduction</h5>
+            <p class="">
+              The following graph shows the distribution of household incomes
+              and welfare transfers in the US in 2017.
+            </p>
+            You can use it to find out how an income guarantee would <span class="color-uig"> add </span> to the incomes in the different income groups and to get an estimation of the overall <span class="color-negative"> budget effects </span> when it is in place.
+            <p>
+               To learn how to do that, you can just keep on
+              <span class="bold">scrolling.</span>
+            </p>
+            <p>
+              Or you can
+              <a href="#end-of-intro1">
+                <button class="button" @click="readyToChange">
+                  skip the introduction
+                </button>
+              </a>
+              and start using it.
+            </p>
           </div>
+        </div>
+         <!-- Index 1 ******************************************************************** -->
+        <div class="step2 scrolling-over-container" data-step="b">
+          <!-- v-if="insight == 'introLegendA'" -->
+          <div class="scrolling-over-content">
+            <div>
+              <h5>Let’s take a look at the legend:</h5>
+              The height of the bars in the chart indicates the amount of income
+              and benefits. Each bar stack represents an income group. The
+              stacks are grouped and sorted by income without benefits.
+            </div>
+            <div class="unhug-top">
+              The bars have two different textures. This one
+              <svg
+                class="inline-svg"
+                v-if="isLoaded"
+                :width="scale.x.bandwidth() * 1.6"
+                height="16"
+              >
+                <path
+                  :transform="`translate(1, 1)`"
+                  stroke-width="0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  :d="legendPathMarketIncomeSmall.fill"
+                ></path>
+                <path
+                  :transform="`translate(1, 1)`"
+                  stroke-width="0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  :d="legendPathMarketIncomeSmall.stroke"
+                ></path>
+              </svg>
+              for the income without benefits (but before taxes) and this one
+              for welfare benefits, tax credits and the UIG:&nbsp;
+              <svg
+                class="inline-svg"
+                v-if="isLoaded"
+                :width="scale.x.bandwidth() * 1.6"
+                height="16"
+              >
+                <path
+                  :transform="`translate(1, 1)`"
+                  stroke-width="0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  :d="legendPathTransfersSmall.fill"
+                ></path>
+                <path
+                  :transform="`translate(1, 1)`"
+                  stroke-width="0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  :d="legendPathTransfersSmall.stroke"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <!-- Index 2 ******************************************************************** -->
+        <div class="step3 scrolling-over-container" data-step="d">
+          <div class="scrolling-over-content">
+            <div>
+              <h5>Let’s talk about scale!</h5>
+              Because incomes in the last group are so high, it’s hard to see
+              the welfare benefits.
+              <div class="unhug-top">
+                On the left you have 2 options to see more details:
+              </div>
+              <div class="simple-flex unhug-top">
+                <div class>
+                  Uncheck this box to hide incomes:
+                  <label class="checkbox-container sans">
+                    <div class="color-minc center">Income without benefits</div>
+                    <input
+                      v-if="isLoaded"
+                      type="checkbox"
+                      v-model="positionsArray[0].checked"
+                      @click="togglePosition(0)"
+                    />
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+                <div>or</div>
+                <div>
+                  Zoom on the first 6 groups with this icon:
+                  <div class="zoom-container unhug-top-175" @click="scaleYAxis">
+                    <div class="icon-medium">
+                      <zoomIcon class="zoom-icon" />
+                      <div
+                        class="small sans color-light plusOrMinus pom-scroll-adjust"
+                      >
+                        {{ zoomSign[0] }}
+                      </div>
+                    </div>
+                    <p class="sans zoomText color-light">
+                      Zoom {{ zoomSign[1] }} the Y-axis
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Index 3 ******************************************************************** -->
+        <div class="step4 scrolling-over-container" data-step="d">
+          <div class="scrolling-over-content">
+            <div>
+              <div>
+                What do you think is a good amount for an income guarantee?
+                <div class="group bignumberinput unhug-top-small">
+                    <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+                    <input
+                      type="text"
+                      pattern="\d*"
+                      maxlength="5"
+                      id="uig-amount-adult"
+                      required="required"
+                      class="bignumberinput sans"
+                      max="30001"
+                      v-model.number="uigPerAdult"
+                      @change="doAfterBasicIncomeChanged()"
+                    >
+                    <div
+                      for="uig-amount-adult"
+                      class="controls bold sans control-minus"
+                      @click="minusIncome()"
+                    >-</div>
+                    <label for="uig-amount-adult" class="bignumberinput sans">$ per adult per year</label>
+                    <div class="controls bold sans control-plus" @click="plusIncome()">+</div>
+                    <!-- <div class="bar bignumberinput"></div> -->
+                  </div>
+                  <div class="group bignumberinput">
+                    <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+                    <input
+                      type="text"
+                      pattern="\d*"
+                      maxlength="5"
+                      id="uig-mount-kid"
+                      required="required"
+                      class="bignumberinput sans"
+                      max="15000"
+                      v-model.number="uigPerKid"
+                      @change="doAfterBasicIncomeChanged()"
+                    >
+                    <div
+                      for="uig-mount-kid"
+                      class="controls bold sans control-minus"
+                      @click="minusIncomeKid()"
+                    >-</div>
+                    <label for="uig-mount-kid" class="bignumberinput sans">$ per child per year</label>
+                    <div class="controls bold sans control-plus" @click="plusIncomeKid()">+</div>
+                    <!-- <div class="bar bignumberinput"></div> -->
+                  </div>
+                  <p class="sans small note-top-unhug">Let’s implement it!</p>
+                  <div
+                  @mouseenter="mouseenterCheckboxes"
+                  @mouseleave="mouseleaveCheckboxes"
+                  :id="positionsArray.length - 1"
+                  >
+                    <label class="checkbox-container sans color-primary checkbox-primary">
+                      <div class="center">Universal Income Guarantee</div>
+                      <input
+                        v-if="isLoaded"
+                        v-show="positionsArray[positionsArray.length - 1].checked"
+                        type="checkbox"
+                        v-model="positionsArray[positionsArray.length - 1].checked"
+                        @click="clickOnUIGCheckbox"
+                      >
+                      <span class="checkmark checkmark-primary"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <!-- Index 4 ******************************************************************** -->
+        <div class="step5 scrolling-over-container" data-step="d">
+          <div class="scrolling-over-content">
+            <div>
+              <h5>The balance</h5>
+              Our changes improve the situation of the lower income groups significantly and accross these groups the distribution is more even.
+              But they also result in a overall balance of
+              <span :class="`bold color-${balancePosOrNeg}`"
+                >$ {{ currentBalanceF.join(" ") }}.</span
+              >
+              <br />Scroll a little bit further… and you can change the levels of the income guarantee. 
+              <p>In the next graph we will also see one approach to tackle these costs.</p>
+              <p class="bold color-primary">Enjoy exploring!</p>
+              <!-- <div class="unhug-top">
+                <button @click="readyToChange">Enjoy exploring!</button>
+              </div>-->
+            </div>
+          </div>
+        </div>
+        <!-- Index 5 ******************************************************************** -->
+        <div class="step6" data-step="d" id="end-of-intro1">
+          <hr />
+        </div>
+        <!-- Index 6 ******************************************************************** -->
+        <div class="step7" data-step="d">
+          <hr />
         </div>
       </Scrollama>
 
-      <!-- Insight
+      <!-- Insight -->
       <div class="insight sans light">
         <div v-if="insight == 'readyToChange'">
-          <transition name="fade">
-            <div v-show="uigChanged">
-              <span class="regular"
-                >Households earning less than {{ UIGthresholdF }} $ receive a
-                UIG.</span
-              >
-              They represent
-              {{ currentTotalRecipientPercentagePopulationF }} % of the
-              population and receive on average
-              <span :class="`regular color-${currentAvgPosOrNeg}`">
-                {{ currentAvgIncomeDifferenceRecipientHouseholds }} $
-                {{ currentAvgMoreOrLess }}</span
-              >
-              benefits than before.
-            </div>
-          </transition>
-          <transition name="fade">
-            <div v-show="welfareChanged">
-              <span class="regular">
-                {{ connectingWordInInsight }}
-                {{ currentTotalNonRecipientHouseholdsF }} households not
-                receiving a UIG</span
-              >
-              will on average experience a loss of welfare benefits equal to
-              <span class="regular color-negative">
-                {{ avgPercentageChangeNonRecipients }} %
-              </span>
-              of their original income.
-            </div>
-          </transition>
-          <transition name="fade">
-            <div v-show="!anythingChanged">
-              This is the income distribution in the US without any changes in
-              2017.
-            </div>
-          </transition>
           <div class="return-button">
             <a href="#start-of-the-intro"
               ><button @click="startIntro" class="small">
@@ -347,8 +533,7 @@
           </div>
         </div>
       </div>
-      -->
-      <!-- <div id="end-of-insight"><hr></div> -->
+      <div id="end-of-insight"><hr></div>
        <div
         class="tooltip-container tooltip sans tooltip-zero-opacity"
         id="tooltip"
@@ -561,7 +746,7 @@ export default {
       isLoaded: false,
       moe: false,
       yAxisScaled: false,
-      uigPerAdult: 12000,
+      uigPerAdult: 0,
       uigPerKid: 0,
       zoomSign: ["+", "in"],
       insight: "intro",
@@ -1076,7 +1261,7 @@ export default {
     },
     doAfterBasicIncomeChanged() {
       // console.log("input changed");
-      if (this.uigPerAdult >= 0 && this.uigPerAdult < 30000) {
+      if (this.uigPerAdult >= 0 && this.uigPerAdult < 30000 && this.uigPerKid >= 0 && this.uigPerKid < 15000) {
         setTimeout(() => {
           this.computeData();
           this.calculateUIGInAllBins();
@@ -1611,18 +1796,17 @@ export default {
             this.goToScaleA();
             break;
           case 3:
-            this.goToInterfaceA();
-            break;
-          case 4:
             this.goToInterfaceB();
             break;
-          case 5:
+          case 4:
             this.goToBudgetA();
             break;
+          case 5:
+            break;
           case 6:
+            this.readyToChange();
             break;
           case 7:
-            this.readyToChange();
             break;
           default:
             console.log(
@@ -1648,15 +1832,14 @@ export default {
               this.goToScaleA();
               break;
             case 4:
-              this.goToInterfaceA();
-              break;
-            case 5:
               this.goToInterfaceB();
               break;
+            case 5:
+              break;
             case 6:
+              this.goToBudgetA();
               break;
             case 7:
-              this.goToBudgetA();
               break;
             default:
               console.log(
@@ -1695,15 +1878,13 @@ export default {
       this.unblurList(this.allIntroElements);
     },
     readyToChange() {
-      // Behavior on click back to intro and scroll up
-      // [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
-      //   e.classList.add("hidden-steps");
-      // });
-      // console.log("ready");
+      this.hideScrollovers();
       this.unblurAll();
       this.insight = "readyToChange";
     },
     startIntro() {
+      this.showScrollovers();
+
       this.blurAll();
     },
     goToLegendA() {
@@ -1745,8 +1926,19 @@ export default {
       this.introUIGActive = true;
     },
     goToBudgetA() {
+      this.showScrollovers();
       this.blurAll();
       this.unblurOne("selectBudget");
+    },
+    showScrollovers() {
+      [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+          e.classList.remove("hidden-steps");
+      });
+    },
+    hideScrollovers() {
+      [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+          e.classList.add("hidden-steps");
+      });
     }
   },
   directives: {
@@ -1976,5 +2168,49 @@ input[type="number"] {
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
+}
+
+.step1 {
+  // width: 100%;
+  margin-top: -86.5vh;
+  margin-bottom: 65vh;
+  // height: 50vh;
+  // background: rgba(252,252,252,0.95)
+}
+
+.step2 {
+  // margin-bottom: 0;
+ }
+
+.step2 {
+  margin-bottom: 78vh;
+}
+
+.step3 {
+  margin-bottom: 78vh;
+}
+
+.step4 {
+  margin-bottom: 78vh;
+}
+
+.step5 {
+  margin-bottom: 10vh;
+  // TODO: fix this somehow!
+  // height: 40vh;
+  // background: rgba(252,252,252,0.8)
+
+}
+
+.step6 {
+  margin-bottom: 80vh;
+}
+
+.step7 {
+  margin-bottom: 5vh;
+}
+
+.step8 {
+  margin-bottom: 40vh;
 }
 </style>
