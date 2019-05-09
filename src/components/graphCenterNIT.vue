@@ -3,7 +3,7 @@
     <div class="margin-left"></div>
     <div class="center-block">
       <div class="chart sans">
-        <h5 class="sans hug-bottom" id="graph-headline1">
+        <h5 class="sans hug-bottom" id="graph-ideal-ubi">
           Ideal income progression with a UIG scheme <br />
           for a household with two adults and one child
         </h5>

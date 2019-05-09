@@ -138,7 +138,8 @@
       </div>
       <div class="margin-right"></div>
     </div>
-    <graphModelOne />
+    <!-- <graphModelOne /> -->
+    <graphModelTwo />
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
@@ -274,7 +275,8 @@
       <div class="margin-right"></div>
     </div>
     <!-- * -->
-    <graphModelTwo />
+    <graphModelOne />
+    <!-- <graphModelTwo /> -->
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>

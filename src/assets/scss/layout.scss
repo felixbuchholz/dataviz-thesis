@@ -166,7 +166,7 @@
 
 .grid-vertical-container-interface {
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto 1fr;
   // grid-template-columns: 100%;
   grid-template-areas: 
   "interface-headline"
@@ -178,19 +178,14 @@
   grid-area: "interface-headline";
 }
 
-// .interface-uig {
-//   grid-area: "interface-uig";
-// }
-
 .interface-welfare {
   grid-area: "interface-welfare";
 }
 
 .interface-zoom {
   grid-area: "interface-zoom";
+  align-items: flex-end;
 }
-
-
 
 .inline-svg {
   display: inline;

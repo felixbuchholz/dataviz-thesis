@@ -5,11 +5,9 @@
         <!-- <br /> -->
         <div class="interface-headline">
           <div class="blur" id="selectHeadline">
-            <h5 class="sans small regular unhug-top">
-              Configure the scheme:
-            </h5>
+            <h5 class="sans small regular unhug-top">Configure the scheme:</h5>
           </div>
-          <div class=" uig unhug-top border-top-with-note blur" id="selectUIG">
+          <div class="uig unhug-top border-top-with-note blur" id="selectUIG">
             <div
               :class="
                 `positions position${positionsArray.length -
@@ -21,9 +19,7 @@
             >
               <p class="sans small note-top-unhug">Should a UIG be active?</p>
               <div>
-                <label
-                  class="checkbox-container sans color-primary checkbox-primary"
-                >
+                <label class="checkbox-container sans color-primary checkbox-primary">
                   <div class="center">Universal Income Guarantee</div>
                   <input
                     v-if="isLoaded"
@@ -31,16 +27,14 @@
                     type="checkbox"
                     v-model="positionsArray[positionsArray.length - 1].checked"
                     @click="clickOnUIGCheckbox"
-                  />
+                  >
                   <span class="checkmark checkmark-primary"></span>
                 </label>
               </div>
               <!-- <h5 class="sans">Change the parameters of this scheme:</h5> -->
               <transition name="fade">
                 <div v-show-slide="onlyUIG[0].checked" class="parameters">
-                  <p class="sans small note-top-unhug hug-bottom">
-                    – Yes, and the UIG should be
-                  </p>
+                  <p class="sans small note-top-unhug hug-bottom">– Yes, and the UIG should be</p>
                   <!-- Credit input field:  https://codepen.io/anon/pen/MRXvdp -->
                   <div class="group bignumberinput">
                     <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
@@ -52,25 +46,38 @@
                       required="required"
                       class="bignumberinput sans"
                       max="30001"
-                      v-model.number="this.uigPerAdult"
-                      @change="doAfterIncomeBracketsChanged()"
-                    />
+                      v-model.number="uigPerAdult"
+                      @change="doAfterBasicIncomeChanged()"
+                    >
                     <div
                       for="incomebrackets"
                       class="controls bold sans control-minus"
                       @click="minusIncome()"
-                    >
-                      -
-                    </div>
-                    <label for="incomebrackets" class="bignumberinput sans"
-                      >$ per adult per year</label
+                    >-</div>
+                    <label for="incomebrackets" class="bignumberinput sans">$ per adult per year</label>
+                    <div class="controls bold sans control-plus" @click="plusIncome()">+</div>
+                    <div class="bar bignumberinput"></div>
+                  </div>
+                  <div class="group bignumberinput">
+                    <!-- <label for="incomebrackets" class="bignumberinput">lowest</label> -->
+                    <input
+                      type="text"
+                      pattern="\d*"
+                      maxlength="5"
+                      id="incomebrackets"
+                      required="required"
+                      class="bignumberinput sans"
+                      max="30001"
+                      v-model.number="uigPerKid"
+                      @change="doAfterBasicIncomeChanged()"
                     >
                     <div
-                      class="controls bold sans control-plus"
-                      @click="plusIncome()"
-                    >
-                      +
-                    </div>
+                      for="incomebrackets"
+                      class="controls bold sans control-minus"
+                      @click="minusIncomeKid()"
+                    >-</div>
+                    <label for="incomebrackets" class="bignumberinput sans">$ per child per year</label>
+                    <div class="controls bold sans control-plus" @click="plusIncomeKid()">+</div>
                     <div class="bar bignumberinput"></div>
                   </div>
                 </div>
@@ -78,13 +85,8 @@
             </div>
           </div>
         </div>
-        <div
-          class="interface-welfare border-top-with-note blur"
-          id="selectWelfare"
-        >
-          <p class="sans small note-top-unhug">
-            For an optional comparison, current welfare benefits
-          </p>
+        <div v-if="optionalWelfareComparison" v-show-slide="optionalWelfareComparison" class="interface-welfare border-top-with-note blur" id="selectWelfare">
+          <p class="sans small note-top-unhug">For an optional comparison, current welfare benefits</p>
 
           <div
             :class="
@@ -112,18 +114,14 @@
                 @click="
                   togglePosition(positionsOnlyWelfareR.length - 1 - i + 1)
                 "
-              />
+              >
               <span :class="`checkmark checkmark-${e.name}`"></span>
             </label>
           </div>
         </div>
-        <div
-          class="interface-zoom income border-top-with-note blur"
-          id="selectScale"
-        >
-          <p class="sans small note-top-unhug">
-            Show the income without benefits in comparison?
-          </p>
+        <!-- <div class="spacer-auto"></div> -->
+        <div class="interface-zoom income border-top-with-note blur" id="selectScale">
+          <p class="sans small note-top-unhug">Show the income without benefits in comparison?</p>
           <div
             :class="`positions position${0} transfer-checkboxes`"
             @mouseenter="mouseenterCheckboxes"
@@ -137,38 +135,28 @@
                 type="checkbox"
                 v-model="positionsArray[0].checked"
                 @click="togglePosition(0)"
-              />
+              >
               <span class="checkmark"></span>
             </label>
           </div>
-          <p class="sans small note-top-unhug">
-            Focus on the lower six income brackets?
-          </p>
+          <p class="sans small note-top-unhug">Focus on the lower six income brackets?</p>
           <div class="zoom-container" @click="scaleYAxis">
             <div class="icon-medium">
-              <zoomIcon class="zoom-icon" />
-              <div class="small sans color-light plusOrMinus">
-                {{ zoomSign[0] }}
-              </div>
+              <zoomIcon class="zoom-icon"/>
+              <div class="small sans color-light plusOrMinus">{{ zoomSign[0] }}</div>
             </div>
             <div>
-              <p class="sans zoomText color-light">
-                Zoom {{ zoomSign[1] }} the Y-axis
-              </p>
+              <p class="sans zoomText color-light">Zoom {{ zoomSign[1] }} the Y-axis</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="center-block">
-      <Scrollama
-        @step-enter="stepEnterHandler"
-        @step-exit="stepExitHandler"
-        :offset="0.9"
-      >
+    <div class="center-block" id="graph-headline1">
+      <Scrollama @step-enter="stepEnterHandler" @step-exit="stepExitHandler" :offset="0.9">
         <div slot="graphic" class="graphic">
           <div class="chart">
-            <h5 class="sans hug-bottom" id="graph-headline1">UIG scheme 2:</h5>
+            <h5 class="sans hug-bottom">UIG scheme 2:</h5>
             <span class="sans">
               Every adult is granted an income guarantee of 1.000 $ a month
               <!-- <span class="bold">
@@ -177,30 +165,8 @@
                   uigPerAdult
                 }}</span>
                 income brackets
-              </span> -->
+              </span>-->
             </span>
-            <div v-if="tooltip.id != null">
-              <transition-group name="tipmove" tag="div">
-                <div
-                  class="tooltip-container"
-                  v-for="(element, index) in data"
-                  :key="index * 10 + element.id"
-                  :style="
-                    `position:fixed;left:${tooltip.left}px;top:${
-                      tooltip.top
-                    }px;right:${tooltip.right}px;bottom:${tooltip.bottom}px`
-                  "
-                >
-                  <div
-                    class="tooltip sans"
-                    :id="`tooltip${element.id}`"
-                    v-show="index == tooltip.id"
-                    v-html="formatTooltip(element)"
-                    @mouseenter="touchedToolTip"
-                  ></div>
-                </div>
-              </transition-group>
-            </div>
 
             <transition name="fade">
               <svg
@@ -213,7 +179,7 @@
                 <g :transform="`translate(${margin.left}, ${margin.top})`">
                   <!-- Credit grid-lines: Andrew Levinson
                   https://github.com/AndrewLevinson/thesis/blob/master/src/components/ChartOne.vue
-              -->
+                  -->
                   <g v-if="isLoaded">
                     <g v-grid:gridLine="scale" class="grid-lines"></g>
                   </g>
@@ -273,16 +239,10 @@
                                 <!-- transform="rotate(-45) translate(-2,4)" -->
                                 $ {{ showCurrentWelfareOrIncomeBefore(f, j) }}
                               </text>
-                              <!-- <rect
-                          v-show="show"
-                          fill: "rgba(0,0,0,0.3)"
-                          :width="scale.x.bandwidth()"
-                          :height="height - scale.y(f.val)"
-                          />-->
                             </g>
                           </transition>
                         </g>
-                        <g :transform="`translate(${0},${lineYPosition(e)})`">
+                        <g v-if="optionalWelfareComparison" :transform="`translate(${0},${lineYPosition(e)})`" id="positiveOrNegativeLine">
                           <line
                             class="positions"
                             :x1="scale.x(e.bin) - scale.x.bandwidth() * 0.2"
@@ -305,56 +265,36 @@
                       opacity="0"
                       fill="red"
                       :id="e.id"
-                      @mouseenter="mouseenterBars"
-                      @mousemove="mousemoveBars"
-                      @mouseout="mouseleaveBars"
+                      @mouseenter="mouseenterBarsOneTip"
+                      @mousemove="mousemoveBarsOneTip"
+                      @mouseout="mouseleaveBarsOneTip"
                       @click="clickBars"
                     ></rect>
                   </g>
 
-                  <rect
-                    x="0"
-                    :y="height"
-                    :height="margin.bottom"
-                    :width="width"
-                    fill="#fcfcfc"
-                  ></rect>
+                  <rect x="0" :y="height" :height="margin.bottom" :width="width" fill="#fcfcfc"></rect>
                   <text
                     class="graph-label"
                     :transform="`translate(${width}, ${height + 25})`"
                     text-anchor="end"
                     fill="currentColor"
-                  >
-                    *X
-                  </text>
-                  <g
-                    v-axis:x="scale"
-                    :transform="`translate(${0}, ${height})`"
-                    class="x-axis"
-                  ></g>
+                  >*X</text>
+                  <g v-axis:x="scale" :transform="`translate(${0}, ${height})`" class="x-axis"></g>
                   <text
                     class="graph-label"
                     :transform="`translate(${0},-10)`"
                     text-anchor="end"
                     fill="currentColor"
-                  >
-                    *Y
-                  </text>
+                  >*Y</text>
                   <g v-axis:y="scale" class="y-axis"></g>
                 </g>
               </svg>
             </transition>
           </div>
         </div>
-        <div
-          class="step1 scrolling-over-container"
-          data-step="a"
-          id="start-of-the-intro"
-        >
+        <div class="step1 scrolling-over-container" data-step="a" id="start-of-the-intro">
           <div class="scrolling-over-content">
-            <button class="button" @click="readyToChange">
-              skip the introduction
-            </button>
+            <button class="button" @click="readyToChange">skip the introduction</button>
           </div>
         </div>
       </Scrollama>
@@ -407,49 +347,45 @@
           </div>
         </div>
       </div>
-       -->
+      -->
       <!-- <div id="end-of-insight"><hr></div> -->
+       <div
+        class="tooltip-container tooltip sans tooltip-zero-opacity"
+        id="tooltip"
+        v-html="tooltip.html"
+        :style="
+              `position:fixed;left:${tooltip.left}px;top:${tooltip.top}px;`
+            "
+        @mouseenter="touchedToolTip"
+      ></div>
     </div>
     <div class="margin-right">
       <div v-if="isLoaded" class="budget grid-vertical-container">
         <div class="budget-calculations blur" id="selectBudget">
-          <h5 class="sans small regular unhug-top">
-            Overall balance effects of this scheme:
-          </h5>
+          <h5 class="sans small regular unhug-top">Overall balance effects of this scheme:</h5>
           <div>
             <div class="border-top-with-note unhug-top">
               <transition name="fade">
-                <div v-show-slide="currentTotalSavings != 0">
-                  <p class="sans small note-top-unhug">
-                    Current subtotal welfare savings ($):
-                  </p>
-                  <p class="sans bold align-right">
-                    {{ currentTotalSavingsF }}
-                  </p>
+                <div v-if="optionalWelfareComparison & currentTotalSavings != 0" v-show-slide="currentTotalSavings != 0">
+                  <p class="sans small note-top-unhug">Current subtotal welfare savings ($):</p>
+                  <p class="sans bold align-right">{{ currentTotalSavingsF }}</p>
                 </div>
               </transition>
               <transition name="fade">
                 <div v-show-slide="currentTotalSpendings != 0">
                   <p class="sans small">Current subtotal UIG spendings ($):</p>
-                  <p class="sans bold align-right">
-                    {{ currentTotalSpendingsF }}
-                  </p>
+                  <p class="sans bold align-right">{{ currentTotalSpendingsF }}</p>
                 </div>
               </transition>
             </div>
             <div class="simple-flex border-top-with-note">
               <p class="sans bold note-top-unhug">Balance ($):</p>
               <div>
-                <div
-                  class="sans bold note-top-unhug"
-                  v-html="currentBalanceHTML"
-                ></div>
-                <p
-                  v-if="currentBalance != 0"
-                  class="small sans regular color-standard align-right"
-                >
+                <div class="sans bold note-top-unhug" v-html="currentBalanceHTML"></div>
+                <p v-if="currentBalance != 0" class="small sans regular color-standard align-right">
                   &#8776; {{ currentBalanceAsPercentageOfGDP }}&#8201;% of
-                  GDP,<br />
+                  GDP,
+                  <br>
                   {{ currentBalanceAsPercentageOfFedExp }}&#8201;% of fed. exp.
                 </p>
               </div>
@@ -474,7 +410,7 @@
                 2017
               </div>
             </div>
-            <div class="unhug-top-small">
+            <div v-if="optionalWelfareComparison" class="unhug-top-small" id="legend-for-lines">
               <div class="simple-flex-center">
                 <svg
                   class="inline-svg"
@@ -493,9 +429,7 @@
                     stroke-linecap="round"
                   ></line>
                 </svg>
-                <p class="sans small legend-description">
-                  Situation before changes
-                </p>
+                <p class="sans small legend-description">Situation before changes</p>
               </div>
               <div class="simple-flex-center">
                 <svg
@@ -515,9 +449,7 @@
                     stroke-linecap="round"
                   ></line>
                 </svg>
-                <p class="sans small color-positive legend-description">
-                  More after changes
-                </p>
+                <p class="sans small color-positive legend-description">More after changes</p>
               </div>
               <div class="simple-flex-center">
                 <svg
@@ -537,9 +469,7 @@
                     stroke-linecap="round"
                   ></line>
                 </svg>
-                <p class="sans small color-negative legend-description">
-                  Less after changes
-                </p>
+                <p class="sans small color-negative legend-description">Less after changes</p>
               </div>
             </div>
             <div class="unhug-top-small">
@@ -565,9 +495,7 @@
                     :d="legendPathTransfers.stroke"
                   ></path>
                 </svg>
-                <p class="sans small legend-description">
-                  Welfare or UIG benefits
-                </p>
+                <p class="sans small legend-description">Welfare or UIG benefits</p>
               </div>
             </div>
             <div class="simple-flex-center unhug-top-tiny">
@@ -592,9 +520,7 @@
                   :d="legendPathMarketIncome.stroke"
                 ></path>
               </svg>
-              <p class="sans small legend-description">
-                Income without benefits
-              </p>
+              <p class="sans small legend-description">Income without benefits</p>
             </div>
           </div>
         </div>
@@ -628,15 +554,15 @@ export default {
       svgWidth: 400,
       svgHeight: 660,
       margin: { top: 25, left: 40, bottom: 70, right: 2 },
-      tooltip: { id: -1, left: null, top: null, bottom: null, right: null },
+      tooltip: { id: -1, left: null, top: null, html: "Test" },
+      tooltipStay: false,
       show: true,
       mouseDown: false,
       isLoaded: false,
       moe: false,
       yAxisScaled: false,
-      numOfUIGBins: 0,
       uigPerAdult: 12000,
-      uigPerKid: 6000,
+      uigPerKid: 0,
       zoomSign: ["+", "in"],
       insight: "intro",
       introUIGActive: false,
@@ -654,7 +580,8 @@ export default {
       avgPercentageChangeNonRecipients: 0,
       gdpUSA2017: 19390600000000,
       fedGovExpUSA2017: 3980311000000,
-      featuresOpen: false
+      featuresOpen: false,
+      optionalWelfareComparison: false
     };
   },
   computed: {
@@ -948,6 +875,12 @@ export default {
         }, 800); // was 1200
       }
     },
+    uigPerAdult() {
+      this.doAfterBasicIncomeChanged()
+    },
+     uigPerKid() {
+      this.doAfterBasicIncomeChanged()
+    },
     tooltip() {
       // console.log("tooltip has changed");
     },
@@ -1141,7 +1074,7 @@ export default {
     initiallyUncheckUIG() {
       this.positionsArray[this.positionsArray.length - 1].checked = false;
     },
-    doAfterIncomeBracketsChanged() {
+    doAfterBasicIncomeChanged() {
       // console.log("input changed");
       if (this.uigPerAdult >= 0 && this.uigPerAdult < 30000) {
         setTimeout(() => {
@@ -1161,14 +1094,22 @@ export default {
       let incomeInBin = e.positions[0].valueBefore;
       // Maybe this will be in data bin later
       let avgNumberOfAdultsInBin = e.populationDetails.madults.val;
-      let avgNumberOfKidsInBin = parseFloat((e.populationDetails.mpersons.val - e.populationDetails.madults.val).toFixed(2));
+      let avgNumberOfKidsInBin = parseFloat(
+        (
+          e.populationDetails.mpersons.val - e.populationDetails.madults.val
+        ).toFixed(2)
+      );
       // console.log(e.populationDetails.mpersons.val, avgNumberOfAdultsInBin, avgNumberOfKidsInBin);
-      // let 
-      let uigTotalPerAvgHousehold = avgNumberOfAdultsInBin * this.uigPerAdult + avgNumberOfKidsInBin * this.uigPerKid;
-      let uigMinusTaxPerAvgHoushold = parseInt(uigTotalPerAvgHousehold - (incomeInBin * 0.5));
+      // let
+      let uigTotalPerAvgHousehold =
+        avgNumberOfAdultsInBin * this.uigPerAdult +
+        avgNumberOfKidsInBin * this.uigPerKid;
+      let uigMinusTaxPerAvgHoushold = parseInt(
+        uigTotalPerAvgHousehold - incomeInBin * 0.5
+      );
 
       if (uigMinusTaxPerAvgHoushold < 0) {
-        uigMinusTaxPerAvgHoushold = 0
+        uigMinusTaxPerAvgHoushold = 0;
       }
       // Negative marginal tax rate = 50 %
       // New Calculation
@@ -1325,7 +1266,17 @@ export default {
     },
     minusIncome() {
       if (this.uigPerAdult >= 250) {
-        this.uigPerAdult -=250;
+        this.uigPerAdult -= 250;
+      }
+    },
+    plusIncomeKid() {
+      if (this.uigPerKid < 29750) {
+        this.uigPerKid += 250;
+      }
+    },
+    minusIncomeKid() {
+      if (this.uigPerKid >= 250) {
+        this.uigPerKid -= 250;
       }
     },
     mouseenterCheckboxes(e) {
@@ -1381,17 +1332,15 @@ export default {
         }
       });
     },
-    mouseenterBars(e) {
+    mouseenterBarsOneTip(e) {
+      if (this.optionalWelfareComparison) {
+        this.findBinAndToggleDeactive(e);
+      }
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      tooltip.classList.remove("tooltip-zero-opacity");
       const i = e.target.id;
-      this.findBinAndToggleDeactive(e);
-      // console.log(d3.select(`#tooltip${i}`));
-      this.tooltip.id = i;
-      let tooltip = this.$el.querySelector(`#tooltip${i}`)
-      tooltip.style.opacity = 1;
-      // d3.select(`#tooltip${i}`)
-      //   .transition()
-      //   .duration(400)
-      //   .style("opacity", 1);
+      const element = this.data[i];
+      this.tooltip.html = this.formatTooltip(element);
     },
     findBinAndToggleDeactive(e) {
       const binNum = e.target.id;
@@ -1407,45 +1356,54 @@ export default {
         }
       });
     },
-    mousemoveBars(e) {
-      const i = e.target.id;
-      let tooltip = this.$el.querySelector(`#tooltip${i}`);
-      const tooltipHeight = tooltip.getBoundingClientRect().height;
-      let mouse = { x: e.clientX, y: e.clientY };
-      let w = window.innerWidth;
-      let h = window.innerHeight;
-      let barWidth = this.scale.x.bandwidth();
-      // this.tooltip.left = mouse.x + barWidth;
-      if (mouse.x < w / 2) {
-        this.tooltip.left = mouse.x + barWidth;
-      } else {
-        this.tooltip.left = null;
-        this.tooltip.left = mouse.x - 450;
-      }
-      if (mouse.y > h / 2) {
-        this.tooltip.top = mouse.y - tooltipHeight - 20;
-      } else {
-        // this.tooltip.bottom = null;
-        this.tooltip.top = mouse.y + 30;
+    mousemoveBarsOneTip(e) {
+      if (!this.tooltipStay) {
+        let tooltip = this.$el.querySelector(`#tooltip`);
+        tooltip.classList.remove("tooltip-zero-opacity");
+        const tooltipHeight = tooltip.getBoundingClientRect().height;
+        let mouse = { x: e.clientX, y: e.clientY };
+        let w = window.innerWidth;
+        let h = window.innerHeight;
+        let barWidth = this.scale.x.bandwidth();
+        // this.tooltip.left = mouse.x + barWidth;
+        if (mouse.x < w / 2) {
+          this.tooltip.left = mouse.x + barWidth;
+        } else {
+          this.tooltip.left = null;
+          this.tooltip.left = mouse.x - 450;
+        }
+        if (mouse.y > h / 2) {
+          this.tooltip.top = mouse.y - tooltipHeight - 20;
+        } else {
+          // this.tooltip.bottom = null;
+          this.tooltip.top = mouse.y + 30;
+        }
       }
     },
-    mouseleaveBars(e) {
-      this.findBinAndToggleDeactive(e);
-      const i = e.target.id;
-      // Element scope
-      let tooltip = this.$el.querySelector(`#tooltip${i}`)
-      tooltip.style.opacity = 0;
-      // console.log(tooltip);
+    mouseleaveBarsOneTip(e) {
+      if (this.optionalWelfareComparison) {
+        this.findBinAndToggleDeactive(e);
+      }
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      tooltip.classList.add("tooltip-zero-opacity");
     },
     clickBars(e) {
-      const i = e.target.id;
-      // console.log(e, e.target.id);
-      let element = this.$el.querySelector(`#tooltip${i}`);
-      element.classList.add("visible");
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      tooltip.classList.toggle("tooltip-stay");
+      if (this.tooltipStay) {
+        this.tooltipStay = false;
+      } else {
+        this.tooltipStay = true;
+      }
     },
     // eslint-disable-next-line no-unused-vars
     touchedToolTip(e) {
-      this.tooltip.id = -1;
+      console.log("happened");
+      let tooltip = this.$el.querySelector(`#tooltip`);
+      setTimeout(() => {
+        tooltip.classList.remove("tooltip-hidden");
+      }, 800);
+      tooltip.classList.add("tooltip-hidden");
     },
     formatTooltip(e) {
       const f = d3.format(",d");
@@ -1461,8 +1419,12 @@ export default {
       // <div class="italic tooltip-right"> +/- $ ${position.moe}</div>
       for (const [i, position] of e.positions.entries()) {
         if (this.positionsArray[i].checked == true || i == 0) {
+          let color = position.name
+          if (color != "minc" && color != "uig" && !this.optionalWelfareComparison) {
+            color = "medium"
+          }
           positionshtml += `<div class="small simple-flex-bottom unhug-bottom-tooltip tooltip-p color-${
-            position.name
+            color
           }">
           <div>${position.ttName}:</div>
            <div class="">$&nbsp;${f(position.val)}</div></div>`;
@@ -1482,9 +1444,7 @@ export default {
         </div>`;
       }
 
-      let tooltiphtml = `<div class="graph-label">Income range: <span class="">${
-        e.bin
-      } $</span></div>
+      let tooltiphtml = `<div class="graph-label">Income range: ${e.bin}</div>
       <p class="small">
         # of households: ${this.lazyfixFormat(
           fbig(e.populationDetails.hhtotal.val)
@@ -1843,8 +1803,8 @@ export default {
 <style src="vue-scrollama/dist/vue-scrollama.css"></style>
 <style scoped lang="scss">
 // Credit: https://codepen.io/anon/pen/MRXvdp
-$main-color: rgba(255,255,255,0.01);
-$secondary-color: rgba(87,176,234,1);
+$main-color: rgba(255, 255, 255, 0.01);
+$secondary-color: rgba(87, 176, 234, 1);
 $width: 550px; // Change Me
 
 .move-right {
@@ -1860,14 +1820,15 @@ $width: 550px; // Change Me
   top: 1.2rem;
   // opacity: 0;
   color: $secondary-color;
-  // color: white; 
+  // color: white;
   // background: $secondary-color;
   border-radius: 50%;
 }
 .controls:hover {
-  color: white; 
+  color: white;
   background: $secondary-color;
-}.control-minus {
+}
+.control-minus {
   left: 0%;
 }
 .control-plus {
@@ -1881,8 +1842,6 @@ $width: 550px; // Change Me
   position: relative;
 }
 
-
-
 label.bignumberinput {
   position: absolute;
   text-align: center;
@@ -1893,7 +1852,7 @@ label.bignumberinput {
   font-size: 1.6rem;
   line-height: 1.5rem;
   cursor: text;
-  transition: .25s ease;
+  transition: 0.25s ease;
   // content: "enter a number";
 }
 
@@ -1907,40 +1866,39 @@ input.bignumberinput {
   border: none;
   border-radius: 0; // For iOS
   // border-bottom: solid $width/150 rgba(white, .5);
-  color:$secondary-color;
+  color: $secondary-color;
   background: $main-color;
   font-size: 5rem;
   font-weight: 900;
-  transition: .3s 0.2s ease;
+  transition: 0.3s 0.2s ease;
   &:invalid {
     color: grey;
-    ~label {
+    ~ label {
       color: grey;
     }
-    ~.controls {
+    ~ .controls {
       color: grey;
       opacity: 0;
     }
-    ~.bar {
+    ~ .bar {
       background: grey;
     }
   }
   &:valid {
     // border-bottom-color: rgba(white, .5);
-    ~label {
+    ~ label {
       top: 7.4rem;
       font-size: 1.6rem;
       color: $secondary-color;
       text-align: center;
-
     }
-    ~.control-plus {
+    ~ .control-plus {
       left: 80%;
     }
-    ~.control-minus {
+    ~ .control-minus {
       left: 10%;
     }
-    ~.bar {
+    ~ .bar {
       // text-align: center;
       margin-left: 43%;
       width: 4rem;
@@ -1950,7 +1908,7 @@ input.bignumberinput {
   &:focus {
     outline: none;
     // border-bottom-color: $secondary-color;
-    ~label {
+    ~ label {
       top: 7.4rem;
       // left: 3.8rem;
       font-size: 1.4rem;
@@ -1958,23 +1916,22 @@ input.bignumberinput {
       color: $secondary-color;
       text-align: center;
     }
-    ~.bar {
+    ~ .bar {
       margin-left: 43%;
       width: 4rem;
       height: 0.4rem;
       background: $secondary-color;
     }
-    ~.controls {
+    ~ .controls {
       // color: $secondary-color;
     }
-    ~input {
+    ~ input {
       color: $secondary-color;
     }
-    
   }
 
   // Stop Chrome's hideous pale yellow background on auto-fill
-  
+
   &:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px $main-color inset;
     -webkit-text-fill-color: $secondary-color !important;
@@ -1982,18 +1939,17 @@ input.bignumberinput {
   }
 }
 
-
 .bar.bignumberinput {
   // background: $secondary-color;
   background: $secondary-color;
-  content: '';
+  content: "";
   width: 100%;
   height: 0.1rem;
   margin-top: 0.6rem;
   position: relative;
   // // transform: translateX(-100%);
   // transition: .3s ease;
-  
+
   // &:before {
   //   content: '';
   //   // position: absolute;
@@ -2002,23 +1958,23 @@ input.bignumberinput {
   //   left: 3.6rem;
   //   background: $secondary-color;
   //   // transform: translateX(-100%);
-    
+
   // }
 }
 
-::selection {background: rgba($secondary-color, .3);}
-
+::selection {
+  background: rgba($secondary-color, 0.3);
+}
 
 // Credit: Andrei Gheorghiu
 // https://stackoverflow.com/questions/45396280/customizing-increment-arrows-on-input-of-type-number-using-css
 input[type="number"] {
   -webkit-appearance: textfield;
-     -moz-appearance: textfield;
-          appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
-
 </style>

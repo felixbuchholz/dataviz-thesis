@@ -3,7 +3,7 @@
     <div class="margin-left"></div>
     <div class="center-block">
       <div class="chart sans">
-        <h5 class="sans hug-bottom" id="graph-headline1">
+        <h5 class="sans hug-bottom" id="graph-welfare-trap">
           Uneven progression of benefits with growing income:
         </h5>
         Scenario: Single mother with two kids in Chicago
