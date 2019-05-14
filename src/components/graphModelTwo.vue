@@ -272,7 +272,7 @@
                     ></rect>
                   </g>
 
-                  <rect x="0" :y="height" :height="margin.bottom" :width="width" fill="#fcfcfc"></rect>
+                  <rect x="0" :y="height" :height="margin.bottom" :width="width" fill="#fcfcfc" id="xAxisRect1"></rect>
                   <text
                     class="graph-label"
                     :transform="`translate(${width}, ${height + 25})`"
@@ -293,7 +293,7 @@
           </div>
         </div>
         <!-- Index 0 ******************************************************************** -->
-        <div class="step1 scrolling-over-container" data-step="a" id="start-of-the-intro">
+        <div class="step1 scrolling-over-container" data-step="a" id="start-of-the-intro1">
           <div class="scrolling-over-content">
             <h5>UIG Scheme 1, Introduction</h5>
             <p class="">
@@ -307,11 +307,11 @@
             </p>
             <p>
               Or you can
-              <a href="#end-of-intro1">
-                <button class="button" @click="readyToChange">
+              <!-- <a href="#end-of-intro1"> -->
+                <button class="button" @click="skipIntro">
                   skip the introduction
                 </button>
-              </a>
+              <!-- </a> -->
               and start using it.
             </p>
           </div>
@@ -525,13 +525,18 @@
       <div class="insight sans light">
         <div v-if="insight == 'readyToChange'">
           <div class="return-button">
-            <a href="#start-of-the-intro"
+            <a href="#start-of-the-intro1"
               ><button @click="startIntro" class="small">
                 Back to the intro
-              </button></a
-            >
+              </button></a>
           </div>
         </div>
+        <div class="standard-hidden">
+            <a href="#end-of-intro2"
+            ><button class="small">
+              >
+            </button></a>
+          </div>
       </div>
       <div id="end-of-insight"><hr></div>
        <div
@@ -546,7 +551,7 @@
     </div>
     <div class="margin-right">
       <div v-if="isLoaded" class="budget grid-vertical-container">
-        <div class="budget-calculations blur" id="selectBudget">
+        <div class="budget-calculations blur presentation" id="selectBudget">
           <h5 class="sans small regular unhug-top">Overall balance effects of this scheme:</h5>
           <div>
             <div class="border-top-with-note unhug-top">
@@ -579,7 +584,7 @@
         </div>
         <div class="spacer-auto"></div>
         <div class="legend-for-graph">
-          <div class="border-top-with-note blur" id="selectLegend">
+          <div class="border-top-with-note blur presentation" id="selectLegend">
             <p class="sans small note-top-unhug">Legend:</p>
             <div class="sans small note-top-unhug simple-flex-row-nowrap">
               <div class="bold">*Y:</div>
@@ -746,6 +751,8 @@ export default {
       isLoaded: false,
       moe: false,
       yAxisScaled: false,
+      yZoomActive: false,
+      previousScrollPosition: 0,
       uigPerAdult: 0,
       uigPerKid: 0,
       zoomSign: ["+", "in"],
@@ -1518,9 +1525,7 @@ export default {
       });
     },
     mouseenterBarsOneTip(e) {
-      if (this.optionalWelfareComparison) {
-        this.findBinAndToggleDeactive(e);
-      }
+      this.findBinAndToggleDeactive(e);
       let tooltip = this.$el.querySelector(`#tooltip`);
       tooltip.classList.remove("tooltip-zero-opacity");
       const i = e.target.id;
@@ -1531,13 +1536,17 @@ export default {
       const binNum = e.target.id;
       [].map.call(this.$el.querySelectorAll(`#bin${binNum} .path`), e => {
         e.classList.toggle("more-stroke");
-        // Colors
-        if (e.classList.contains("income")) {
+        if (this.optionalWelfareComparison) {
+          // Colors
+          if (e.classList.contains("income")) {
+            e.classList.toggle("stroke-deactive-income");
+          } else if (e.classList.contains("welfare")) {
+            e.classList.toggle("stroke-deactive-welfare");
+          } else if (e.classList.contains("uig")) {
+            e.classList.toggle("stroke-deactive-uig");
+          }
+        } else {
           e.classList.toggle("stroke-deactive-income");
-        } else if (e.classList.contains("welfare")) {
-          e.classList.toggle("stroke-deactive-welfare");
-        } else if (e.classList.contains("uig")) {
-          e.classList.toggle("stroke-deactive-uig");
         }
       });
     },
@@ -1566,9 +1575,7 @@ export default {
       }
     },
     mouseleaveBarsOneTip(e) {
-      if (this.optionalWelfareComparison) {
-        this.findBinAndToggleDeactive(e);
-      }
+      this.findBinAndToggleDeactive(e);
       let tooltip = this.$el.querySelector(`#tooltip`);
       tooltip.classList.add("tooltip-zero-opacity");
     },
@@ -1690,22 +1697,24 @@ export default {
       this.featuresOpen = !this.featuresOpen;
     },
     scaleYAxis() {
-      // if else
-      if (this.yAxisScaled == false) {
+      if (!this.yAxisScaled) {
+        // console.log(window.scrollY);
+        this.previousScrollPosition = window.scrollY;
+        this.yAxisScaled = true;
+        this.zoomSign = ["-", "out"];
+        this.svgHeight = 3000;
+        this.computeAllPaths();
+
+        // console.log( document.getElementById("graph-headline1"));
         [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
           e.classList.add("hidden-steps");
         });
-        this.yAxisScaled = true;
-        this.zoomSign = ["-", "out"];
         setTimeout(() => {
-          window.scrollBy({
-            top: 2300,
-            left: 0,
+          const element_to_scroll_to = document.getElementById("end-of-intro1");
+          element_to_scroll_to.scrollIntoView({
             behavior: "smooth"
           });
         }, 1000);
-        this.svgHeight = 3000;
-        this.computeAllPaths();
       } else {
         this.zoomSign = ["+", "in"];
         setTimeout(() => {
@@ -1716,14 +1725,62 @@ export default {
           this.svgHeight = 700;
           this.computeAllPaths();
         }, 1000);
-        const element_to_scroll_to = document.getElementById("graph-headline1");
-        element_to_scroll_to.scrollIntoView({
+        window.scrollTo({
+          top: this.previousScrollPosition,
           behavior: "smooth"
-        });
+        })
       }
-      setTimeout(() => {
-        // this.readyToChange();
-      }, 1500);
+        
+        // else {
+        //   setTimeout(() => {
+        //     // [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+        //     //   e.classList.remove("hidden-steps");
+        //     // });
+        //     this.yAxisScaled = false;
+        //     this.svgHeight = 700;
+        //     this.computeAllPaths();
+        //   }, 1000);
+        //   window.scrollTo({
+        //     top: 100,
+        //     behavior: "smooth"
+        //   })
+        // }
+      // OLD
+      // if (this.yZoomActive) {
+      //   if (this.yAxisScaled == false) {
+      //     [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+      //       e.classList.add("hidden-steps");
+      //     });
+      //     this.yAxisScaled = true;
+      //     this.zoomSign = ["-", "out"];
+      //     setTimeout(() => {
+      //       window.scrollBy({
+      //         top: 2300,
+      //         left: 0,
+      //         behavior: "smooth"
+      //       });
+      //     }, 1000);
+      //     this.svgHeight = 3000;
+      //     this.computeAllPaths();
+      //   } else {
+      //     this.zoomSign = ["+", "in"];
+      //     setTimeout(() => {
+      //       [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
+      //         e.classList.remove("hidden-steps");
+      //       });
+      //       this.yAxisScaled = false;
+      //       this.svgHeight = 700;
+      //       this.computeAllPaths();
+      //     }, 1000);
+      //     const element_to_scroll_to = document.getElementById("graph-headline1");
+      //     element_to_scroll_to.scrollIntoView({
+      //       behavior: "smooth"
+      //     });
+      //   }
+      //   setTimeout(() => {
+      //     this.readyToChange();
+      //   }, 1500);
+      // }
     },
     // eslint-disable-next-line no-unused-vars
     onResize(event) {
@@ -1881,10 +1938,24 @@ export default {
       this.hideScrollovers();
       this.unblurAll();
       this.insight = "readyToChange";
+      // const element_to_scroll_to = document.getElementById("end-of-intro1")
+      // element_to_scroll_to.scrollIntoView()
+      // this.yZoomActive = true;
+    },
+    skipIntro() {
+      setTimeout(() => {
+        this.unblurAll();
+      }, 500);
+      this.hideScrollovers();
+      this.insight = "readyToChange";
+      const element_to_scroll_to = document.getElementById("end-of-intro1")
+      element_to_scroll_to.scrollIntoView()
+      // this.yZoomActive = true;
     },
     startIntro() {
       this.showScrollovers();
-
+      // const element_to_scroll_to = document.getElementById("start-of-the-intro1")
+      // element_to_scroll_to.scrollIntoView()
       this.blurAll();
     },
     goToLegendA() {

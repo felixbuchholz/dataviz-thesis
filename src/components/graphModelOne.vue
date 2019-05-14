@@ -369,11 +369,11 @@
             </button>-->
             <p>
               Or you can
-              <a href="#end-of-intro2">
-                <button class="button" @click="readyToChange">
+              <!-- <a href="#end-of-intro2"> -->
+                <button class="button" @click="skipIntro">
                   skip the introduction
                 </button>
-              </a>
+              <!-- </a> -->
               and start using it.
             </p>
           </div>
@@ -654,6 +654,12 @@
             </a>
           </div>
         </div>
+        <div class="standard-hidden">
+            <a href="#thank-you"
+            ><button @click="" class="small">
+              >
+            </button></a>
+          </div>
       </div>
       <!-- <div id="end-of-insight"><hr></div> -->
     </div>
@@ -857,6 +863,7 @@ import { rough } from "../assets/lib/rough.js";
 import zoomIcon from "../../public/assets/svg/zoom_s.svg";
 import "intersection-observer"; // for cross-browser support
 import Scrollama from "vue-scrollama";
+import { setTimeout } from 'timers';
 
 export default {
   name: "graphModelOne",
@@ -882,6 +889,7 @@ export default {
       isLoaded: false,
       moe: false,
       yAxisScaled: false,
+      previousScrollPosition: 0,
       numOfUIGBins: 0,
       zoomSign: ["+", "in"],
       insight: "intro",
@@ -1826,22 +1834,24 @@ export default {
       this.featuresOpen = !this.featuresOpen;
     },
     scaleYAxis() {
-      // if else
-      if (this.yAxisScaled == false) {
+       if (!this.yAxisScaled) {
+        // console.log(window.scrollY);
+        this.previousScrollPosition = window.scrollY;
+        this.yAxisScaled = true;
+        this.zoomSign = ["-", "out"];
+        this.svgHeight = 3000;
+        this.computeAllPaths();
+
+        // console.log( document.getElementById("graph-headline1"));
         [].map.call(this.$el.querySelectorAll(`.scrollama-steps`), e => {
           e.classList.add("hidden-steps");
         });
-        this.yAxisScaled = true;
-        this.zoomSign = ["-", "out"];
         setTimeout(() => {
-          window.scrollBy({
-            top: 2300,
-            left: 0,
+          const element_to_scroll_to = document.getElementById("end-of-intro2");
+          element_to_scroll_to.scrollIntoView({
             behavior: "smooth"
           });
         }, 1000);
-        this.svgHeight = 3000;
-        this.computeAllPaths();
       } else {
         this.zoomSign = ["+", "in"];
         setTimeout(() => {
@@ -1852,14 +1862,11 @@ export default {
           this.svgHeight = 700;
           this.computeAllPaths();
         }, 1000);
-        const element_to_scroll_to = document.getElementById("graph-headline2");
-        element_to_scroll_to.scrollIntoView({
+        window.scrollTo({
+          top: this.previousScrollPosition,
           behavior: "smooth"
-        });
+        })
       }
-      setTimeout(() => {
-        // this.readyToChange();
-      }, 1500);
     },
     onResize(event) {
       const chartElement = this.$el.querySelectorAll(".chart")[0];
@@ -2011,9 +2018,23 @@ export default {
       this.hideScrollovers();
       this.unblurAll();
       this.insight = "readyToChange";
+      // const element_to_scroll_to = document.getElementById("end-of-intro2")
+      // element_to_scroll_to.scrollIntoView()
+    },
+    skipIntro() {
+      setTimeout(() => {
+        this.unblurAll();
+      }, 500);
+      this.hideScrollovers();
+      this.insight = "readyToChange";
+      const element_to_scroll_to = document.getElementById("end-of-intro2")
+      element_to_scroll_to.scrollIntoView()
+      // this.yZoomActive = true;
     },
     startIntro() {
       this.showScrollovers();
+      // const element_to_scroll_to = document.getElementById("start-of-the-intro2")
+      // element_to_scroll_to.scrollIntoView()
       this.blurAll();
     },
     goToLegendA() {

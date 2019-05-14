@@ -49,11 +49,13 @@
           >
         </p>
         <div class="right">
-          <img src="../../public/assets/mockup/job-benchmark.jpg" alt="" />
+          <!-- <img src="../../public/assets/mockup/job-benchmark.jpg" alt="" /> -->
         </div>
       </div>
       <div class="margin-right"></div>
     </div>
+    <!-- * -->
+      <graphAutomationBenchmark />
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
@@ -88,12 +90,6 @@
       </div>
       <div class="margin-right"></div>
     </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block"></div>
-      <div class="margin-right"></div>
-    </div>
     <!-- * Template * -->
     <div class="grid-container">
       <div class="margin-left"></div>
@@ -105,11 +101,12 @@
 
 <script>
 import graphCenterAutomationWage from "../components/graphCenterAutomationWage.vue";
+import graphAutomationBenchmark from "../components/graphAutomationBenchmark.vue";
 import arrowIcon from "../../public/assets/svg/arrow.svg";
 
 export default {
   name: "automationSubsection",
-  components: { graphCenterAutomationWage, arrowIcon },
+  components: { graphCenterAutomationWage, arrowIcon, graphAutomationBenchmark },
   props: {
     msg: String
   },

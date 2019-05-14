@@ -68,6 +68,7 @@
             </a>
           </ol>
         </div>
+        <div class="presentation-button small" @click="goToPresentationMode">Presentation?</div>
       </div>
     </div>
   </div>
@@ -93,6 +94,15 @@ export default {
       menu.classList.toggle("is-active");
     },
     goToInternalLink() {
+      this.openCloseMenu();
+    },
+    goToPresentationMode() {
+      [].map.call(document.querySelectorAll(`.standard-hidden`), e => {
+        e.classList.toggle("presentation-show");
+      });
+      [].map.call(document.querySelectorAll(`.blur`), e => {
+        e.classList.toggle("presentation-unblur");
+      });
       this.openCloseMenu();
     }
   }

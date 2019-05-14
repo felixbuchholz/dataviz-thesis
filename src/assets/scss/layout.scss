@@ -342,10 +342,6 @@ hr {
   opacity: 0;
 }
 
-.hidden-steps {
-  transition: none;
-  visibility: hidden;
-}
 .simple-graph-legend {
   display: flex;
   align-items: flex-end;
@@ -361,3 +357,21 @@ hr {
 .legend-space-after-svg {
   margin-right: 12px;
 }
+
+.standard-hidden {
+  display: none;
+}
+
+.presentation-show {
+  display: initial;
+}
+
+.presentation-button {
+  cursor: pointer;
+  margin: 32px;
+  float: right;
+}
+
+// .scrollama-steps{
+//   display: none;
+// }
