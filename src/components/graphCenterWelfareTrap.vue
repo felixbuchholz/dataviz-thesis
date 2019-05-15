@@ -160,7 +160,9 @@
             Numbers: hourly wage to reach the gross income when working 40
             h/week
           </p>
-          <p class="unhug-bottom-70 italic">Source</p>
+          <p class="unhug-bottom-70 italic">Source: <br>
+            Randolph, E. (2014). <a href="https://files.illinoispolicy.org/wp-content/uploads/2014/12/Welfare_Report_finalfinal.pdf">Modeling Potential Income and Welfare- Assistance Benefits in Illinois.</a> Chicago: Illinois Policy Institute.
+          </p>
         </div>
       </div>
     </div>

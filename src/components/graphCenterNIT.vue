@@ -160,7 +160,7 @@
     </div>
     <div class="margin-right">
       <div class="simple-graph-legend margin-container sans small">
-        <div class="border-top-with-note">
+        <div class="border-top-with-note unhug-bottom-70">
           <p class="note-top-unhug">Legend:</p>
           <div class="simple-flex-center">
             <svg class="legend-space-after-svg" width="56" height="50">
@@ -239,7 +239,7 @@
           <div class="simple-flex-center unhug-top-small">
             <div>* Taxes after: The tax rate after the break-even point can be different</div>
           </div>
-          <a href="#graph-headline1"><p class="unhug-bottom-70 italic">Let’s see how this scheme would affect incomes in the US</p></a>
+          <!-- <a href="#graph-headline1"><p class="unhug-bottom-70 italic">Let’s see how this scheme would affect incomes in the US</p></a> -->
         </div>
       </div>
     </div>

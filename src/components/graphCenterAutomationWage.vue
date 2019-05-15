@@ -49,14 +49,14 @@
     <div class="margin-right">
       <div class="note unhug-top-small">
         Source: <br />
-        Executive Office of the President,
+        Executive Office of the President. (2016).
         <a
           class="sans"
           href="https://obamawhitehouse.archives.gov/sites/whitehouse.gov/files/documents/Artificial-Intelligence-Automation-Economy.PDF"
         >
           Artificial Intelligence, Automation, and the Economy,
         </a>
-        2016
+        Washington, D.C.
       </div>
     </div>
   </div>
