@@ -3,7 +3,7 @@
     <!-- * Template * -->
     <div class="grid-container">
       <div class="margin-left"></div>
-      <div class="center-block"></div>
+      <div class="center-block"><div class="spacer"></div></div>
       <div class="margin-right"></div>
     </div>
     <!-- * -->
@@ -11,17 +11,17 @@
       <div class="margin-left"></div>
       <div class="center-block">
         <h3 class="hug-bottom" id="section-5">
-          Endnotes
+          Sources
         </h3>
       </div>
       <div class="margin-right">
-        <div class="margin-container">
+        <!-- <div class="margin-container">
           <a href="#section-4">
             <div class="icon-small unhug-top-small">
               <arrowIcon class="arrow-icon up" />
             </div>
           </a>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- * -->

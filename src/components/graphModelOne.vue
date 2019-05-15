@@ -359,10 +359,11 @@
           <div class="scrolling-over-content">
             <h5>UIG Scheme 2, Introduction</h5>
             <div class="unhug-bottom">
-              The following graph shows the distribution of household incomes
-              and welfare transfers in the US in 2017.
+              In comparsion to the previous scheme this one has a slightly different approach. 
+              The idea is to decide which existing welfare programs can replaced by an income guarantee.
+              The overall savings are then used to grant a certain amount of lower income groups a UIG.
             </div>
-            To learn how you can interact with it, you can just keep on
+            To learn how you can interact with some additions to the previous graph, you can just keep on
             <span class="bold">scrolling.</span>
             <!-- <button class="button" @click="startIntro">
               scroll through a small introduction.
@@ -371,10 +372,9 @@
               Or you can
               <!-- <a href="#end-of-intro2"> -->
                 <button class="button" @click="skipIntro">
-                  skip the introduction
+                  skip the introduction.
                 </button>
               <!-- </a> -->
-              and start using it.
             </p>
           </div>
         </div>
@@ -383,10 +383,7 @@
           <!-- v-if="insight == 'introLegendA'" -->
           <div class="scrolling-over-content">
             <div>
-              <h5>Let’s take a look at the legend:</h5>
-              The height of the bars in the chart indicates the amount of income
-              and benefits. Each bar stack represents an income group. The
-              stacks are grouped and sorted by income without benefits.
+              <h5>New lines</h5>
             </div>
             <div class="unhug-top">
               This line&nbsp;
@@ -414,64 +411,15 @@
               <span class="regular color-positive">green</span> if the group
               profits from your configuration.
             </div>
-            <div class="unhug-top">
-              The bars have two different textures. This one
-              <svg
-                class="inline-svg"
-                v-if="isLoaded"
-                :width="scale.x.bandwidth() * 1.6"
-                height="16"
-              >
-                <path
-                  :transform="`translate(1, 1)`"
-                  stroke-width="0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  :d="legendPathMarketIncomeSmall.fill"
-                ></path>
-                <path
-                  :transform="`translate(1, 1)`"
-                  stroke-width="0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  :d="legendPathMarketIncomeSmall.stroke"
-                ></path>
-              </svg>
-              for the income without benefits (but before taxes) and this one
-              for welfare benefits, tax credits and the UIG:&nbsp;
-              <svg
-                class="inline-svg"
-                v-if="isLoaded"
-                :width="scale.x.bandwidth() * 1.6"
-                height="16"
-              >
-                <path
-                  :transform="`translate(1, 1)`"
-                  stroke-width="0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  :d="legendPathTransfersSmall.fill"
-                ></path>
-                <path
-                  :transform="`translate(1, 1)`"
-                  stroke-width="0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  :d="legendPathTransfersSmall.stroke"
-                ></path>
-              </svg>
-            </div>
           </div>
         </div>
         <!-- Index 2 ******************************************************************** -->
         <div class="step3 scrolling-over-container" data-step="d">
           <div class="scrolling-over-content">
             <div>
-              <h5>Let’s talk about scale!</h5>
-              Because incomes in the last group are so high, it’s hard to see
-              the welfare benefits.
+              <h5>Scale again</h5>
               <div class="unhug-top">
-                On the left you have 2 options to see more details:
+                You still have 2 options to focus just on benefits or zoom in to see more detailed differences:
               </div>
               <div class="simple-flex unhug-top">
                 <div class>
@@ -515,10 +463,10 @@
               <h5>The welfare interface</h5>
               In this scheme the idea is to replace current welfare benefits
               with a UIG. You can hover over the different categories to see how
-              they affect incomes in all groups and select them individually.
+              they affect incomes in all groups and select them individually. – But for now let’s
               <p v-if="!allWelfareUnchecked">
                 <button @click="uncheckAll">
-                  But for now – let’s un-check all of them!
+                  see a scenerio where all the listed welfare is replaced
                 </button>
               </p>
               <p v-else-if="allWelfareUnchecked">Ok!</p>
@@ -530,7 +478,7 @@
           <div class="scrolling-over-content">
             <div>
               <div>
-                Let’s activate the UIG.
+                We can now activate the UIG.
                 <label
                   class="checkbox-inline checkbox-container sans color-primary checkbox-primary"
                 >
@@ -551,9 +499,8 @@
                   class="unhug-top"
                 >
                   Now we have to decide how many of the lower income groups
-                  should benefit from it.
-                  <br />Let’s
-                  <button @click="setUIGBinsTo5">set it to 5.</button>
+                  should benefit from it. <br>
+                  <button @click="setUIGBinsTo5">The lower five income groups</button> are a good place to start.
                 </div>
               </transition>
               <div v-if="uigChanged & (numOfUIGBins == 5)" class="unhug-top">

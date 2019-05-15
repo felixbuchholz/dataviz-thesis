@@ -34,13 +34,27 @@
         </div>
       </div>
     </div>
+     <!-- * -->
+    <div class="grid-container">
+      <div class="margin-left"></div>
+      <div class="center-block">
+        <p class="right">
+          There are also concerns that a UIG is the first step to an
+          inefficient and <span class="bold">unsustainable</span> egalitarian
+          system. And there is some confusion about the real net costs of such a
+          program often leading to an early dismissal of the idea: it appears to be
+          <span class="bold">too expensive</span> to be feasible.
+        </p>
+      </div>
+      <div class="margin-right"></div>
+    </div>
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
         <!-- These migh be links -->
         <p class="left">
-          Interests in UIGs are diverse. Some see it as an opportunity to
+          But some see a UIG as an opportunity to
           <span class="bold">reduce</span>
           the amount of <span class="bold">bureaucracy</span> to administer
           welfare programs, some others are concerned with
@@ -53,28 +67,13 @@
       </div>
       <div class="margin-right"></div>
     </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="right">
-          Of course, there are also concerns that a UIG is the first step to an
-          inefficient and <span class="bold">unsustainable</span> egalitarian
-          system. And because it’s granted to everyone in contrast to most of
-          the current welfare, confusion about the real net costs of such a
-          program often lead to an early dismissal of the idea: it appears to be
-          <span class="bold">too expensive</span> to be feasible.
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
+   
     <!-- * -->
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
         <p class="intro">
-         Let’s start with these
-          <span class="bold">three entry points:</span>
+         There will be three small sections for these three entry points:
         </p>
         <ol class="intro">
           <li>

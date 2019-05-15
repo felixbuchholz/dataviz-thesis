@@ -128,7 +128,7 @@
           effects like that, case studies are essential (although they have
           limitations as well). Two common concerns are if a UIG reduces the
           amount of time people are working and how the received money is spent.
-          Case studies suggest that in both regards there is less reason to
+          Case studies suggest that in both regards there is not too much reason to
           worry: Across studies, there is only a slight reduction of hours
           worked, the money is not spent on temptation goods like tobacco or
           alcohol and the time is spent productively, for more childcare,
@@ -169,9 +169,9 @@
       <div class="margin-left"></div>
       <div class="center-block">
         <p class="right">
-          Another approach to dynamic effects is to model people’s behavior and
-          for example with optimization curves. Some researchers expect the
-          number of total hours worked to drop significantly. Along these lines,
+          Another approach to dynamic effects is to model people’s behavior with 
+          optimization curves. Some researchers using these models expect the number 
+          of total hours worked to drop significantly. Along these lines,
           another concern is relevant: who will continue doing unpleasant jobs
           if they can rely on a secured income floor? Employers would need to
           raise wages to create new incentives for these jobs resulting in
