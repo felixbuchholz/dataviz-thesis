@@ -35,11 +35,11 @@
       <div class="margin-left"></div>
       <div class="center-block">
         <p class="intro">
-          Probably the most challenging question to answer is how to make the
-          welfare system fairer. Usually, we would try and agree on a definition
-          of fairness first. In this case, it might not be necessary. The notion
-          of a universal income guarantee could be general enough that it is
-          compatible with different perspectives on fairness.
+          Probably the most challenging question is how to make the
+          welfare system fairer. To do this, we usually need to agree on a definition of fariness first. 
+          In the case of income guarantees this might not be necessary. 
+          Even if people disagree on a definition of fairness, 
+          there is still a possibility they can agree on UIGs providing fair results.
         </p>
       </div>
       <div class="margin-right"></div>
@@ -72,7 +72,7 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <p class="left">
+        <p class="right">
           People who agree that the
           <span class="bold">government influence</span> on private matters
           should be <span class="bold">small when possible</span> might also
@@ -80,24 +80,6 @@
           spend it in the most useful way instead of limiting their options, for
           example with the restrictions like in the case of SNAP
           <span class="italic">(food stamps).</span>
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
-        <p class="right">
-          On the other hand, the <span class="bold">vagueness</span> of income
-          guarantee labels
-          <span class="bold"
-            >can mask the considerable difference in perspectives.</span
-          >
-          For some proponents, a UIG might be a way to achieve what they regard
-          as an acceptable minimal welfare system. Others would strongly
-          disagree and see it as an opportunity to share more significant parts
-          of economic growth more equally.
         </p>
       </div>
       <div class="margin-right"></div>
@@ -173,11 +155,9 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <p class="intro">
-          This is only a fragment of the discussion of the relation between
-          social justice and universal income guarantees. But to understand the
-          nuances and challenges of a pragmatic implementation, it’s important
-          to look at how a UIG would affect incomes.
+        <p class="left">
+          In the next section we will look at the nuances and challenges of a practical implementation. It’s important
+          to look at how a UIG would affect incomes and check if the result matches the fairness expectations.
         </p>
       </div>
       <div class="margin-right"></div>

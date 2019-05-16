@@ -97,22 +97,10 @@
     <div class="grid-container">
       <div class="margin-left"></div>
       <div class="center-block">
-        <p class="right">
-          The number of variations and
-          <span class="bold">uncertainties</span> are definitely part of the
-          difficulty to decide whether a UIG is actually a good or a bad idea.
-        </p>
-      </div>
-      <div class="margin-right"></div>
-    </div>
-    <!-- * -->
-    <div class="grid-container">
-      <div class="margin-left"></div>
-      <div class="center-block">
         <p class="left">
-          But they are also an <span class="bold">opportunity</span> to decide
-          which questions we want to see answered by specific proposals and be
-          part of shaping the debate.
+          Over the next sections this interactive visual inquiry will set a framework to 
+          decide whether a UIG is a good or a bad idea and tries to offer a
+          multiple perspectives to find a nuanced argument for both sides.
         </p>
       </div>
       <div class="margin-right"></div>
