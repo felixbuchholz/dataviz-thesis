@@ -649,11 +649,6 @@ esttab matrix(at, fmt(2)) using hh_2family.csv, plain replace eqlabels(none) mla
 
 
 
-
-
-
-
-
 * 3. Retirment, Veteran & survivor status
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
@@ -671,7 +666,6 @@ esttab matrix(at, fmt(2)) using hh_2family.csv, plain replace eqlabels(none) mla
 	* 12 observations in the data
 	
 
-	
 	
 
 
@@ -731,93 +725,6 @@ matrix a = r(table)
 matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
 mat at = a'	
 esttab matrix(at, fmt(2)) using hh_4disa.csv, plain replace eqlabels(none) mlabels(none)
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-* ## OLD BUCKETS
-
-* -----------------------------------------------------------------------------
-* #### SNAP 
-* SPMSNAP, not self-reported 
-* https://cps.ipums.org/cps-action/variables/FOODSTAMP#description_section
-* > Slightly higher than foodstamp which is self reported
-
-* snap by household
-	* bys serial: egen hh_spmsnap=total(spmsnap)
-* cleanup
-	* replace hh_spmsnap = 0 if pernum != 1
-
-* Calculate by hh_clean_mkt_inc_total_cat bins:
-	* svy: mean hh_spmsnap if pernum == 1, over(hh_clean_mkt_inc_total_cat)
-
-* - - - - -
-
-* -----------------------------------------------------------------------------
-* #### Energy subsidy
-
-* Energy subsidy value sum by household
-	* 	bys serial: egen hh_heatval=total(heatval)
-* - Clean up, retain values just for head of household
-	* replace hh_heatval = 0 if pernum != 1
-
-* Get the energy subsidy value by bins
-	* svy: mean hh_heatval if pernum == 1, over(hh_incomecat)
-	
-	
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-* OLD Bucket: Child
-* egen float clean_child_total = rowtotal(clean_incchild clean_ctccrd clean_actccrd)
-
-* BucketChild by household
-* bys serial: egen hh_clean_child_total=total(clean_child_total)
-* cleanup
-* replace hh_clean_child_total = 0 if pernum != 1
-
-* svy: mean hh_clean_child_total if pernum == 1, over(hh_clean_mkt_inc_total_cat)
-
-* return list
-* matrix a = r(table)
-* matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
-* mat at = a'	
-* esttab matrix(at, fmt(2)) using hh_child.csv, plain replace eqlabels(none) mlabels(none)
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-
-* -----------------------------------------------------------------------------
-* -----------------------------------------------------------------------------
-* Old bucket clean_incss
-
-
-* by household
-* bys serial: egen hh_clean_incss=total(clean_incss)
-* cleanup
-* replace hh_clean_incss = 0 if pernum != 1
-
-* svy: mean hh_clean_incss if pernum == 1, over(hh_clean_mkt_inc_total_cat)
-
-* return list
-* matrix a = r(table)
-* matrix colnames a = <10000 10000-14999 15000-24999 25000-34999 35000-49999 50000-74999 75000-99999 100000-149999 150000-199999 >200000
-* mat at = a'	
-* esttab matrix(at, fmt(2)) using hh_socialsec.csv, plain replace eqlabels(none) mlabels(none)
 * -----------------------------------------------------------------------------
 * -----------------------------------------------------------------------------
 
@@ -942,50 +849,9 @@ esttab matrix(at, fmt(2)) using hh_4disa.csv, plain replace eqlabels(none) mlabe
 		* Topcode: 50,000, see: https://cps.ipums.org/cps/topcodes_tables.shtml#2017top
 		* 1980+: Persons age 15+
 		
-* -----------------------------------------------------------------------------
-* ## Annotation, un-used income variables 
-
-
-* faminc: Family income of householder
-
-* inctot: 
-	* Universe: Persons age 15+
-	* Codes: 
-		* 99999999 = N.I.U. (Not in Universe). 
-		* 99999998 = Missing. 
-	* INCTOT indicates each respondent's total pre-tax personal income or losses 
-	* from all sources for the previous calendar year. 
-	* Amounts are expressed as they were reported to the interviewer; 
-	* Must be adjusted for inflation using CPI
-	* Sum of: 
-		* Market:
-			* INCWAGE 
-			* INCBUS 
-			* INCFARM 
-			* INCINT 
-			* INCDIVID 
-			* INCRENT 
-			* INCEDUC 
-			* INCALIM * Alimony, not in data anymore, stopped 2014
-			* INCASIST * Friends & relatives not in household
-			* INCOTHER * Hobbies, severance pay 
-		
-		* Welfare:
-			* INCWELFR 
-			* INCSSI
-			* INCSURV
-			* INCCHILD
-			 
-		* Split:
-			* INCWKCOM
-			* INCDISAB 
-			* INCSS 
-			* INCVET 
-			* INCUNEMP
-			* INCRETIR
 			
 * -----------------------------------------------------------------------------
-* ## Annotation, Welfare positions, not encoded in inc
+* ## Annotation, Welfare positions, not encoded in amount of income
 
 * Welfare columns in data:
 	* Only recipiency

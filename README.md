@@ -8,9 +8,7 @@ Link:
 
 ## Abstract
 
-A presidential candidate currently running his campaign on a universal basic income (UBI) platform in the United States shows how much traction the idea of a guaranteed, unconditional income as a government transfer to all citizens has gained in recent years. While it is definitely a highly controversial topic, it seems remarkable that in an increasingly polarized political environment support for this idea can be found across in other regards antagonistic ideological camps. Analysis of the debate around UBI might find that its appeal originates in the fact that in the core idea does not promote a full political program but rather is a strategy of rethinking welfare – with different political perspectives leading to an assemblage of specific UBI plans. Perplexion in this debate arises when these particular concepts are considered or suggested to be inherently equivalent policies.  
-
-In order to enable readers to engage in a more nuanced debate around universal income guarantees, I want to identify and explore strategies to avoid escalation and demarcation in the presentation of a political proposition. In this paper, I want to discuss how a combination of a data-driven essay and open-ended user interaction can help enhance engagement in exploring a balanced argument.
+In a climate of polarization, a peculiar idea might have the potential to reach across political frontiers: the idea to grant every citizen a universal income guarantee. This project is not only an attempt to facilitate a nuanced debate about this policy and its possible effects on incomes in the US but also an offer to think about welfare and shared growth in general.
 
 ## Acknowledgements
 
