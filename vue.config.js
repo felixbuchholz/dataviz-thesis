@@ -9,5 +9,5 @@ module.exports = {
 
     svgRule.use("vue-svg-loader").loader("vue-svg-loader");
   },
-  publicPath: process.env.NODE_ENV === "production" ? "/thesis2019/" : "/"
+  publicPath: process.env.NODE_ENV === "production" ? "/dataviz-thesis/" : "/"
 };

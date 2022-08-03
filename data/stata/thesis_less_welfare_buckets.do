@@ -19,7 +19,7 @@
 
 * Change directory
 cd 
-cd repos/thesis2019/data/stata
+cd repos/dataviz-thesis/data/stata
 
 * Read in IPUMS CPS data // Citation:
 do cps_00012.do

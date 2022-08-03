@@ -337,7 +337,7 @@
           <p class="unhug">
             <a
               class="sans"
-              href="https://github.com/felixbuchholz/thesis2019/blob/master/data/thesis.pdf"
+              href="https://github.com/felixbuchholz/dataviz-thesis/blob/master/data/thesis.pdf"
               >Layout</a
             >
           </p>
