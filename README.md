@@ -2,9 +2,9 @@
 An interactive visual inquiry by Felix Buchholz
 
 Link:  
-[Live project](https://felixbuchholz.github.io/thesis2019/)
+[Live project](https://felixbuchholz.github.io/dataviz-thesis/)
 
-![Preview](https://raw.githubusercontent.com/felixbuchholz/thesis2019/master/public/assets/preview.gif)
+![Preview](https://raw.githubusercontent.com/felixbuchholz/dataviz-thesis/master/public/assets/preview.gif)
 
 ## Abstract
 
@@ -35,4 +35,4 @@ Michael Wolf
 
 
 ## Link to the thesis
-[Thesis & research repository](https://github.com/felixbuchholz/thesis)
+[Thesis & research repository](https://github.com/felixbuchholz/dataviz-thesis-class)
